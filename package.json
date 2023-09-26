@@ -34,6 +34,8 @@
     "@pureadmin/utils": "^1.9.6",
     "@vueuse/core": "^10.2.0",
     "@vueuse/motion": "^2.0.0",
+    "@zxcvbn-ts/core": "^3.0.4",
+    "@zxcvbn-ts/language-common": "^3.0.4",
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",

@@ -17,7 +17,9 @@ import { Result, PageResult } from "@/api/common";
 
 /** 获取用户管理列表 */
 export const getUserList = (data?: object) => {
-  return http.request<PageResult>("post", "/user", { data });
+  return http.request<PageResult>("post", "/api/v1/sys/sys-user/page", {
+    data
+  });
 };
 
 /** 用户管理-获取所有角色列表 */
@@ -39,5 +41,5 @@ export const getRoleList = (data?: object) => {
 
 /** 获取部门管理列表 */
 export const getDeptList = (data?: object) => {
-  return http.request<Result>("post", "/api/v1/sys/sys-dept/page", { data });
+  return http.request<Result>("post", "/api/v1/sys/sys-dept/list", { data });
 };
