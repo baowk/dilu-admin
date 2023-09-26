@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { isEqual } from "@pureadmin/utils";
+import { transformI18n } from "@/plugins/i18n";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
@@ -96,7 +97,7 @@ watch(
         :key="item.path"
       >
         <a @click.prevent="handleLink(item)">
-          {{ item.meta.title }}
+          {{ transformI18n(item.meta.title) }}
         </a>
       </el-breadcrumb-item>
     </transition-group>

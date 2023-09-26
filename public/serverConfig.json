@@ -5,6 +5,7 @@
   "HiddenSideBar": false,
   "MultiTagsCache": false,
   "KeepAlive": true,
+  "Locale": "zh",
   "Layout": "vertical",
   "Theme": "default",
   "DarkMode": false,

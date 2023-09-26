@@ -442,6 +442,8 @@
       .search-container,
       /* 告警 */
       .dropdown-badge,
+      /* 国际化 */
+      .globalization,
       /* 用户名 */
       .el-dropdown-link,
       /* 设置 */
@@ -454,6 +456,15 @@
       .dropdown-badge {
         height: 48px;
         color: $subMenuActiveText;
+      }
+
+      .globalization {
+        width: 40px;
+        height: 48px;
+        padding: 11px;
+        color: $subMenuActiveText;
+        cursor: pointer;
+        outline: none;
       }
 
       .el-dropdown-link {
@@ -613,6 +624,8 @@ body[layout="vertical"] {
   .search-container,
   /* 告警 */
   .dropdown-badge,
+  /* 国际化 */
+  .globalization,
   /* 用户名 */
   .el-dropdown-link,
   /* 设置 */

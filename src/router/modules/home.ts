@@ -1,3 +1,4 @@
+import { $t } from "@/plugins/i18n";
 const { VITE_HIDE_HOME } = import.meta.env;
 const Layout = () => import("@/layout/index.vue");
 
@@ -8,7 +9,7 @@ export default {
   redirect: "/welcome",
   meta: {
     icon: "homeFilled",
-    title: "首页",
+    title: $t("menus.hshome"),
     rank: 0
   },
   children: [
@@ -17,7 +18,7 @@ export default {
       name: "Welcome",
       component: () => import("@/views/welcome/index.vue"),
       meta: {
-        title: "首页",
+        title: $t("menus.hshome"),
         showLink: VITE_HIDE_HOME === "true" ? false : true
       }
     }

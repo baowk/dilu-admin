@@ -1,3 +1,4 @@
+import { $t } from "@/plugins/i18n";
 const Layout = () => import("@/layout/index.vue");
 
 export default [
@@ -6,7 +7,7 @@ export default [
     name: "Login",
     component: () => import("@/views/login/index.vue"),
     meta: {
-      title: "登录",
+      title: $t("menus.hslogin"),
       showLink: false,
       rank: 101
     }
@@ -15,7 +16,7 @@ export default [
     path: "/redirect",
     component: Layout,
     meta: {
-      title: "加载中...",
+      title: $t("status.hsLoad"),
       showLink: false,
       rank: 102
     },
