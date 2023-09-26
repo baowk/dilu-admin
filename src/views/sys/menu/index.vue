@@ -3,11 +3,9 @@ import { ref, computed } from "vue";
 import { clone } from "@pureadmin/utils";
 import type { ElTreeV2 } from "element-plus";
 import { transformI18n } from "@/plugins/i18n";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { extractPathList, deleteChildren } from "@/utils/tree";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import type { TreeNode } from "element-plus/es/components/tree-v2/src/types";
-import NodeTree from "@iconify-icons/ri/node-tree";
 
 defineOptions({
   name: "MenuTree"
@@ -46,18 +44,7 @@ const filterMethod = (query: string, node: treeNode) => {
   <el-card shadow="never">
     <template #header>
       <div class="card-header">
-        <span class="font-medium">
-          菜单树结构（采用element-plus的
-          <el-link
-            href="https://element-plus.gitee.io/zh-CN/component/tree-v2.html"
-            target="_blank"
-            :icon="useRenderIcon(NodeTree)"
-            style="margin: 0 5px 4px 0; font-size: 16px"
-          >
-            Tree V2
-          </el-link>
-          组件并支持国际化）
-        </span>
+        <span class="font-medium"> 菜单树结构 </span>
       </div>
     </template>
     <el-input

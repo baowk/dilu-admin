@@ -13,7 +13,7 @@ export function useRole() {
   const form = reactive({
     name: "",
     code: "",
-    status: ""
+    status: 0
   });
   const formRef = ref();
   const dataList = ref([]);
