@@ -79,15 +79,6 @@ export function useRole() {
       slot: "operation"
     }
   ];
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
 
   function onChange({ row, index }) {
     ElMessageBox.confirm(

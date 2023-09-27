@@ -3,7 +3,7 @@ import editForm from "../form.vue";
 import { handleTree } from "@/utils/tree";
 import { message } from "@/utils/message";
 import { getDeptList } from "@/api/system";
-import { usePublicHooks } from "../../hooks";
+import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { reactive, ref, onMounted, h } from "vue";
 import { type FormItemProps } from "../utils/types";
