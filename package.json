@@ -38,6 +38,7 @@
     "@zxcvbn-ts/language-common": "^3.0.4",
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
+    "cropperjs": "^1.6.1",
     "dayjs": "^1.11.8",
     "echarts": "^5.4.2",
     "element-plus": "2.3.6",
@@ -54,6 +55,7 @@
     "vue": "^3.3.4",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.2",
+    "vue-tippy": "^6.3.1",
     "vue-types": "^5.1.0"
   },
   "devDependencies": {
