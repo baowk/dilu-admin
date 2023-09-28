@@ -11,6 +11,7 @@ interface FormItemProps {
   email: string;
   sex: string | number;
   status: number;
+  age: number;
   dept?: {
     id?: number;
     name?: string;

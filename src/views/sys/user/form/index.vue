@@ -3,7 +3,7 @@ import { ref } from "vue";
 import ReCol from "@/components/ReCol";
 import { formRules } from "../utils/rule";
 import { FormProps } from "../utils/types";
-import { usePublicHooks } from "../../hooks";
+import { usePublicHooks } from "@/utils/hooks";
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<FormProps>(), {
     email: "",
     sex: "",
     status: 1,
+    age: 0,
     remark: ""
   })
 });
@@ -89,6 +90,17 @@ defineExpose({ getRef });
             v-model="newFormInline.phone"
             clearable
             placeholder="请输入手机号"
+          />
+        </el-form-item>
+      </re-col>
+
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="年龄" prop="age">
+          <el-input
+            v-model.number="newFormInline.age"
+            type="number"
+            clearable
+            placeholder="年龄"
           />
         </el-form-item>
       </re-col>
