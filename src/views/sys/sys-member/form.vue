@@ -6,12 +6,13 @@ import { SysMemberFormProps } from "@/api/sys/sys-member";
 const props = withDefaults(defineProps<SysMemberFormProps>(), {
   formInline: () => ({
     id: 0,
-    deptId: 0,
+    teamId: 0,
     userId: 0,
     nickname: null,
     name: null,
     phone: null,
     deptPath: null,
+    deptId: 0,
     postTag: 0,
     status: 0
   })
@@ -41,11 +42,11 @@ defineExpose({ getRef });
         placeholder="请输入主键"
       />
     </el-form-item>
-    <el-form-item label="部门id" prop="deptId">
+    <el-form-item label="团队id" prop="teamId">
       <el-input
-        v-model.number="newFormInline.deptId"
+        v-model.number="newFormInline.teamId"
         clearable
-        placeholder="请输入部门id"
+        placeholder="请输入团队id"
       />
     </el-form-item>
     <el-form-item label="用户id" prop="userId">
@@ -81,6 +82,13 @@ defineExpose({ getRef });
         v-model="newFormInline.deptPath"
         clearable
         placeholder="请输入部门路径"
+      />
+    </el-form-item>
+    <el-form-item label="部门id" prop="deptId">
+      <el-input
+        v-model.number="newFormInline.deptId"
+        clearable
+        placeholder="请输入部门id"
       />
     </el-form-item>
     <el-form-item label="职位标签 1主管 2副主管 3员工" prop="postTag">

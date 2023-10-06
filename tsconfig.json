@@ -37,6 +37,6 @@
     "src/**/*.vue",
     "types/*.d.ts",
     "vite.config.ts"
-  ],
+, "src/views/sys/sys-member/utils/hook.tsx.bak"  ],
   "exclude": ["dist", "**/*.js", "node_modules"]
 }

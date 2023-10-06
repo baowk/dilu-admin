@@ -4,7 +4,7 @@ import { Result, PageResult } from "@/api/common";
 
 //Api
 
-/** 获取成员管理列表 */
+/** 获取会员管理列表 */
 export const getSysMemberPage = (data?: object) => {
   return http.request<Result<PageResult<SysMember>>>(
     "post",
@@ -15,14 +15,14 @@ export const getSysMemberPage = (data?: object) => {
   );
 };
 
-/** 获取成员 */
+/** 获取会员 */
 export const getSysMember = (data?: object) => {
   return http.request<Result<SysMember>>("post", "/api/v1/sys/sys-member/get", {
     data
   });
 };
 
-/** 创建成员 */
+/** 创建会员 */
 export const createSysMember = (data?: object) => {
   return http.request<Result<SysMember>>(
     "post",
@@ -33,7 +33,7 @@ export const createSysMember = (data?: object) => {
   );
 };
 
-/** 更新成员 */
+/** 更新会员 */
 export const updateSysMember = (data?: object) => {
   return http.request<Result<SysMember>>(
     "post",
@@ -44,7 +44,7 @@ export const updateSysMember = (data?: object) => {
   );
 };
 
-/** 删除成员 */
+/** 删除会员 */
 export const delSysMember = (data?: object) => {
   return http.request<Result<SysMember>>("post", "/api/v1/sys/sys-member/del", {
     data
@@ -53,12 +53,12 @@ export const delSysMember = (data?: object) => {
 
 //Model
 
-/** 成员 */
+/** 会员 */
 interface SysMember {
   /** 主键 */
   id: number;
-  /** 部门id */
-  deptId: number;
+  /** 团队id */
+  teamId: number;
   /** 用户id */
   userId: number;
   /** 昵称 */
@@ -69,6 +69,8 @@ interface SysMember {
   phone: string;
   /** 部门路径 */
   deptPath: string;
+  /** 部门id */
+  deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
   postTag: number;
   /** 状态 1正常  */
@@ -88,28 +90,22 @@ interface SysMember {
 interface SysMemberFormItemProps {
   /** 主键 */
   id: number;
-
-  /** 部门id */
-  deptId: number;
-
+  /** 团队id */
+  teamId: number;
   /** 用户id */
   userId: number;
-
   /** 昵称 */
   nickname: string;
-
   /** 姓名 */
   name: string;
-
   /** 电话 */
   phone: string;
-
   /** 部门路径 */
   deptPath: string;
-
+  /** 部门id */
+  deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
   postTag: number;
-
   /** 状态 1正常  */
   status: number;
 }

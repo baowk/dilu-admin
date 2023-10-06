@@ -38,8 +38,3 @@ export const getRoleList = (data?: object) => {
     data
   });
 };
-
-/** 获取部门管理列表 */
-export const getDeptList = (data?: object) => {
-  return http.request<Result>("post", "/api/v1/sys/sys-dept/list", { data });
-};
