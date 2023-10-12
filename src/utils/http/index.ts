@@ -12,6 +12,7 @@ import {
 import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
+import { getCurTeamId } from "@/utils/team";
 import { useUserStoreHook } from "@/store/modules/user";
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -52,6 +53,7 @@ class PureHttp {
     return new Promise(resolve => {
       PureHttp.requests.push((token: string) => {
         config.headers["Authorization"] = formatToken(token);
+        config.headers["teamId"] = getCurTeamId();
         resolve(config);
       });
     });
@@ -90,6 +92,7 @@ class PureHttp {
                       .then(res => {
                         const token = res.data.accessToken;
                         config.headers["Authorization"] = formatToken(token);
+                        config.headers["teamId"] = getCurTeamId();
                         PureHttp.requests.forEach(cb => cb(token));
                         PureHttp.requests = [];
                       })
@@ -102,6 +105,7 @@ class PureHttp {
                   config.headers["Authorization"] = formatToken(
                     data.accessToken
                   );
+                  config.headers["teamId"] = getCurTeamId();
                   resolve(config);
                 }
               } else {

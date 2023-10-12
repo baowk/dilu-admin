@@ -37,6 +37,12 @@ export const getLogin = (data?: object) => {
   return http.request<UserResult>("post", "/api/v1/sys/login", { data });
 };
 
+export const getMyTeams = (data?: object) => {
+  return http.request<UserResult>("post", "/api/v1/sys/sys-member/myTeams", {
+    data
+  });
+};
+
 /** 刷新token */
 export const refreshTokenApi = (data?: object) => {
   return http.request<RefreshTokenResult>("post", "/refreshToken", { data });
