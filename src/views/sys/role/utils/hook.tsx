@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
+import { getRoleList } from "@/api/sys/sys-role";
 import { ElMessageBox } from "element-plus";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";

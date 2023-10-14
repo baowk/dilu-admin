@@ -37,7 +37,9 @@ export const useUserStore = defineStore({
               setToken(data.data);
               getMyTeams().then(data => {
                 if (data.code == 200) {
+                  console.log("setTeams bef");
                   setTeams(data.data);
+                  console.log("setTeams Aft");
                 }
               });
             }

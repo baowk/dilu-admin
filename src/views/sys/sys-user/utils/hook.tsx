@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getSysUserPage, createSysUser, updateSysUser, delSysUser } from "@/api/sys/sys-user";
+import {
+  getSysUserPage,
+  createSysUser,
+  updateSysUser,
+  delSysUser
+} from "@/api/sys/sys-user";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -25,7 +30,7 @@ export function useSysUser() {
     roleId: 0,
     post: null,
     remark: null,
-    status: 0,
+    status: 0
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -39,7 +44,6 @@ export function useSysUser() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
@@ -201,7 +205,7 @@ export function useSysUser() {
       title: `${title}用户`,
       props: {
         formInline: {
-          id: row?.id ?? 0 ,
+          id: row?.id ?? 0,
           username: row?.username ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
@@ -212,10 +216,10 @@ export function useSysUser() {
           bio: row?.bio ?? "",
           birthday: row?.birthday ?? "",
           gender: row?.gender ?? "",
-          roleId: row?.roleId ?? 0 ,
+          roleId: row?.roleId ?? 0,
           post: row?.post ?? "",
           remark: row?.remark ?? "",
-          status: row?.status ?? 0 ,
+          status: row?.status ?? 0
         }
       },
       width: "48%",
@@ -250,7 +254,7 @@ export function useSysUser() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }

@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getSysTeamPage, createSysTeam, updateSysTeam, delSysTeam } from "@/api/sys/sys-team";
+import {
+  getSysTeamPage,
+  createSysTeam,
+  updateSysTeam,
+  delSysTeam
+} from "@/api/sys/sys-team";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -14,7 +19,7 @@ export function useRole() {
     id: 0,
     name: null,
     owner: 0,
-    status: 0,
+    status: 0
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -28,7 +33,6 @@ export function useRole() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
@@ -118,10 +122,10 @@ export function useRole() {
       title: `${title}团队`,
       props: {
         formInline: {
-          id: row?.id ?? 0 ,
+          id: row?.id ?? 0,
           name: row?.name ?? "",
-          owner: row?.owner ?? 0 ,
-          status: row?.status ?? 0 ,
+          owner: row?.owner ?? 0,
+          status: row?.status ?? 0
         }
       },
       width: "48%",
@@ -156,7 +160,7 @@ export function useRole() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }
