@@ -16,6 +16,9 @@ import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 
+import { setTeams } from "@/utils/team";
+import { getMyTeams } from "@/api/user";
+
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import globalization from "@/assets/svg/globalization.svg?component";
@@ -55,12 +58,17 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           password: ruleForm.password
         })
         .then(res => {
-          console.log(res);
           if (res.code == 200) {
-            // 获取后端路由
-            initRouter().then(() => {
-              router.push(getTopMenu(true).path);
-              message("登录成功", { type: "success" });
+            //获取团队
+            getMyTeams().then(data => {
+              if (data.code == 200) {
+                setTeams(data.data);
+                // 获取后端路由
+                initRouter().then(() => {
+                  router.push(getTopMenu(true).path);
+                  message("登录成功", { type: "success" });
+                });
+              }
             });
           } else {
             message(res.msg, { customClass: "el", type: "error" });

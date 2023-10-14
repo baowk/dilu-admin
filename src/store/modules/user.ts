@@ -4,11 +4,10 @@ import { userType } from "./types";
 import { routerArrays } from "@/layout/types";
 import { router, resetRouter } from "@/router";
 import { storageSession } from "@pureadmin/utils";
-import { getLogin, getMyTeams, refreshTokenApi } from "@/api/user";
+import { getLogin, refreshTokenApi } from "@/api/user";
 import { UserResult, RefreshTokenResult } from "@/api/user";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { type DataInfo, setToken, removeToken, sessionKey } from "@/utils/auth";
-import { setTeams } from "@/utils/team";
 
 export const useUserStore = defineStore({
   id: "pure-user",
@@ -35,13 +34,6 @@ export const useUserStore = defineStore({
           .then(data => {
             if (data.code == 200) {
               setToken(data.data);
-              getMyTeams().then(data => {
-                if (data.code == 200) {
-                  console.log("setTeams bef");
-                  setTeams(data.data);
-                  console.log("setTeams Aft");
-                }
-              });
             }
             resolve(data);
           })
