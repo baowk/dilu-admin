@@ -1,11 +1,10 @@
 //Model
 
-/** 成员 */
 interface SysMember {
   /** 主键 */
   id: number;
-  /** 部门id */
-  deptId: number;
+  /** 团队id */
+  teamId: number;
   /** 用户id */
   userId: number;
   /** 昵称 */
@@ -16,6 +15,8 @@ interface SysMember {
   phone: string;
   /** 部门路径 */
   deptPath: string;
+  /** 部门id */
+  deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
   postTag: number;
   /** 状态 1正常  */
@@ -35,28 +36,22 @@ interface SysMember {
 interface SysMemberFormItemProps {
   /** 主键 */
   id: number;
-
-  /** 部门id */
-  deptId: number;
-
+  /** 团队id */
+  teamId: number;
   /** 用户id */
   userId: number;
-
   /** 昵称 */
   nickname: string;
-
   /** 姓名 */
   name: string;
-
   /** 电话 */
   phone: string;
-
   /** 部门路径 */
   deptPath: string;
-
+  /** 部门id */
+  deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
   postTag: number;
-
   /** 状态 1正常  */
   status: number;
 }
@@ -65,3 +60,4 @@ interface SysMemberFormProps {
 }
 
 export type { SysMemberFormItemProps, SysMemberFormProps, SysMember };
+

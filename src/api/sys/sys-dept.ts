@@ -17,7 +17,9 @@ export const getSysDeptPage = (data?: object) => {
 
 /** 获取部门管理列表 */
 export const getDeptList = (data?: object) => {
-  return http.request<Result>("post", "/api/v1/sys/sys-dept/list", { data });
+  return http.request<Result<SysDept>>("post", "/api/v1/sys/sys-dept/list", {
+    data
+  });
 };
 
 /** 获取部门 */

@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { SysTeam } from "@/api/sys/sys-team.d";
 
-//Api 
+//Api
 
 /** 获取团队管理列表 */
 export const getSysTeamPage = (data?: object) => {
@@ -31,14 +31,14 @@ export const createSysTeam = (data?: object) => {
 
 /** 更新团队 */
 export const updateSysTeam = (data?: object) => {
-  return http.request<Result<SysTeam>>("post", "/api/v1/sys/sys-team/update",{
+  return http.request<Result<SysTeam>>("post", "/api/v1/sys/sys-team/update", {
     data
   });
 };
 
 /** 删除团队 */
 export const delSysTeam = (data?: object) => {
-  return http.request<Result<SysTeam>>("post", "/api/v1/sys/sys-team/del",{
+  return http.request<Result<SysTeam>>("post", "/api/v1/sys/sys-team/del", {
     data
   });
 };
@@ -47,7 +47,6 @@ export const delSysTeam = (data?: object) => {
 
 /** 团队 */
 interface SysTeam {
-  
   /** 主键 */
   id: number;
   /** 团队名 */
@@ -62,9 +61,7 @@ interface SysTeam {
   updatedAt: Date;
 }
 
-
 interface SysTeamFormItemProps {
-  
   /** 主键 */
   id: number;
   /** 团队名 */

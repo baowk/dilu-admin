@@ -11,7 +11,7 @@ import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
 import type { FormItemProps, RoleFormItemProps } from "./types";
 import { hideTextAtIndex, getKeyList, isAllEmpty } from "@pureadmin/utils";
-import { getRoleIds, getAllRoleList } from "@/api/system";
+import { getRoleIds, getAllRoleList } from "@/api/sys/sys-role";
 
 import { getDeptList } from "@/api/sys/sys-dept";
 
@@ -324,7 +324,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           password: row?.password ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
-          sex: row?.sex ?? "",
+          sex: row?.gender ?? "",
           status: row?.status ?? 1,
           remark: row?.remark ?? ""
         }

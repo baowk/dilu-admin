@@ -39,7 +39,7 @@ export function getTeams(): TeamInfo {
 }
 
 export function getCurTeamId(): number {
-  return getTeams().select;
+  return getTeams() ? getTeams().select : 0;
 }
 
 export function selectTeamId(teamId: number) {

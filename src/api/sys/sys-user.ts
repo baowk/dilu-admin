@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { SysUser } from "@/api/sys/sys-user.d";
 
-//Api 
+//Api
 
 /** 获取用户管理列表 */
 export const getSysUserPage = (data?: object) => {
@@ -31,14 +31,14 @@ export const createSysUser = (data?: object) => {
 
 /** 更新用户 */
 export const updateSysUser = (data?: object) => {
-  return http.request<Result<SysUser>>("post", "/api/v1/sys/sys-user/update",{
+  return http.request<Result<SysUser>>("post", "/api/v1/sys/sys-user/update", {
     data
   });
 };
 
 /** 删除用户 */
 export const delSysUser = (data?: object) => {
-  return http.request<Result<SysUser>>("post", "/api/v1/sys/sys-user/del",{
+  return http.request<Result<SysUser>>("post", "/api/v1/sys/sys-user/del", {
     data
   });
 };
@@ -47,7 +47,6 @@ export const delSysUser = (data?: object) => {
 
 /** 用户 */
 interface SysUser {
-  
   /** 主键 */
   id: number;
   /** 用户名 */
@@ -90,9 +89,7 @@ interface SysUser {
   deletedAt: Date;
 }
 
-
 interface SysUserFormItemProps {
-  
   /** 主键 */
   id: number;
   /** 用户名 */

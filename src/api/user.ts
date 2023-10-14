@@ -1,5 +1,8 @@
 import { http } from "@/utils/http";
 
+import { Result } from "@/api/common";
+import { type Team } from "@/utils/team";
+
 export type UserResult = {
   code: number;
   msg: string;
@@ -38,9 +41,13 @@ export const getLogin = (data?: object) => {
 };
 
 export const getMyTeams = (data?: object) => {
-  return http.request<UserResult>("post", "/api/v1/sys/sys-member/myTeams", {
-    data
-  });
+  return http.request<Result<Array<Team>>>(
+    "post",
+    "/api/v1/sys/sys-member/myTeams",
+    {
+      data
+    }
+  );
 };
 
 /** 刷新token */
