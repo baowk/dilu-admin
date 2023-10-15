@@ -2,13 +2,18 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { BillFormProps } from "@/api/dental/bill";
+import { message } from "@/utils/message";
+import { identify } from "@/api/dental/bill";
 
 const props = withDefaults(defineProps<BillFormProps>(), {
   formInline: () => ({
+    text: null,
     id: 0,
     no: null,
     customerId: 0,
+    customerName: null,
     userId: 0,
+    name: null,
     teamId: 0,
     deptPath: null,
     total: null,
@@ -19,6 +24,7 @@ const props = withDefaults(defineProps<BillFormProps>(), {
     tradeStatus: 0,
     dentalCount: 0,
     brand: 0,
+    brandName: null,
     implantedCount: 0,
     implant: 0,
     implantDate: null,
@@ -44,6 +50,18 @@ function getRef() {
   return ruleFormRef.value;
 }
 
+function handleIdentify() {
+  let t = newFormInline.value.text;
+  identify({ text: t }).then(res => {
+    if (res.code == 200) {
+      newFormInline.value = res.data;
+      newFormInline.value.text = t;
+    } else {
+      message(`识别失败`, { type: "error" });
+    }
+  });
+}
+
 defineExpose({ getRef });
 </script>
 
@@ -54,55 +72,53 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
+    <el-form-item label="智能识别" prop="text">
       <el-input
-        v-model.number="newFormInline.id"
+        v-model.number="newFormInline.text"
         clearable
-        placeholder="请输入主键"
+        placeholder="请输入成交模板"
+        type="textarea"
+        :rows="6"
       />
+      <el-button type="primary" @click="handleIdentify()">识别</el-button>
     </el-form-item>
-    <el-form-item label="订单号" prop="no">
+
+    <!-- <el-form-item label="订单号" prop="no">
       <el-input
         v-model="newFormInline.no"
         clearable
         placeholder="请输入订单号"
       />
-    </el-form-item>
-    <el-form-item label="顾客" prop="customerId">
+    </el-form-item> -->
+    <el-form-item label="咨询师" prop="name">
       <el-input
-        v-model.number="newFormInline.customerId"
+        v-model.number="newFormInline.name"
+        clearable
+        placeholder="请输入咨询师"
+      />
+    </el-form-item>
+    <el-form-item label="交易日期" prop="tradeAt">
+      <el-input
+        v-model="newFormInline.tradeAt"
+        clearable
+        placeholder="请输入交易日期"
+      />
+    </el-form-item>
+    <el-form-item label="顾客" prop="customerName">
+      <el-input
+        v-model.number="newFormInline.customerName"
         clearable
         placeholder="请输入顾客"
       />
     </el-form-item>
-    <el-form-item label="用户id" prop="userId">
-      <el-input
-        v-model.number="newFormInline.userId"
-        clearable
-        placeholder="请输入用户id"
-      />
-    </el-form-item>
-    <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
-      />
-    </el-form-item>
-    <el-form-item label="部门路径" prop="deptPath">
-      <el-input
-        v-model="newFormInline.deptPath"
-        clearable
-        placeholder="请输入部门路径"
-      />
-    </el-form-item>
-    <el-form-item label="金额" prop="total">
+
+    <!-- <el-form-item label="金额" prop="total">
       <el-input
         v-model="newFormInline.total"
         clearable
         placeholder="请输入金额"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="折后金额" prop="realTotal">
       <el-input
         v-model="newFormInline.realTotal"
@@ -124,17 +140,8 @@ defineExpose({ getRef });
         placeholder="请输入关联订单"
       />
     </el-form-item>
-    <el-form-item label="交易日期" prop="tradeAt">
-      <el-input
-        v-model="newFormInline.tradeAt"
-        clearable
-        placeholder="请输入交易日期"
-      />
-    </el-form-item>
-    <el-form-item
-      label="交易类型1 成交 2补尾款  3补上月欠款 10退款"
-      prop="tradeStatus"
-    >
+
+    <el-form-item label="交易类型" prop="tradeStatus">
       <el-input
         v-model.number="newFormInline.tradeStatus"
         clearable
@@ -148,9 +155,9 @@ defineExpose({ getRef });
         placeholder="请输入颗数"
       />
     </el-form-item>
-    <el-form-item label="品牌" prop="brand">
+    <el-form-item label="品牌" prop="brandName">
       <el-input
-        v-model.number="newFormInline.brand"
+        v-model.number="newFormInline.brandName"
         clearable
         placeholder="请输入品牌"
       />
@@ -183,14 +190,14 @@ defineExpose({ getRef });
         placeholder="请输入医生"
       />
     </el-form-item>
-    <el-form-item label="1 普通 2 半口 3 全口" prop="pack">
+    <el-form-item label="全半口" prop="pack">
       <el-input
         v-model.number="newFormInline.pack"
         clearable
         placeholder="请输入1 普通 2 半口 3 全口"
       />
     </el-form-item>
-    <el-form-item label="预定回款日期" prop="paybackDate">
+    <el-form-item label="预回款日期" prop="paybackDate">
       <el-input
         v-model="newFormInline.paybackDate"
         clearable
@@ -223,6 +230,8 @@ defineExpose({ getRef });
         v-model="newFormInline.remark"
         clearable
         placeholder="请输入备注"
+        type="textarea"
+        :rows="3"
       />
     </el-form-item>
   </el-form>

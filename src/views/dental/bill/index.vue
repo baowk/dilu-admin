@@ -40,7 +40,7 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="交易类型1 成交 2补尾款  3补上月欠款 10退款：" prop="tradeStatus">
+      <el-form-item label="交易类型：" prop="tradeStatus">
         <el-input
           v-model="form.name"
           placeholder="请输入交易类型1 成交 2补尾款  3补上月欠款 10退款"

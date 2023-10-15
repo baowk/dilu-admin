@@ -43,6 +43,17 @@ export const delBill = (data?: object) => {
   });
 };
 
+/** 智能识别 */
+export const identify = (data?: object) => {
+  return http.request<Result<BillFormItemProps>>(
+    "post",
+    "/api/v1/dental/bill/identify",
+    {
+      data
+    }
+  );
+};
+
 //Model
 
 /** 账单 */
@@ -102,14 +113,18 @@ interface Bill {
 }
 
 interface BillFormItemProps {
+  /**智能之别模板文本 */
+  text?: string;
   /** 主键 */
   id: number;
   /** 订单号 */
   no: string;
   /** 顾客 */
   customerId: number;
+  customerName?: string;
   /** 用户id */
   userId: number;
+  name: string;
   /** 团队id */
   teamId: number;
   /** 部门路径 */
@@ -130,6 +145,7 @@ interface BillFormItemProps {
   dentalCount: number;
   /** 品牌 */
   brand: number;
+  brandName?: string;
   /** 已种颗数 */
   implantedCount: number;
   /** 是否已种 */

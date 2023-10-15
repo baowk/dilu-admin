@@ -7,8 +7,9 @@ import {
   updateEventDaySt,
   delEventDaySt
 } from "@/api/dental/event-day-st";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
+
+import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type EventDayStFormItemProps } from "@/api/dental/event-day-st";
 import { type PaginationProps } from "@pureadmin/table";
@@ -30,9 +31,10 @@ export function useEventDaySt() {
   });
   const formRef = ref();
   const dataList = ref([]);
+  const members = ref(Array<SysMember>);
   const loading = ref(true);
   //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
+  const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -41,59 +43,70 @@ export function useEventDaySt() {
   });
   const columns: TableColumnList = [
     {
-      label: "主键",
-      prop: "id",
-      minWidth: 120
-    },
-    {
       label: "时间",
       prop: "day",
-      minWidth: 120
-    },
-    {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ day }) =>
+        dayjs(String(day), "YYYYMMDD").format("YYYY-MM-DD")
     },
     {
       label: "用户id",
       prop: "userId",
-      minWidth: 120
-    },
-    {
-      label: "部门路径",
-      prop: "deptPath",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ userId }) => getUserName(userId)
     },
     {
       label: "留存",
       prop: "newCustomerCnt",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "初诊",
       prop: "firstDiagnosis",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "复诊",
       prop: "furtherDiagnosis",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "成交",
       prop: "deal",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "明日邀约",
       prop: "invitation",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "休息",
       prop: "rest",
-      minWidth: 120
+      minWidth: 80,
+      cellRenderer: scope => (
+        <el-switch
+          v-model={scope.row.rest}
+          active-value={1}
+          inactive-value={2}
+          active-text="正常"
+          inactive-text="休息"
+          inline-prompt
+          style={switchStyle.value}
+        />
+      )
+    },
+    {
+      label: "创建者",
+      prop: "createBy",
+      minWidth: 80,
+      formatter: ({ createBy }) => getUserName(createBy)
+    },
+    {
+      label: "更新者",
+      prop: "updateBy",
+      minWidth: 80,
+      formatter: ({ updateBy }) => getUserName(updateBy)
     },
     {
       label: "创建时间",
@@ -109,16 +122,7 @@ export function useEventDaySt() {
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
-    {
-      label: "创建者",
-      prop: "createBy",
-      minWidth: 120
-    },
-    {
-      label: "更新者",
-      prop: "updateBy",
-      minWidth: 120
-    },
+
     {
       label: "操作",
       fixed: "right",
@@ -148,6 +152,22 @@ export function useEventDaySt() {
 
   function handleSelectionChange(val) {
     console.log("handleSelectionChange", val);
+  }
+
+  function getUserName(val): string {
+    for (const i in members.value) {
+      if (members.value[i].userId === val) {
+        return members.value[i].name
+          ? members.value[i].name
+          : members.value[i].nickname;
+      }
+    }
+  }
+
+  function getMembers() {
+    getSysMemberPage().then(res => {
+      members.value = res.data.list;
+    });
   }
 
   async function onSearch() {
@@ -236,6 +256,7 @@ export function useEventDaySt() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    getMembers();
     onSearch();
   });
 
@@ -245,6 +266,8 @@ export function useEventDaySt() {
     columns,
     dataList,
     pagination,
+    members,
+    getMembers,
     onSearch,
     resetForm,
     openDialog,

@@ -6,7 +6,7 @@ import { EventDayStFormProps } from "@/api/dental/event-day-st";
 const props = withDefaults(defineProps<EventDayStFormProps>(), {
   formInline: () => ({
     id: 0,
-    day: 0,
+    day: new Date(),
     teamId: 0,
     userId: 0,
     deptPath: null,
@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<EventDayStFormProps>(), {
     furtherDiagnosis: 0,
     deal: 0,
     invitation: 0,
-    rest: 0
+    rest: 1
   })
 });
 
@@ -41,25 +41,13 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
     <el-form-item label="时间" prop="day">
-      <el-input
-        v-model.number="newFormInline.day"
-        clearable
-        placeholder="请输入时间"
-      />
-    </el-form-item>
-    <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
+      <el-date-picker
+        v-model="newFormInline.day"
+        type="date"
+        placeholder="Pick a day"
+        format="YYYY-MM-DD"
+        value-format="YYYYMMDD"
       />
     </el-form-item>
     <el-form-item label="用户id" prop="userId">
@@ -67,13 +55,6 @@ defineExpose({ getRef });
         v-model.number="newFormInline.userId"
         clearable
         placeholder="请输入用户id"
-      />
-    </el-form-item>
-    <el-form-item label="部门路径" prop="deptPath">
-      <el-input
-        v-model="newFormInline.deptPath"
-        clearable
-        placeholder="请输入部门路径"
       />
     </el-form-item>
     <el-form-item label="留存" prop="newCustomerCnt">
@@ -112,10 +93,13 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="休息" prop="rest">
-      <el-input
-        v-model.number="newFormInline.rest"
-        clearable
-        placeholder="请输入休息"
+      <el-switch
+        v-model="newFormInline.rest"
+        inline-prompt
+        :active-value="1"
+        :inactive-value="2"
+        active-text="上班"
+        inactive-text="休息"
       />
     </el-form-item>
   </el-form>

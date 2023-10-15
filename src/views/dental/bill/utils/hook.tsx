@@ -73,16 +73,16 @@ export function useBill() {
       prop: "userId",
       minWidth: 120
     },
-    {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
-    },
-    {
-      label: "部门路径",
-      prop: "deptPath",
-      minWidth: 120
-    },
+    // {
+    //   label: "团队id",
+    //   prop: "teamId",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "部门路径",
+    //   prop: "deptPath",
+    //   minWidth: 120
+    // },
     {
       label: "金额",
       prop: "total",
@@ -111,7 +111,7 @@ export function useBill() {
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
-      label: "交易类型1 成交 2补尾款  3补上月欠款 10退款",
+      label: "交易类型",
       prop: "tradeStatus",
       minWidth: 120
     },
@@ -274,7 +274,7 @@ export function useBill() {
           remark: row?.remark ?? ""
         }
       },
-      width: "48%",
+      width: "52%",
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
@@ -286,6 +286,7 @@ export function useBill() {
           if (valid) {
             // 表单规则校验通过
             if (title === "新增") {
+              console.log("curData", curData);
               createBill(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {

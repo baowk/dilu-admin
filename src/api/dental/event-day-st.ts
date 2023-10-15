@@ -95,7 +95,7 @@ interface EventDayStFormItemProps {
   /** 主键 */
   id: number;
   /** 时间 */
-  day: number;
+  day: number | string | Date;
   /** 团队id */
   teamId: number;
   /** 用户id */
