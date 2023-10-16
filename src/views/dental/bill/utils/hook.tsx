@@ -9,6 +9,7 @@ import {
 } from "@/api/dental/bill";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
+import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
 import { type BillFormItemProps } from "@/api/dental/bill";
 import { type PaginationProps } from "@pureadmin/table";
@@ -27,14 +28,14 @@ export function useBill() {
     paidTotal: null,
     linkId: 0,
     tradeAt: null,
-    tradeStatus: 0,
+    tradeStatus: null,
     dentalCount: 0,
     brand: 0,
     implantedCount: 0,
     implant: 0,
     implantDate: null,
     doctor: null,
-    pack: 0,
+    pack: null,
     paybackDate: null,
     tags: null,
     prjName: null,
@@ -44,6 +45,7 @@ export function useBill() {
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
+  const members = ref(Array<SysMember>);
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
@@ -52,6 +54,64 @@ export function useBill() {
     currentPage: 1,
     background: true
   });
+
+  const packOptions = [
+    {
+      value: 1,
+      label: "颗数"
+    },
+    {
+      value: 2,
+      label: "半口"
+    },
+    {
+      value: 3,
+      label: "全口"
+    }
+  ];
+
+  const brandOptions = [
+    {
+      value: 1,
+      label: "奥齿泰"
+    },
+    {
+      value: 2,
+      label: "皓圣"
+    },
+    {
+      value: 3,
+      label: "雅定"
+    },
+    {
+      value: 4,
+      label: "ITI"
+    },
+    {
+      value: 5,
+      label: "诺贝尔"
+    }
+  ];
+
+  const tradeOptions = [
+    {
+      value: 1,
+      label: "成交"
+    },
+    {
+      value: 2,
+      label: "补尾款"
+    },
+    {
+      value: 3,
+      label: "补上月欠款"
+    },
+    {
+      value: 10,
+      label: "退款"
+    }
+  ];
+
   const columns: TableColumnList = [
     {
       label: "主键",
@@ -71,18 +131,9 @@ export function useBill() {
     {
       label: "用户id",
       prop: "userId",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ userId }) => getUserName(userId)
     },
-    // {
-    //   label: "团队id",
-    //   prop: "teamId",
-    //   minWidth: 120
-    // },
-    // {
-    //   label: "部门路径",
-    //   prop: "deptPath",
-    //   minWidth: 120
-    // },
     {
       label: "金额",
       prop: "total",
@@ -148,7 +199,7 @@ export function useBill() {
       minWidth: 120
     },
     {
-      label: "1 普通 2 半口 3 全口",
+      label: "全半口",
       prop: "pack",
       minWidth: 120
     },
@@ -200,6 +251,22 @@ export function useBill() {
       slot: "operation"
     }
   ];
+
+  function getMembers() {
+    getSysMemberPage().then(res => {
+      members.value = res.data.list;
+    });
+  }
+
+  function getUserName(val): string {
+    for (const i in members.value) {
+      if (members.value[i].userId === val) {
+        return members.value[i].name
+          ? members.value[i].name
+          : members.value[i].nickname;
+      }
+    }
+  }
 
   function handleDelete(row) {
     delBill({ ids: [row.id] }).then(res => {
@@ -324,6 +391,7 @@ export function useBill() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    getMembers();
     onSearch();
   });
 
@@ -333,6 +401,9 @@ export function useBill() {
     columns,
     dataList,
     pagination,
+    packOptions,
+    brandOptions,
+    tradeOptions,
     onSearch,
     resetForm,
     openDialog,

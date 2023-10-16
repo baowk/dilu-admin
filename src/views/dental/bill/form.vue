@@ -4,6 +4,7 @@ import type { FormRules } from "element-plus";
 import { BillFormProps } from "@/api/dental/bill";
 import { message } from "@/utils/message";
 import { identify } from "@/api/dental/bill";
+import { useBill } from "./utils/hook";
 
 const props = withDefaults(defineProps<BillFormProps>(), {
   formInline: () => ({
@@ -21,15 +22,15 @@ const props = withDefaults(defineProps<BillFormProps>(), {
     paidTotal: null,
     linkId: 0,
     tradeAt: null,
-    tradeStatus: 0,
+    tradeStatus: null,
     dentalCount: 0,
-    brand: 0,
+    brand: null,
     brandName: null,
     implantedCount: 0,
     implant: 0,
     implantDate: null,
     doctor: null,
-    pack: 0,
+    pack: null,
     paybackDate: null,
     tags: null,
     prjName: null,
@@ -37,6 +38,8 @@ const props = withDefaults(defineProps<BillFormProps>(), {
     remark: null
   })
 });
+
+const { packOptions, brandOptions, tradeOptions } = useBill();
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -83,13 +86,6 @@ defineExpose({ getRef });
       <el-button type="primary" @click="handleIdentify()">识别</el-button>
     </el-form-item>
 
-    <!-- <el-form-item label="订单号" prop="no">
-      <el-input
-        v-model="newFormInline.no"
-        clearable
-        placeholder="请输入订单号"
-      />
-    </el-form-item> -->
     <el-form-item label="咨询师" prop="name">
       <el-input
         v-model.number="newFormInline.name"
@@ -112,13 +108,6 @@ defineExpose({ getRef });
       />
     </el-form-item>
 
-    <!-- <el-form-item label="金额" prop="total">
-      <el-input
-        v-model="newFormInline.total"
-        clearable
-        placeholder="请输入金额"
-      />
-    </el-form-item> -->
     <el-form-item label="折后金额" prop="realTotal">
       <el-input
         v-model="newFormInline.realTotal"
@@ -126,27 +115,35 @@ defineExpose({ getRef });
         placeholder="请输入折后金额"
       />
     </el-form-item>
-    <el-form-item label="已支付金额" prop="paidTotal">
+    <el-form-item label="已付金额" prop="paidTotal">
       <el-input
         v-model="newFormInline.paidTotal"
         clearable
-        placeholder="请输入已支付金额"
+        placeholder="请输入已付金额"
       />
     </el-form-item>
-    <el-form-item label="关联订单" prop="linkId">
+    <!-- <el-form-item label="关联订单" prop="linkId">
       <el-input
         v-model.number="newFormInline.linkId"
         clearable
         placeholder="请输入关联订单"
       />
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item label="交易类型" prop="tradeStatus">
-      <el-input
-        v-model.number="newFormInline.tradeStatus"
+      <el-select
+        v-model="newFormInline.tradeStatus"
+        placeholder="请选择交易类型"
+        class="w-full"
         clearable
-        placeholder="请输入交易类型1 成交 2补尾款  3补上月欠款 10退款"
-      />
+      >
+        <el-option
+          v-for="(item, index) in tradeOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="颗数" prop="dentalCount">
       <el-input
@@ -156,11 +153,19 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="品牌" prop="brandName">
-      <el-input
-        v-model.number="newFormInline.brandName"
+      <el-select
+        v-model="newFormInline.brand"
+        placeholder="请选择品牌"
+        class="w-full"
         clearable
-        placeholder="请输入品牌"
-      />
+      >
+        <el-option
+          v-for="(item, index) in brandOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="已种颗数" prop="implantedCount">
       <el-input
@@ -191,11 +196,19 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="全半口" prop="pack">
-      <el-input
-        v-model.number="newFormInline.pack"
+      <el-select
+        v-model="newFormInline.pack"
+        placeholder="请选择项目"
+        class="w-full"
         clearable
-        placeholder="请输入1 普通 2 半口 3 全口"
-      />
+      >
+        <el-option
+          v-for="(item, index) in packOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="预回款日期" prop="paybackDate">
       <el-input
@@ -211,18 +224,18 @@ defineExpose({ getRef });
         placeholder="请输入标签"
       />
     </el-form-item>
-    <el-form-item label="项目" prop="prjName">
+    <!-- <el-form-item label="项目" prop="prjName">
       <el-input
         v-model="newFormInline.prjName"
         clearable
         placeholder="请输入项目"
       />
-    </el-form-item>
-    <el-form-item label="其他项目" prop="otherPrj">
+    </el-form-item> -->
+    <el-form-item label="全科项目" prop="otherPrj">
       <el-input
         v-model="newFormInline.otherPrj"
         clearable
-        placeholder="请输入其他项目"
+        placeholder="请输入全科项目"
       />
     </el-form-item>
     <el-form-item label="备注" prop="remark">
