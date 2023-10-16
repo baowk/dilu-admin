@@ -39,7 +39,8 @@ const props = withDefaults(defineProps<BillFormProps>(), {
   })
 });
 
-const { packOptions, brandOptions, tradeOptions } = useBill();
+const { packOptions, brandOptions, tradeOptions, switchStyle, members } =
+  useBill();
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -86,18 +87,26 @@ defineExpose({ getRef });
       <el-button type="primary" @click="handleIdentify()">识别</el-button>
     </el-form-item>
 
-    <el-form-item label="咨询师" prop="name">
-      <el-input
-        v-model.number="newFormInline.name"
+    <el-form-item label="咨询师" prop="userId">
+      <el-select
+        v-model="newFormInline.userId"
+        placeholder="请选择咨询师"
+        class="w-full"
         clearable
-        placeholder="请输入咨询师"
-      />
+      >
+        <el-option
+          v-for="(item, index) in members"
+          :key="index"
+          :label="item.name"
+          :value="item.userId"
+        />
+      </el-select>
     </el-form-item>
-    <el-form-item label="交易日期" prop="tradeAt">
-      <el-input
+    <el-form-item label="成交日期" prop="tradeAt">
+      <el-date-picker
         v-model="newFormInline.tradeAt"
-        clearable
-        placeholder="请输入交易日期"
+        type="date"
+        placeholder="选择成交日期"
       />
     </el-form-item>
     <el-form-item label="顾客" prop="customerName">
@@ -181,13 +190,13 @@ defineExpose({ getRef });
         placeholder="请输入是否已种"
       />
     </el-form-item>
-    <el-form-item label="植入日期" prop="implantDate">
+    <!-- <el-form-item label="植入日期" prop="implantDate">
       <el-input
         v-model="newFormInline.implantDate"
         clearable
         placeholder="请输入植入日期"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="医生" prop="doctor">
       <el-input
         v-model="newFormInline.doctor"
@@ -210,13 +219,13 @@ defineExpose({ getRef });
         />
       </el-select>
     </el-form-item>
-    <el-form-item label="预回款日期" prop="paybackDate">
+    <!-- <el-form-item label="预回款日期" prop="paybackDate">
       <el-input
         v-model="newFormInline.paybackDate"
         clearable
         placeholder="请输入预定回款日期"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="标签" prop="tags">
       <el-input
         v-model="newFormInline.tags"

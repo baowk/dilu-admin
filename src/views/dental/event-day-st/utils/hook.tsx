@@ -195,16 +195,16 @@ export function useEventDaySt() {
       props: {
         formInline: {
           id: row?.id ?? 0,
-          day: row?.day ?? 0,
-          teamId: row?.teamId ?? 0,
-          userId: row?.userId ?? 0,
+          day: row?.day ?? new Date(),
+          teamId: row?.teamId ?? null,
+          userId: row?.userId ?? null,
           deptPath: row?.deptPath ?? "",
           newCustomerCnt: row?.newCustomerCnt ?? 0,
           firstDiagnosis: row?.firstDiagnosis ?? 0,
           furtherDiagnosis: row?.furtherDiagnosis ?? 0,
           deal: row?.deal ?? 0,
           invitation: row?.invitation ?? 0,
-          rest: row?.rest ?? 0
+          rest: row?.rest ?? 1
         }
       },
       width: "48%",
@@ -267,6 +267,7 @@ export function useEventDaySt() {
     dataList,
     pagination,
     members,
+    switchStyle,
     getMembers,
     onSearch,
     resetForm,

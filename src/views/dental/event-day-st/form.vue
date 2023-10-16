@@ -2,11 +2,12 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { EventDayStFormProps } from "@/api/dental/event-day-st";
+import { useEventDaySt } from "./utils/hook";
 
 const props = withDefaults(defineProps<EventDayStFormProps>(), {
   formInline: () => ({
     id: 0,
-    day: new Date(),
+    day: null,
     teamId: 0,
     userId: 0,
     deptPath: null,
@@ -18,6 +19,8 @@ const props = withDefaults(defineProps<EventDayStFormProps>(), {
     rest: 1
   })
 });
+
+const { switchStyle, members } = useEventDaySt();
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -46,16 +49,22 @@ defineExpose({ getRef });
         v-model="newFormInline.day"
         type="date"
         placeholder="Pick a day"
-        format="YYYY-MM-DD"
-        value-format="YYYYMMDD"
       />
     </el-form-item>
-    <el-form-item label="用户id" prop="userId">
-      <el-input
-        v-model.number="newFormInline.userId"
+    <el-form-item label="咨询师" prop="userId">
+      <el-select
+        v-model="newFormInline.userId"
+        placeholder="请选择咨询师"
+        class="w-full"
         clearable
-        placeholder="请输入用户id"
-      />
+      >
+        <el-option
+          v-for="(item, index) in members"
+          :key="index"
+          :label="item.name"
+          :value="item.userId"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="留存" prop="newCustomerCnt">
       <el-input
@@ -95,11 +104,12 @@ defineExpose({ getRef });
     <el-form-item label="休息" prop="rest">
       <el-switch
         v-model="newFormInline.rest"
-        inline-prompt
         :active-value="1"
         :inactive-value="2"
-        active-text="上班"
+        active-text="正常"
         inactive-text="休息"
+        inline-prompt
+        :style="switchStyle"
       />
     </el-form-item>
   </el-form>
