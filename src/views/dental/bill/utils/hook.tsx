@@ -11,26 +11,46 @@ import {
 //import { usePublicHooks } from "@/utils/hooks";
 import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
-import { type BillFormItemProps } from "@/api/dental/bill";
+import { type BillFormItemProps, identify } from "@/api/dental/bill";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useBill() {
+  const qform = reactive({
+    no: null,
+    customerId: null,
+    customerName: null,
+    userId: null,
+    name: null,
+    teamId: 0,
+    deptPath: null,
+    linkId: 0,
+    tradeType: null,
+    brand: null,
+    brandName: null,
+    implant: 0,
+    pack: null,
+    tags: null
+  });
+
   const form = reactive({
     id: 0,
     no: null,
-    customerId: 0,
-    userId: 0,
+    customerId: null,
+    customerName: null,
+    userId: null,
+    name: null,
     teamId: 0,
     deptPath: null,
-    total: null,
-    realTotal: null,
-    paidTotal: null,
+    amount: null,
+    realAmount: null,
+    paidAmount: null,
     linkId: 0,
     tradeAt: null,
     tradeStatus: null,
     dentalCount: 0,
-    brand: 0,
+    brand: null,
+    brandName: null,
     implantedCount: 0,
     implant: 0,
     implantDate: null,
@@ -42,6 +62,8 @@ export function useBill() {
     otherPrj: null,
     remark: null
   });
+
+  const identifyText = ref("");
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
@@ -112,6 +134,21 @@ export function useBill() {
     }
   ];
 
+  const impactOptions = [
+    {
+      value: 1,
+      label: "未中"
+    },
+    {
+      value: 2,
+      label: "部分"
+    },
+    {
+      value: 3,
+      label: "已种"
+    }
+  ];
+
   const columns: TableColumnList = [
     {
       label: "主键",
@@ -136,17 +173,17 @@ export function useBill() {
     },
     {
       label: "金额",
-      prop: "total",
+      prop: "amount",
       minWidth: 120
     },
     {
       label: "折后金额",
-      prop: "realTotal",
+      prop: "realAmount",
       minWidth: 120
     },
     {
       label: "已支付金额",
-      prop: "paidTotal",
+      prop: "paidAmount",
       minWidth: 120
     },
     {
@@ -268,6 +305,20 @@ export function useBill() {
     }
   }
 
+  function handleIdentify(text) {
+    identify({ text: text }).then(res => {
+      if (res.code == 200) {
+        formRef.value = res.data;
+        formRef.value.text = text;
+        {
+          res.data;
+        }
+      } else {
+        message(`识别失败`, { type: "error" });
+      }
+    });
+  }
+
   function handleDelete(row) {
     delBill({ ids: [row.id] }).then(res => {
       if (res.code == 200) {
@@ -293,7 +344,7 @@ export function useBill() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getBillPage(toRaw(form));
+    const { data } = await getBillPage(toRaw(qform));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -321,9 +372,9 @@ export function useBill() {
           userId: row?.userId ?? null,
           teamId: row?.teamId ?? null,
           deptPath: row?.deptPath ?? "",
-          total: row?.total ?? "",
-          realTotal: row?.realTotal ?? "",
-          paidTotal: row?.paidTotal ?? "",
+          amount: row?.amount ?? "",
+          realAmount: row?.realAmount ?? "",
+          paidAmount: row?.paidAmount ?? "",
           linkId: row?.linkId ?? 0,
           tradeAt: row?.tradeAt ?? new Date(),
           tradeStatus: row?.tradeStatus ?? null,
@@ -349,11 +400,19 @@ export function useBill() {
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as BillFormItemProps;
+
+        console.log("Form", form);
+
+        console.log("FormRef", FormRef);
+        console.log("curData", curData);
+
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
+            console.log("Form", form);
+            console.log("FormRef", FormRef);
+            console.log("curData", curData);
             if (title === "新增") {
-              console.log("curData", curData);
               createBill(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
@@ -397,6 +456,7 @@ export function useBill() {
 
   return {
     form,
+    qform,
     loading,
     columns,
     dataList,
@@ -405,6 +465,9 @@ export function useBill() {
     brandOptions,
     tradeOptions,
     members,
+    identifyText,
+    impactOptions,
+    handleIdentify,
     onSearch,
     resetForm,
     openDialog,

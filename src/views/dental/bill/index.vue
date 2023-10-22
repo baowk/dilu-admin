@@ -17,11 +17,12 @@ defineOptions({
 
 const formRef = ref();
 const {
-  form,
+  qform,
   loading,
   columns,
   dataList,
   pagination,
+  tradeOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -37,16 +38,23 @@ const {
     <el-form
       ref="formRef"
       :inline="true"
-      :model="form"
+      :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="交易类型：" prop="tradeStatus">
-        <el-input
-          v-model="form.name"
-          placeholder="请输入交易类型1 成交 2补尾款  3补上月欠款 10退款"
+      <el-form-item label="交易类型：" prop="tradeType">
+        <el-select
+          v-model="qform.tradeType"
+          placeholder="请选择交易类型"
+          class="w-full"
           clearable
-          class="!w-[200px]"
-        />
+        >
+          <el-option
+            v-for="(item, index) in tradeOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button

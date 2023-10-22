@@ -130,11 +130,11 @@ interface BillFormItemProps {
   /** 部门路径 */
   deptPath: string;
   /** 金额 */
-  total: string;
+  amount: string;
   /** 折后金额 */
-  realTotal: string;
+  realAmount: string;
   /** 已支付金额 */
-  paidTotal: string;
+  paidAmount: string;
   /** 关联订单 */
   linkId: number;
   /** 交易日期 */
