@@ -42,17 +42,17 @@ export function useBill() {
     name: null,
     teamId: 0,
     deptPath: null,
-    amount: null,
-    realAmount: null,
-    paidAmount: null,
+    amount: 0,
+    realAmount: 0,
+    paidAmount: 0,
     linkId: 0,
-    tradeAt: null,
-    tradeStatus: null,
+    tradeAt: new Date(),
+    tradeType: 1,
     dentalCount: 0,
-    brand: null,
+    brand: 1,
     brandName: null,
     implantedCount: 0,
-    implant: 0,
+    implant: null,
     implantDate: null,
     doctor: null,
     pack: null,
@@ -310,9 +310,7 @@ export function useBill() {
       if (res.code == 200) {
         formRef.value = res.data;
         formRef.value.text = text;
-        {
-          res.data;
-        }
+        console.log("identify form", formRef);
       } else {
         message(`识别失败`, { type: "error" });
       }
@@ -381,7 +379,7 @@ export function useBill() {
           dentalCount: row?.dentalCount ?? 0,
           brand: row?.brand ?? null,
           implantedCount: row?.implantedCount ?? 0,
-          implant: row?.implant ?? 0,
+          implant: row?.implant ?? null,
           implantDate: row?.implantDate ?? "",
           doctor: row?.doctor ?? "",
           pack: row?.pack ?? null,
@@ -401,19 +399,20 @@ export function useBill() {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as BillFormItemProps;
 
-        console.log("Form", form);
+        //console.log("Form", form);
 
-        console.log("FormRef", FormRef);
-        console.log("curData", curData);
+        // console.log("FormRef", FormRef);
+        // console.log("curData", curData);
 
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
             console.log("Form", form);
-            console.log("FormRef", FormRef);
-            console.log("curData", curData);
+            // console.log("FormRef", FormRef);
+            // console.log("curData", curData);
+            // console.log("formRef.value", formRef.value);
             if (title === "新增") {
-              createBill(curData).then(res => {
+              createBill(form).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
                     type: "success"
