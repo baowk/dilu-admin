@@ -81,7 +81,7 @@ interface Bill {
   /** 交易日期 */
   tradeAt: Date;
   /** 交易类型1 成交 2补尾款  3补上月欠款 10退款 */
-  tradeStatus: number;
+  tradeType: number;
   /** 颗数 */
   dentalCount: number;
   /** 品牌 */
@@ -140,7 +140,7 @@ interface BillFormItemProps {
   /** 交易日期 */
   tradeAt: Date;
   /** 交易类型1 成交 2补尾款  3补上月欠款 10退款 */
-  tradeStatus: number;
+  tradeType: number;
   /** 颗数 */
   dentalCount: number;
   /** 品牌 */

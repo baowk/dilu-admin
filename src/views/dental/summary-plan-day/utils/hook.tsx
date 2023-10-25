@@ -10,6 +10,7 @@ import {
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
+import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 import { type SummaryPlanDayFormItemProps } from "@/api/dental/summary-plan-day";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -27,6 +28,7 @@ export function useSummaryPlanDay() {
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
+  const members = ref(Array<SysMember>);
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
@@ -47,14 +49,10 @@ export function useSummaryPlanDay() {
       minWidth: 120
     },
     {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
-    },
-    {
       label: "用户id",
       prop: "userId",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ userId }) => getUserName(userId)
     },
     {
       label: "部门路径",
@@ -104,6 +102,22 @@ export function useSummaryPlanDay() {
     });
   }
 
+  function getMembers() {
+    getSysMemberPage().then(res => {
+      members.value = res.data.list;
+    });
+  }
+
+  function getUserName(val): string {
+    for (const i in members.value) {
+      if (members.value[i].userId === val) {
+        return members.value[i].name
+          ? members.value[i].name
+          : members.value[i].nickname;
+      }
+    }
+  }
+
   function handleSizeChange(val: number) {
     console.log(`${val} items per page`);
   }
@@ -141,9 +155,9 @@ export function useSummaryPlanDay() {
       props: {
         formInline: {
           id: row?.id ?? 0,
-          day: row?.day ?? 0,
+          day: row?.day ?? null,
           teamId: row?.teamId ?? 0,
-          userId: row?.userId ?? 0,
+          userId: row?.userId ?? null,
           deptPath: row?.deptPath ?? "",
           summary: row?.summary ?? "",
           plan: row?.plan ?? ""
@@ -198,6 +212,7 @@ export function useSummaryPlanDay() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    getMembers();
     onSearch();
   });
 
@@ -207,6 +222,7 @@ export function useSummaryPlanDay() {
     columns,
     dataList,
     pagination,
+    members,
     onSearch,
     resetForm,
     openDialog,

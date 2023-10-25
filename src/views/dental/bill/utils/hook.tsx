@@ -11,7 +11,7 @@ import {
 //import { usePublicHooks } from "@/utils/hooks";
 import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
-import { type BillFormItemProps, identify } from "@/api/dental/bill";
+import { type BillFormItemProps } from "@/api/dental/bill";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
@@ -31,36 +31,6 @@ export function useBill() {
     implant: 0,
     pack: null,
     tags: null
-  });
-
-  const form = reactive({
-    id: 0,
-    no: null,
-    customerId: null,
-    customerName: null,
-    userId: null,
-    name: null,
-    teamId: 0,
-    deptPath: null,
-    amount: 0,
-    realAmount: 0,
-    paidAmount: 0,
-    linkId: 0,
-    tradeAt: new Date(),
-    tradeType: 1,
-    dentalCount: 0,
-    brand: 1,
-    brandName: null,
-    implantedCount: 0,
-    implant: null,
-    implantDate: null,
-    doctor: null,
-    pack: null,
-    paybackDate: null,
-    tags: null,
-    prjName: null,
-    otherPrj: null,
-    remark: null
   });
 
   const identifyText = ref("");
@@ -200,7 +170,7 @@ export function useBill() {
     },
     {
       label: "交易类型",
-      prop: "tradeStatus",
+      prop: "tradeType",
       minWidth: 120
     },
     {
@@ -305,18 +275,6 @@ export function useBill() {
     }
   }
 
-  function handleIdentify(text) {
-    identify({ text: text }).then(res => {
-      if (res.code == 200) {
-        formRef.value = res.data;
-        formRef.value.text = text;
-        console.log("identify form", formRef);
-      } else {
-        message(`识别失败`, { type: "error" });
-      }
-    });
-  }
-
   function handleDelete(row) {
     delBill({ ids: [row.id] }).then(res => {
       if (res.code == 200) {
@@ -375,7 +333,7 @@ export function useBill() {
           paidAmount: row?.paidAmount ?? "",
           linkId: row?.linkId ?? 0,
           tradeAt: row?.tradeAt ?? new Date(),
-          tradeStatus: row?.tradeStatus ?? null,
+          tradeType: row?.tradeType ?? null,
           dentalCount: row?.dentalCount ?? 0,
           brand: row?.brand ?? null,
           implantedCount: row?.implantedCount ?? 0,
@@ -399,20 +357,12 @@ export function useBill() {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as BillFormItemProps;
 
-        //console.log("Form", form);
-
-        // console.log("FormRef", FormRef);
-        // console.log("curData", curData);
-
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
-            console.log("Form", form);
-            // console.log("FormRef", FormRef);
-            // console.log("curData", curData);
-            // console.log("formRef.value", formRef.value);
             if (title === "新增") {
-              createBill(form).then(res => {
+              console.log("Create Form", curData);
+              createBill(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
                     type: "success"
@@ -425,6 +375,7 @@ export function useBill() {
                 }
               });
             } else {
+              console.log("update Form", curData);
               updateBill(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
@@ -454,7 +405,6 @@ export function useBill() {
   });
 
   return {
-    form,
     qform,
     loading,
     columns,
@@ -466,7 +416,6 @@ export function useBill() {
     members,
     identifyText,
     impactOptions,
-    handleIdentify,
     onSearch,
     resetForm,
     openDialog,

@@ -1,54 +1,68 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
-import { BillFormProps } from "@/api/dental/bill";
+
+import {
+  type BillFormItemProps,
+  identify,
+  BillFormProps
+} from "@/api/dental/bill";
 import { message } from "@/utils/message";
 
 import { useBill } from "./utils/hook";
 
-// const props = withDefaults(defineProps<BillFormProps>(), {
-//   formInline: () => ({
-//     text: null,
-//     id: 0,
-//     no: null,
-//     customerId: 0,
-//     customerName: null,
-//     userId: 0,
-//     name: null,
-//     teamId: 0,
-//     deptPath: null,
-//     amount: null,
-//     realAmount: null,
-//     paidAmount: null,
-//     linkId: 0,
-//     tradeAt: null,
-//     tradeStatus: null,
-//     dentalCount: 0,
-//     brand: null,
-//     brandName: null,
-//     implantedCount: 0,
-//     implant: 0,
-//     implantDate: null,
-//     doctor: null,
-//     pack: null,
-//     paybackDate: null,
-//     tags: null,
-//     prjName: null,
-//     otherPrj: null,
-//     remark: null
-//   })
-// });
+const props = withDefaults(defineProps<BillFormProps>(), {
+  formInline: () => ({
+    id: 0,
+    no: null,
+    customerId: null,
+    customerName: null,
+    userId: null,
+    name: null,
+    teamId: 0,
+    deptPath: null,
+    amount: null,
+    realAmount: null,
+    paidAmount: null,
+    linkId: 0,
+    tradeAt: new Date(),
+    tradeType: 1,
+    dentalCount: 0,
+    brand: 1,
+    brandName: null,
+    implantedCount: 0,
+    implant: null,
+    implantDate: null,
+    doctor: null,
+    pack: null,
+    paybackDate: null,
+    tags: null,
+    prjName: null,
+    otherPrj: null,
+    remark: null
+  })
+});
 
 const {
   packOptions,
   brandOptions,
   tradeOptions,
   impactOptions,
-  handleIdentify,
   identifyText,
-  members,
-  form
+  members
 } = useBill();
+
+function handleIdentify(text) {
+  identify({ text: text }).then(res => {
+    if (res.code == 200) {
+      for (let key in props.formInline) {
+        props.formInline[key] = res.data[key];
+      }
+    } else {
+      message(`识别失败`, { type: "error" });
+    }
+  });
+}
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -56,7 +70,8 @@ const formRules = reactive(<FormRules>{
 });
 
 const ruleFormRef = ref();
-const newFormInline = ref(form);
+
+const newFormInline = ref(props.formInline);
 
 function getRef() {
   return ruleFormRef.value;
