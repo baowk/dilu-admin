@@ -58,6 +58,12 @@ function handleIdentify(text) {
       for (let key in props.formInline) {
         props.formInline[key] = res.data[key];
       }
+      props.formInline.customerName = res.data.customerName;
+      console.log(
+        props.formInline.customerId,
+        props.formInline.customerName,
+        res.data.customerName
+      );
     } else {
       message(`识别失败`, { type: "error" });
     }
@@ -125,9 +131,9 @@ defineExpose({ getRef });
     </el-form-item>
     <el-form-item label="顾客" prop="customerName">
       <el-input
-        v-model.number="newFormInline.customerName"
+        v-model="newFormInline.customerName"
         clearable
-        placeholder="请输入顾客"
+        placeholder="请输入顾客姓名"
       />
     </el-form-item>
 

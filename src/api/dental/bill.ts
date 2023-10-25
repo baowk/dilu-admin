@@ -121,7 +121,10 @@ interface BillFormItemProps {
   no: string;
   /** 顾客 */
   customerId: number;
-  customerName?: string;
+  /** 顾客名 */
+  customerName: string;
+  /** 顾客列表 */
+  customers: [];
   /** 用户id */
   userId: number;
   name: string;

@@ -50,7 +50,7 @@ export function useBill() {
   const packOptions = [
     {
       value: 1,
-      label: "颗数"
+      label: "多颗"
     },
     {
       value: 2,
@@ -123,7 +123,7 @@ export function useBill() {
     {
       label: "主键",
       prop: "id",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "订单号",
@@ -136,16 +136,16 @@ export function useBill() {
       minWidth: 120
     },
     {
-      label: "用户id",
+      label: "用户",
       prop: "userId",
       minWidth: 120,
       formatter: ({ userId }) => getUserName(userId)
     },
-    {
-      label: "金额",
-      prop: "amount",
-      minWidth: 120
-    },
+    // {
+    //   label: "金额",
+    //   prop: "amount",
+    //   minWidth: 120
+    // },
     {
       label: "折后金额",
       prop: "realAmount",
@@ -156,50 +156,63 @@ export function useBill() {
       prop: "paidAmount",
       minWidth: 120
     },
-    {
-      label: "关联订单",
-      prop: "linkId",
-      minWidth: 120
-    },
+    // {
+    //   label: "关联订单",
+    //   prop: "linkId",
+    //   minWidth: 120
+    // },
     {
       label: "交易日期",
       prop: "tradeAt",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ tradeAt }) => dayjs(tradeAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "交易类型",
       prop: "tradeType",
-      minWidth: 120
+      minWidth: 80,
+      formatter: ({ tradeType }) => {
+        for (const t in tradeOptions) {
+          if (tradeOptions[t].value == tradeType) {
+            return tradeOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "颗数",
       prop: "dentalCount",
-      minWidth: 120
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.implantedCount}/{row.dentalCount}
+        </dev>
+      )
     },
+    // {
+    //   label: "已种颗数",
+    //   prop: "implantedCount",
+    //   minWidth: 80
+    // },
     {
       label: "品牌",
       prop: "brand",
-      minWidth: 120
+      minWidth: 80,
+      formatter: ({ brand }) => {
+        for (const t in brandOptions) {
+          if (brandOptions[t].value == brand) {
+            return brandOptions[t].label;
+          }
+        }
+      }
     },
-    {
-      label: "已种颗数",
-      prop: "implantedCount",
-      minWidth: 120
-    },
-    {
-      label: "是否已种",
-      prop: "implant",
-      minWidth: 120
-    },
-    {
-      label: "植入日期",
-      prop: "implantDate",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
+    // {
+    //   label: "植入日期",
+    //   prop: "implantDate",
+    //   minWidth: 120,
+    //   formatter: ({ implantDate }) =>
+    //     dayjs(implantDate).format("YYYY-MM-DD HH:mm:ss")
+    // },
     {
       label: "医生",
       prop: "doctor",
@@ -208,27 +221,34 @@ export function useBill() {
     {
       label: "全半口",
       prop: "pack",
-      minWidth: 120
-    },
-    {
-      label: "预定回款日期",
-      prop: "paybackDate",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ pack }) => {
+        for (const t in packOptions) {
+          if (packOptions[t].value == pack) {
+            return packOptions[t].label;
+          }
+        }
+      }
     },
+    // {
+    //   label: "预定回款日期",
+    //   prop: "paybackDate",
+    //   minWidth: 120,
+    //   formatter: ({ paybackDate }) =>
+    //     dayjs(paybackDate).format("YYYY-MM-DD HH:mm:ss")
+    // },
     {
       label: "标签",
       prop: "tags",
       minWidth: 120
     },
+    // {
+    //   label: "项目",
+    //   prop: "prjName",
+    //   minWidth: 120
+    // },
     {
-      label: "项目",
-      prop: "prjName",
-      minWidth: 120
-    },
-    {
-      label: "其他项目",
+      label: "全科项目",
       prop: "otherPrj",
       minWidth: 120
     },
@@ -254,7 +274,7 @@ export function useBill() {
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 180,
       slot: "operation"
     }
   ];
