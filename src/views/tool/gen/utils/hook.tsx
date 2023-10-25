@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
+import { getSysRolePage } from "@/api/sys/sys-role";
 import { ElMessageBox } from "element-plus";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -141,7 +141,7 @@ export function useRole() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getRoleList(toRaw(form));
+    const { data } = await getSysRolePage(toRaw(form));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;

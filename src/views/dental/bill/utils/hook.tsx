@@ -125,20 +125,20 @@ export function useBill() {
       prop: "id",
       minWidth: 80
     },
-    {
-      label: "订单号",
-      prop: "no",
-      minWidth: 120
-    },
+    // {
+    //   label: "订单号",
+    //   prop: "no",
+    //   minWidth: 120
+    // },
     {
       label: "顾客",
-      prop: "customerId",
-      minWidth: 120
+      prop: "customerName",
+      minWidth: 110
     },
     {
       label: "用户",
       prop: "userId",
-      minWidth: 120,
+      minWidth: 110,
       formatter: ({ userId }) => getUserName(userId)
     },
     // {
@@ -149,12 +149,12 @@ export function useBill() {
     {
       label: "折后金额",
       prop: "realAmount",
-      minWidth: 120
+      minWidth: 110
     },
     {
       label: "已支付金额",
       prop: "paidAmount",
-      minWidth: 120
+      minWidth: 110
     },
     // {
     //   label: "关联订单",
@@ -165,7 +165,7 @@ export function useBill() {
       label: "交易日期",
       prop: "tradeAt",
       minWidth: 120,
-      formatter: ({ tradeAt }) => dayjs(tradeAt).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ tradeAt }) => dayjs(tradeAt).format("YYYY-MM-DD")
     },
     {
       label: "交易类型",
@@ -180,7 +180,7 @@ export function useBill() {
       }
     },
     {
-      label: "颗数",
+      label: "已种/颗数",
       prop: "dentalCount",
       minWidth: 80,
       cellRenderer: ({ row }) => (
@@ -345,6 +345,7 @@ export function useBill() {
           id: row?.id ?? 0,
           no: row?.no ?? "",
           customerId: row?.customerId ?? null,
+          customerName: row?.customerName ?? null,
           userId: row?.userId ?? null,
           teamId: row?.teamId ?? null,
           deptPath: row?.deptPath ?? "",
