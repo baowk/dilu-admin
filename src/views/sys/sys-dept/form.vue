@@ -3,8 +3,11 @@ import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { SysDeptFormProps } from "@/api/sys/sys-dept";
 
+import { usePublicHooks } from "@/utils/hooks";
+
 const props = withDefaults(defineProps<SysDeptFormProps>(), {
   formInline: () => ({
+    higherDeptOptions: [],
     id: 0,
     parentId: 0,
     deptPath: null,
@@ -28,6 +31,8 @@ const formRules = reactive(<FormRules>{
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
+const { switchStyle } = usePublicHooks();
+
 function getRef() {
   return ruleFormRef.value;
 }
@@ -42,26 +47,26 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
+    <el-form-item label="上级部门" prop="parentId">
+      <el-cascader
+        class="w-full"
+        v-model="newFormInline.parentId"
+        :options="newFormInline.higherDeptOptions"
+        :props="{
+          value: 'id',
+          label: 'name',
+          emitPath: false,
+          checkStrictly: true
+        }"
         clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
-    <el-form-item label="父id" prop="parentId">
-      <el-input
-        v-model.number="newFormInline.parentId"
-        clearable
-        placeholder="请输入父id"
-      />
-    </el-form-item>
-    <el-form-item label="部门路径" prop="deptPath">
-      <el-input
-        v-model="newFormInline.deptPath"
-        clearable
-        placeholder="请输入部门路径"
-      />
+        filterable
+        placeholder="请选择上级部门"
+      >
+        <template #default="{ node, data }">
+          <span>{{ data.name }}</span>
+          <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+        </template>
+      </el-cascader>
     </el-form-item>
     <el-form-item label="部门名" prop="name">
       <el-input
@@ -70,11 +75,15 @@ defineExpose({ getRef });
         placeholder="请输入部门名"
       />
     </el-form-item>
-    <el-form-item label="类型" prop="type">
-      <el-input
-        v-model.number="newFormInline.type"
-        clearable
-        placeholder="请输入类型"
+    <el-form-item label="部门类型">
+      <el-switch
+        v-model="newFormInline.type"
+        inline-prompt
+        :active-value="1"
+        :inactive-value="2"
+        active-text="分公司"
+        inactive-text="部门"
+        :style="switchStyle"
       />
     </el-form-item>
     <el-form-item label="部门领导" prop="principal">
@@ -105,11 +114,15 @@ defineExpose({ getRef });
         placeholder="请输入排序"
       />
     </el-form-item>
-    <el-form-item label="状态" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
-        clearable
-        placeholder="请输入状态"
+    <el-form-item label="部门状态">
+      <el-switch
+        v-model="newFormInline.status"
+        inline-prompt
+        :active-value="1"
+        :inactive-value="2"
+        active-text="启用"
+        inactive-text="停用"
+        :style="switchStyle"
       />
     </el-form-item>
     <el-form-item label="备注" prop="remark">
@@ -117,13 +130,6 @@ defineExpose({ getRef });
         v-model="newFormInline.remark"
         clearable
         placeholder="请输入备注"
-      />
-    </el-form-item>
-    <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
       />
     </el-form-item>
   </el-form>

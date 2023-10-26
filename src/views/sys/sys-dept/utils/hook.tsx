@@ -10,71 +10,49 @@ import {
 import { handleTree } from "@/utils/tree";
 import { addDialog } from "@/components/ReDialog";
 import { type SysDeptFormItemProps } from "@/api/sys/sys-dept";
-import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { cloneDeep, isAllEmpty } from "@pureadmin/utils";
+import { usePublicHooks } from "@/utils/hooks";
 
 export function useSysDept() {
   const form = reactive({
-    id: 0,
-    parentId: 0,
-    deptPath: null,
     name: null,
-    type: 0,
     principal: null,
     phone: null,
     email: null,
-    sort: 0,
-    status: 0,
-    remark: null,
-    teamId: 0
+    status: 1
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
+  const { tagStyle } = usePublicHooks();
+
   const columns: TableColumnList = [
-    // {
-    //   label: "主键",
-    //   prop: "id",
-    //   minWidth: 120
-    // },
-    // {
-    //   label: "父id",
-    //   prop: "parentId",
-    //   minWidth: 120
-    // },
-    // {
-    //   label: "部门路径",
-    //   prop: "deptPath",
-    //   minWidth: 120
-    // },
     {
       label: "部门名",
       prop: "name",
-      minWidth: 120
+      minWidth: 160,
+      align: "left"
     },
     {
       label: "类型",
       prop: "type",
-      minWidth: 120
+      minWidth: 100,
+      cellRenderer: ({ row, props }) => (
+        <el-tag size={props.size} style={tagStyle.value(row.type)}>
+          {row.type === 1 ? "分公司" : "部门"}
+        </el-tag>
+      )
     },
     {
       label: "部门领导",
       prop: "principal",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "手机号",
       prop: "phone",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "邮箱",
@@ -84,32 +62,37 @@ export function useSysDept() {
     {
       label: "排序",
       prop: "sort",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 80,
+      cellRenderer: ({ row, props }) => (
+        <el-tag size={props.size} style={tagStyle.value(row.status)}>
+          {row.status === 1 ? "启用" : "停用"}
+        </el-tag>
+      )
     },
     {
       label: "备注",
       prop: "remark",
       minWidth: 120
     },
-    {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
-    },
+    // {
+    //   label: "团队id",
+    //   prop: "teamId",
+    //   minWidth: 120
+    // },
     {
       label: "创建者",
       prop: "createBy",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "更新者",
       prop: "updateBy",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "创建时间",
@@ -159,7 +142,6 @@ export function useSysDept() {
   async function onSearch() {
     loading.value = true;
     const { data } = await getDeptAll(toRaw(form));
-
     let newData = data;
     if (!isAllEmpty(form.name)) {
       // 前端搜索部门名称
@@ -170,7 +152,6 @@ export function useSysDept() {
       newData = newData.filter(item => item.status === form.status);
     }
     dataList.value = handleTree(newData); // 处理成树结构
-    console.log(handleTree(newData));
     setTimeout(() => {
       loading.value = false;
     }, 500);
@@ -204,12 +185,12 @@ export function useSysDept() {
           parentId: row?.parentId ?? 0,
           deptPath: row?.deptPath ?? "",
           name: row?.name ?? "",
-          type: row?.type ?? 0,
+          type: row?.type ?? 2,
           principal: row?.principal ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
           sort: row?.sort ?? 0,
-          status: row?.status ?? 0,
+          status: row?.status ?? 1,
           remark: row?.remark ?? "",
           teamId: row?.teamId ?? 0
         }
@@ -271,7 +252,6 @@ export function useSysDept() {
     loading,
     columns,
     dataList,
-    pagination,
     onSearch,
     resetForm,
     openDialog,

@@ -83,6 +83,7 @@ interface SysDept {
 }
 
 interface SysDeptFormItemProps {
+  higherDeptOptions: Record<string, unknown>[];
   /** 主键 */
   id: number;
   /** 父id */

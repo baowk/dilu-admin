@@ -13,7 +13,7 @@ import type { FormItemProps, RoleFormItemProps } from "./types";
 import { hideTextAtIndex, getKeyList, isAllEmpty } from "@pureadmin/utils";
 import { getRoleIds, getAllRoleList } from "@/api/sys/sys-role";
 
-import { getDeptList } from "@/api/sys/sys-dept";
+import { getDeptAll } from "@/api/sys/sys-dept";
 
 import {
   getSysMemberPage,
@@ -511,7 +511,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     onSearch();
 
     // 归属部门
-    const { data } = await getDeptList();
+    const { data } = await getDeptAll();
     higherDeptOptions.value = handleTree(data);
     treeData.value = handleTree(data);
     treeLoading.value = false;
