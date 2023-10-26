@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { CustomerFormProps } from "@/api/dental/customer";
+import { useCustomer } from "./utils/hook";
 
 const props = withDefaults(defineProps<CustomerFormProps>(), {
   formInline: () => ({
@@ -22,6 +23,8 @@ const props = withDefaults(defineProps<CustomerFormProps>(), {
     inviterName: null
   })
 });
+
+const { members, genderOptions } = useCustomer();
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -45,13 +48,13 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
+    <!-- <el-form-item label="主键" prop="id">
       <el-input
         v-model.number="newFormInline.id"
         clearable
         placeholder="请输入主键"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="姓名" prop="name">
       <el-input
         v-model="newFormInline.name"
@@ -74,10 +77,26 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="性别" prop="gender">
-      <el-input
-        v-model.number="newFormInline.gender"
+      <el-select
+        v-model="newFormInline.gender"
+        placeholder="请选择性别"
+        class="w-full"
         clearable
-        placeholder="请输入性别"
+      >
+        <el-option
+          v-for="(item, index) in genderOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="生日" prop="birthday">
+      <el-date-picker
+        v-model="newFormInline.birthday"
+        type="date"
+        placeholder="选择生日"
+        value-format="x"
       />
     </el-form-item>
     <el-form-item label="年龄" prop="age">
@@ -85,13 +104,6 @@ defineExpose({ getRef });
         v-model.number="newFormInline.age"
         clearable
         placeholder="请输入年龄"
-      />
-    </el-form-item>
-    <el-form-item label="生日" prop="birthday">
-      <el-input
-        v-model.number="newFormInline.birthday"
-        clearable
-        placeholder="请输入生日"
       />
     </el-form-item>
     <el-form-item label="来源" prop="source">
@@ -113,35 +125,24 @@ defineExpose({ getRef });
         v-model="newFormInline.remark"
         clearable
         placeholder="请输入描述"
+        type="textarea"
+        :rows="2"
       />
     </el-form-item>
-    <el-form-item label="用户id" prop="userId">
-      <el-input
-        v-model.number="newFormInline.userId"
+    <el-form-item label="咨询师" prop="userId">
+      <el-select
+        v-model="newFormInline.userId"
+        placeholder="请选择咨询师"
+        class="w-full"
         clearable
-        placeholder="请输入用户id"
-      />
-    </el-form-item>
-    <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
-      />
-    </el-form-item>
-    <el-form-item label="部门路径" prop="deptPath">
-      <el-input
-        v-model="newFormInline.deptPath"
-        clearable
-        placeholder="请输入部门路径"
-      />
-    </el-form-item>
-    <el-form-item label="邀请人" prop="inviter">
-      <el-input
-        v-model.number="newFormInline.inviter"
-        clearable
-        placeholder="请输入邀请人"
-      />
+      >
+        <el-option
+          v-for="(item, index) in members"
+          :key="index"
+          :label="item.name"
+          :value="item.userId"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="邀请人名" prop="inviterName">
       <el-input

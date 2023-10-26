@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<BillFormProps>(), {
     no: null,
     customerId: null,
     customerName: null,
+    customers: [],
     userId: null,
     name: null,
     teamId: 0,

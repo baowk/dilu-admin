@@ -1,7 +1,15 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getCustomerPage, createCustomer, updateCustomer, delCustomer } from "@/api/dental/customer";
+import {
+  getCustomerPage,
+  createCustomer,
+  updateCustomer,
+  delCustomer
+} from "@/api/dental/customer";
+
+import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -25,11 +33,24 @@ export function useCustomer() {
     teamId: 0,
     deptPath: null,
     inviter: 0,
-    inviterName: null,
+    inviterName: null
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
+  const members = ref(Array<SysMember>);
+
+  const genderOptions = [
+    {
+      value: 1,
+      label: "男"
+    },
+    {
+      value: 2,
+      label: "女"
+    }
+  ];
+
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
@@ -39,7 +60,6 @@ export function useCustomer() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
@@ -63,7 +83,12 @@ export function useCustomer() {
     {
       label: "性别",
       prop: "gender",
-      minWidth: 120
+      minWidth: 120,
+      cellRenderer: ({ row }) => (
+        <el-tag type={row.gender === 1 ? "" : "danger"} effect="plain">
+          {row.gender === 1 ? "男" : "女"}
+        </el-tag>
+      )
     },
     {
       label: "年龄",
@@ -73,7 +98,13 @@ export function useCustomer() {
     {
       label: "生日",
       prop: "birthday",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ birthday }) => {
+        if (birthday != 0) {
+          return dayjs(birthday).format("YYYY-MM-DD");
+        }
+        return "";
+      }
     },
     {
       label: "来源",
@@ -93,23 +124,14 @@ export function useCustomer() {
     {
       label: "用户id",
       prop: "userId",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ userId }) => getUserName(userId)
     },
-    {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
-    },
-    {
-      label: "部门路径",
-      prop: "deptPath",
-      minWidth: 120
-    },
-    {
-      label: "邀请人",
-      prop: "inviter",
-      minWidth: 120
-    },
+    // {
+    //   label: "部门路径",
+    //   prop: "deptPath",
+    //   minWidth: 120
+    // },
     {
       label: "邀请人名",
       prop: "inviterName",
@@ -126,8 +148,8 @@ export function useCustomer() {
       label: "更新时间",
       prop: "updatedAt",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ updatedAt }) =>
+        dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -160,6 +182,22 @@ export function useCustomer() {
     console.log("handleSelectionChange", val);
   }
 
+  function getMembers() {
+    getSysMemberPage().then(res => {
+      members.value = res.data.list;
+    });
+  }
+
+  function getUserName(val): string {
+    for (const i in members.value) {
+      if (members.value[i].userId === val) {
+        return members.value[i].name
+          ? members.value[i].name
+          : members.value[i].nickname;
+      }
+    }
+  }
+
   async function onSearch() {
     loading.value = true;
     const { data } = await getCustomerPage(toRaw(form));
@@ -184,21 +222,21 @@ export function useCustomer() {
       title: `${title}客户`,
       props: {
         formInline: {
-          id: row?.id ?? 0 ,
+          id: row?.id ?? 0,
           name: row?.name ?? "",
           phone: row?.phone ?? "",
           wechat: row?.wechat ?? "",
-          gender: row?.gender ?? 0 ,
-          age: row?.age ?? 0 ,
-          birthday: row?.birthday ?? 0 ,
+          gender: row?.gender ?? null,
+          age: row?.age ?? null,
+          birthday: row?.birthday ?? dayjs("1970-01-01"),
           source: row?.source ?? "",
           address: row?.address ?? "",
           remark: row?.remark ?? "",
-          userId: row?.userId ?? 0 ,
-          teamId: row?.teamId ?? 0 ,
+          userId: row?.userId ?? 0,
+          teamId: row?.teamId ?? 0,
           deptPath: row?.deptPath ?? "",
-          inviter: row?.inviter ?? 0 ,
-          inviterName: row?.inviterName ?? "",
+          inviter: row?.inviter ?? 0,
+          inviterName: row?.inviterName ?? ""
         }
       },
       width: "48%",
@@ -233,7 +271,7 @@ export function useCustomer() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }
@@ -250,6 +288,7 @@ export function useCustomer() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    getMembers();
     onSearch();
   });
 
@@ -259,6 +298,8 @@ export function useCustomer() {
     columns,
     dataList,
     pagination,
+    genderOptions,
+    members,
     onSearch,
     resetForm,
     openDialog,
