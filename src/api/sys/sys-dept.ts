@@ -1,25 +1,17 @@
 import { http } from "@/utils/http";
-import { Result, PageResult } from "@/api/common";
+import { Result } from "@/api/common";
 //import { SysDept } from "@/api/sys/sys-dept.d";
 
 //Api
-
 /** 获取部门管理列表 */
-export const getSysDeptPage = (data?: object) => {
-  return http.request<Result<PageResult<SysDept>>>(
+export const getDeptAll = (data?: object) => {
+  return http.request<Result<Array<SysDept>>>(
     "post",
-    "/api/v1/sys/sys-dept/page",
+    "/api/v1/sys/sys-dept/all",
     {
       data
     }
   );
-};
-
-/** 获取部门管理列表 */
-export const getDeptList = (data?: object) => {
-  return http.request<Result<SysDept>>("post", "/api/v1/sys/sys-dept/list", {
-    data
-  });
 };
 
 /** 获取部门 */

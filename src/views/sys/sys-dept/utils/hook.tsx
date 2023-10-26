@@ -2,17 +2,17 @@ import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
 import {
-  getSysDeptPage,
+  getDeptAll,
   createSysDept,
   updateSysDept,
   delSysDept
 } from "@/api/sys/sys-dept";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
+import { handleTree } from "@/utils/tree";
 import { addDialog } from "@/components/ReDialog";
 import { type SysDeptFormItemProps } from "@/api/sys/sys-dept";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { cloneDeep, isAllEmpty } from "@pureadmin/utils";
 
 export function useSysDept() {
   const form = reactive({
@@ -41,21 +41,21 @@ export function useSysDept() {
     background: true
   });
   const columns: TableColumnList = [
-    {
-      label: "主键",
-      prop: "id",
-      minWidth: 120
-    },
-    {
-      label: "父id",
-      prop: "parentId",
-      minWidth: 120
-    },
-    {
-      label: "部门路径",
-      prop: "deptPath",
-      minWidth: 120
-    },
+    // {
+    //   label: "主键",
+    //   prop: "id",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "父id",
+    //   prop: "parentId",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "部门路径",
+    //   prop: "deptPath",
+    //   minWidth: 120
+    // },
     {
       label: "部门名",
       prop: "name",
@@ -122,20 +122,13 @@ export function useSysDept() {
       label: "最后更新时间",
       prop: "updatedAt",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
-      label: "删除时间",
-      prop: "deletedAt",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ updatedAt }) =>
+        dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 160,
       slot: "operation"
     }
   ];
@@ -165,12 +158,19 @@ export function useSysDept() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getSysDeptPage(toRaw(form));
-    dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
+    const { data } = await getDeptAll(toRaw(form));
 
+    let newData = data;
+    if (!isAllEmpty(form.name)) {
+      // 前端搜索部门名称
+      newData = newData.filter(item => item.name.includes(form.name));
+    }
+    if (!isAllEmpty(form.status)) {
+      // 前端搜索状态
+      newData = newData.filter(item => item.status === form.status);
+    }
+    dataList.value = handleTree(newData); // 处理成树结构
+    console.log(handleTree(newData));
     setTimeout(() => {
       loading.value = false;
     }, 500);
@@ -182,11 +182,24 @@ export function useSysDept() {
     onSearch();
   };
 
+  function formatHigherDeptOptions(treeList) {
+    // 根据返回数据的status字段值判断追加是否禁用disabled字段，返回处理后的树结构，用于上级部门级联选择器的展示（实际开发中也是如此，不可能前端需要的每个字段后端都会返回，这时需要前端自行根据后端返回的某些字段做逻辑处理）
+    if (!treeList || !treeList.length) return;
+    const newTreeList = [];
+    for (let i = 0; i < treeList.length; i++) {
+      treeList[i].disabled = treeList[i].status === 0 ? true : false;
+      formatHigherDeptOptions(treeList[i].children);
+      newTreeList.push(treeList[i]);
+    }
+    return newTreeList;
+  }
+
   function openDialog(title = "新增", row?: SysDeptFormItemProps) {
     addDialog({
       title: `${title}部门`,
       props: {
         formInline: {
+          higherDeptOptions: formatHigherDeptOptions(cloneDeep(dataList.value)),
           id: row?.id ?? 0,
           parentId: row?.parentId ?? 0,
           deptPath: row?.deptPath ?? "",
@@ -201,7 +214,7 @@ export function useSysDept() {
           teamId: row?.teamId ?? 0
         }
       },
-      width: "48%",
+      width: "40%",
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,

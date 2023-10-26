@@ -59,6 +59,10 @@ export function useBill() {
     {
       value: 3,
       label: "全口"
+    },
+    {
+      value: 4,
+      label: "全科"
     }
   ];
 
