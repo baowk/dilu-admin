@@ -79,13 +79,15 @@ const {
       @refresh="onSearch"
     >
       <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
-        >
-          新增部门
-        </el-button>
+        <Auth value="sys:sysDept:add">
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(AddFill)"
+            @click="openDialog()"
+          >
+            新增部门
+          </el-button>
+        </Auth>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
