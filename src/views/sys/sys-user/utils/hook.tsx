@@ -7,8 +7,7 @@ import {
   updateSysUser,
   delSysUser
 } from "@/api/sys/sys-user";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
+import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type SysUserFormItemProps } from "@/api/sys/sys-user";
 import { type PaginationProps } from "@pureadmin/table";
@@ -35,8 +34,8 @@ export function useSysUser() {
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
+  const switchLoadMap = ref({});
+  const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -44,11 +43,11 @@ export function useSysUser() {
     background: true
   });
   const columns: TableColumnList = [
-    {
-      label: "主键",
-      prop: "id",
-      minWidth: 120
-    },
+    // {
+    //   label: "主键",
+    //   prop: "id",
+    //   minWidth: 120
+    // },
     {
       label: "用户名",
       prop: "username",
@@ -64,11 +63,11 @@ export function useSysUser() {
       prop: "email",
       minWidth: 120
     },
-    {
-      label: "密码",
-      prop: "password",
-      minWidth: 120
-    },
+    // {
+    //   label: "密码",
+    //   prop: "password",
+    //   minWidth: 120
+    // },
     {
       label: "昵称",
       prop: "nickname",
@@ -90,14 +89,23 @@ export function useSysUser() {
       minWidth: 120
     },
     {
-      label: "生日 格式 yyyy-MM-dd",
+      label: "生日",
       prop: "birthday",
       minWidth: 120
     },
     {
-      label: "性别 1男 2女 3未知",
+      label: "性别",
       prop: "gender",
-      minWidth: 120
+      minWidth: 80,
+      cellRenderer: ({ row, props }) => (
+        <el-tag
+          size={props.size}
+          type={row.gender === 1 ? "" : "danger"}
+          effect="plain"
+        >
+          {row.gender === 1 ? "男" : "女"}
+        </el-tag>
+      )
     },
     {
       label: "角色ID",
@@ -115,9 +123,22 @@ export function useSysUser() {
       minWidth: 120
     },
     {
-      label: "状态 1冻结 2正常 3默认",
+      label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 80,
+      cellRenderer: scope => (
+        <el-switch
+          size={scope.props.size === "small" ? "small" : "default"}
+          loading={switchLoadMap.value[scope.index]?.loading}
+          v-model={scope.row.status}
+          active-value={1}
+          inactive-value={0}
+          active-text="已启用"
+          inactive-text="已停用"
+          inline-prompt
+          style={switchStyle.value}
+        />
+      )
     },
     {
       label: "创建者",
@@ -143,13 +164,13 @@ export function useSysUser() {
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
-    {
-      label: "删除时间",
-      prop: "deletedAt",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
+    // {
+    //   label: "删除时间",
+    //   prop: "deletedAt",
+    //   minWidth: 120,
+    //   formatter: ({ createTime }) =>
+    //     dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+    // },
     {
       label: "操作",
       fixed: "right",
