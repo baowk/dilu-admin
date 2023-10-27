@@ -122,7 +122,7 @@ export function useCustomer() {
       minWidth: 120
     },
     {
-      label: "用户id",
+      label: "咨询师",
       prop: "userId",
       minWidth: 120,
       formatter: ({ userId }) => getUserName(userId)

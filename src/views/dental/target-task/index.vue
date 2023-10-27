@@ -17,11 +17,12 @@ defineOptions({
 
 const formRef = ref();
 const {
-  form,
+  qform,
   loading,
   columns,
   dataList,
   pagination,
+  taskOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -37,10 +38,24 @@ const {
     <el-form
       ref="formRef"
       :inline="true"
-      :model="form"
+      :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    
+      <el-form-item label="类型：" prop="tradeType">
+        <el-select
+          v-model="qform.dayType"
+          placeholder="请选择类型"
+          class="w-full"
+          clearable
+        >
+          <el-option
+            v-for="(item, index) in taskOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -56,15 +71,17 @@ const {
       </el-form-item>
     </el-form>
 
-    <PureTableBar title="TargetTask列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="任务列表" :columns="columns" @refresh="onSearch">
       <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
-        >
-          新增TargetTask
-        </el-button>
+        <Auth value="dental:targetTask:add">
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(AddFill)"
+            @click="openDialog()"
+          >
+            新增任务
+          </el-button>
+        </Auth>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -87,32 +104,36 @@ const {
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
-            >
-              修改
-            </el-button>
-            <el-popconfirm
-              :title="`是否确认删除TargetTask名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
-            >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="primary"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
-                >
-                  删除
-                </el-button>
-              </template>
-            </el-popconfirm>
+            <Auth value="dental:targetTask:edit">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(EditPen)"
+                @click="openDialog('编辑', row)"
+              >
+                修改
+              </el-button>
+            </Auth>
+            <Auth value="dental:targetTask:remove">
+              <el-popconfirm
+                :title="`是否确认删除任务名称为${row.name}的这条数据`"
+                @confirm="handleDelete(row)"
+              >
+                <template #reference>
+                  <el-button
+                    class="reset-margin"
+                    link
+                    type="primary"
+                    :size="size"
+                    :icon="useRenderIcon(Delete)"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-popconfirm>
+            </Auth>
           </template>
         </pure-table>
       </template>

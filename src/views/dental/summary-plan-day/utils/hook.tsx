@@ -41,52 +41,52 @@ export function useSummaryPlanDay() {
     {
       label: "主键",
       prop: "id",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "天",
       prop: "day",
-      minWidth: 120
+      minWidth: 80
     },
     {
-      label: "用户id",
+      label: "咨询师",
       prop: "userId",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ userId }) => getUserName(userId)
     },
-    {
-      label: "部门路径",
-      prop: "deptPath",
-      minWidth: 120
-    },
+    // {
+    //   label: "部门路径",
+    //   prop: "deptPath",
+    //   minWidth: 120
+    // },
     {
       label: "今日总结",
       prop: "summary",
-      minWidth: 120
+      minWidth: 260
     },
     {
       label: "明日计划",
       prop: "plan",
-      minWidth: 120
+      minWidth: 260
     },
     {
       label: "创建时间",
       prop: "createdAt",
-      minWidth: 120,
+      minWidth: 110,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "更新时间",
       prop: "updatedAt",
-      minWidth: 120,
+      minWidth: 110,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];

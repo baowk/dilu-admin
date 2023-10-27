@@ -7,62 +7,79 @@ import {
   updateTargetTask,
   delTargetTask
 } from "@/api/dental/target-task";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
+import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
 import { type TargetTaskFormItemProps } from "@/api/dental/target-task";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useTargetTask() {
-  const form = reactive({
-    id: 0,
-    dayType: 0,
-    day: 0,
-    teamId: 0,
-    userId: 0,
-    deptPath: null,
-    newCustomerCnt: 0,
-    firstDiagnosis: 0,
-    deal: 0
+  const qform = reactive({
+    dayType: 30
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
+  const members = ref(Array<SysMember>);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
   });
-  const columns: TableColumnList = [
+  const taskOptions = [
     {
-      label: "主键",
-      prop: "id",
-      minWidth: 120
+      value: 1,
+      label: "天"
     },
+    {
+      value: 7,
+      label: "周"
+    },
+    {
+      value: 30,
+      label: "月"
+    }
+  ];
+  const columns: TableColumnList = [
+    // {
+    //   label: "主键",
+    //   prop: "id",
+    //   minWidth: 120
+    // },
     {
       label: "时间类型",
       prop: "dayType",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ dayType }) => {
+        for (const t in taskOptions) {
+          if (taskOptions[t].value == dayType) {
+            return taskOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "时间",
       prop: "day",
       minWidth: 120
     },
-    {
-      label: "团队id",
-      prop: "teamId",
-      minWidth: 120
-    },
+    // {
+    //   label: "团队id",
+    //   prop: "teamId",
+    //   minWidth: 120
+    // },
     {
       label: "用户id",
       prop: "userId",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ userId }) => getUserName(userId)
     },
+    // {
+    //   label: "部门路径",
+    //   prop: "deptPath",
+    //   minWidth: 120
+    // },
     {
       label: "留存任务",
       prop: "newCustomerCnt",
@@ -81,26 +98,28 @@ export function useTargetTask() {
     {
       label: "创建者",
       prop: "createBy",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ createBy }) => getUserName(createBy)
     },
     {
       label: "更新者",
       prop: "updateBy",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ updateBy }) => getUserName(updateBy)
     },
     {
       label: "创建时间",
       prop: "createdAt",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ createdAt }) =>
+        dayjs(createdAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "更新时间",
       prop: "updatedAt",
       minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ updatedAt }) =>
+        dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -133,9 +152,25 @@ export function useTargetTask() {
     console.log("handleSelectionChange", val);
   }
 
+  function getMembers() {
+    getSysMemberPage().then(res => {
+      members.value = res.data.list;
+    });
+  }
+
+  function getUserName(val): string {
+    for (const i in members.value) {
+      if (members.value[i].userId === val) {
+        return members.value[i].name
+          ? members.value[i].name
+          : members.value[i].nickname;
+      }
+    }
+  }
+
   async function onSearch() {
     loading.value = true;
-    const { data } = await getTargetTaskPage(toRaw(form));
+    const { data } = await getTargetTaskPage(toRaw(qform));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -154,14 +189,14 @@ export function useTargetTask() {
 
   function openDialog(title = "新增", row?: TargetTaskFormItemProps) {
     addDialog({
-      title: `${title}TargetTask`,
+      title: `${title}任务`,
       props: {
         formInline: {
           id: row?.id ?? 0,
-          dayType: row?.dayType ?? 0,
-          day: row?.day ?? 0,
+          dayType: row?.dayType ?? 30,
+          day: row?.day ?? null,
           teamId: row?.teamId ?? 0,
-          userId: row?.userId ?? 0,
+          userId: row?.userId ?? null,
           deptPath: row?.deptPath ?? "",
           newCustomerCnt: row?.newCustomerCnt ?? 0,
           firstDiagnosis: row?.firstDiagnosis ?? 0,
@@ -217,15 +252,18 @@ export function useTargetTask() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    getMembers();
     onSearch();
   });
 
   return {
-    form,
+    qform,
     loading,
     columns,
     dataList,
     pagination,
+    taskOptions,
+    members,
     onSearch,
     resetForm,
     openDialog,

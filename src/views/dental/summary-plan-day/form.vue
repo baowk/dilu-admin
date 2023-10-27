@@ -54,7 +54,7 @@ defineExpose({ getRef });
         placeholder="请输入天"
       />
     </el-form-item>
-    <el-form-item label="用户id" prop="userId">
+    <el-form-item label="咨询师" prop="userId">
       <el-select
         v-model="newFormInline.userId"
         placeholder="请选择咨询师"

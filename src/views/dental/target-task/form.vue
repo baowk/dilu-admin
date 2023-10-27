@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { TargetTaskFormProps } from "@/api/dental/target-task";
+import { useTargetTask } from "./utils/hook";
 
 const props = withDefaults(defineProps<TargetTaskFormProps>(), {
   formInline: () => ({
@@ -19,11 +20,13 @@ const props = withDefaults(defineProps<TargetTaskFormProps>(), {
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
-  //name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
+  name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
 });
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
+
+const { taskOptions, members } = useTargetTask();
 
 function getRef() {
   return ruleFormRef.value;
@@ -39,48 +42,44 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
+    <el-form-item label="咨询师" prop="userId">
+      <el-select
+        v-model="newFormInline.userId"
+        placeholder="请选择咨询师"
+        class="w-full"
         clearable
-        placeholder="请输入主键"
-      />
+      >
+        <el-option
+          v-for="(item, index) in members"
+          :key="index"
+          :label="item.name"
+          :value="item.userId"
+        />
+      </el-select>
     </el-form-item>
-    <el-form-item label="时间类型:月 30,周 7" prop="dayType">
-      <el-input
-        v-model.number="newFormInline.dayType"
+    <el-form-item label="时间类型" prop="dayType">
+      <el-select
+        v-model="newFormInline.dayType"
+        placeholder="请输入时间类型"
+        class="w-full"
         clearable
-        placeholder="请输入时间类型:月 30,周 7"
-      />
+      >
+        <el-option
+          v-for="(item, index) in taskOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-    <el-form-item label="时间:202310" prop="day">
+    <el-form-item label="时间" prop="day">
       <el-input
         v-model.number="newFormInline.day"
         clearable
-        placeholder="请输入时间:202310"
+        placeholder="请输入时间"
       />
     </el-form-item>
-    <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
-      />
-    </el-form-item>
-    <el-form-item label="用户id" prop="userId">
-      <el-input
-        v-model.number="newFormInline.userId"
-        clearable
-        placeholder="请输入用户id"
-      />
-    </el-form-item>
-    <el-form-item label="部门路径" prop="deptPath">
-      <el-input
-        v-model="newFormInline.deptPath"
-        clearable
-        placeholder="请输入部门路径"
-      />
-    </el-form-item>
+
     <el-form-item label="留存任务" prop="newCustomerCnt">
       <el-input
         v-model.number="newFormInline.newCustomerCnt"
