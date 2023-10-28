@@ -16,12 +16,14 @@ defineOptions({
 });
 
 const formRef = ref();
+const tableRef = ref();
 const {
   qform,
   loading,
   columns,
   dataList,
-  pagination,
+  platformOptions,
+  menuOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -41,6 +43,44 @@ const {
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
       <el-form-item>
+        <el-input
+          v-model="qform.title"
+          placeholder="请输入标题名称"
+          clearable
+          class="!w-[200px]"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="qform.platformType"
+          placeholder="请选择平台类型"
+          class="w-full"
+          clearable
+        >
+          <el-option
+            v-for="(item, index) in platformOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select
+          v-model="qform.menuType"
+          placeholder="请选择菜单类型"
+          class="w-full"
+          clearable
+        >
+          <el-option
+            v-for="(item, index) in menuOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
@@ -55,7 +95,12 @@ const {
       </el-form-item>
     </el-form>
 
-    <PureTableBar title="菜单列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar
+      title="菜单列表"
+      :columns="columns"
+      :tableRef="tableRef?.getTableRef()"
+      @refresh="onSearch"
+    >
       <template #buttons>
         <Auth value="sys:sysMenu:add">
           <el-button
@@ -69,15 +114,16 @@ const {
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          ref="tableRef"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"
+          row-key="id"
           :loading="loading"
           :size="size"
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',

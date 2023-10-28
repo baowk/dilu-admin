@@ -7,46 +7,69 @@ import {
   updateSysMenu,
   delSysMenu
 } from "@/api/sys/sys-menu";
-//import { ElMessageBox } from "element-plus";
+import { handleTree } from "@/utils/tree";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type SysMenuFormItemProps } from "@/api/sys/sys-menu";
-import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { cloneDeep, isAllEmpty } from "@pureadmin/utils";
 
 export function useSysMenu() {
-  const qform = reactive({});
+  const qform = reactive({
+    title: null,
+    menuType: null,
+    platformType: null
+  });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
+
+  const platformOptions = [
+    {
+      value: 1,
+      label: "平台"
+    },
+    {
+      value: 2,
+      label: "团队"
+    }
+  ];
+
+  const menuOptions = [
+    {
+      value: 1,
+      label: "分类"
+    },
+    {
+      value: 2,
+      label: "菜单"
+    },
+    {
+      value: 3,
+      label: "按钮"
+    }
+  ];
+
   const columns: TableColumnList = [
-    {
-      label: "主键",
-      prop: "id",
-      minWidth: 120
-    },
-    {
-      label: "菜单名",
-      prop: "menuName",
-      minWidth: 120
-    },
+    // {
+    //   label: "主键",
+    //   prop: "id",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "菜单名",
+    //   prop: "menuName",
+    //   minWidth: 120
+    // },
     {
       label: "显示名称",
       prop: "title",
-      minWidth: 120
+      minWidth: 200
     },
     {
       label: "图标",
       prop: "icon",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "路径",
@@ -54,14 +77,28 @@ export function useSysMenu() {
       minWidth: 120
     },
     {
-      label: "路径ids/分割",
-      prop: "paths",
-      minWidth: 120
+      label: "平台类型",
+      prop: "platformType",
+      minWidth: 80,
+      formatter: ({ platformType }) => {
+        for (const t in platformOptions) {
+          if (platformOptions[t].value == platformType) {
+            return platformOptions[t].label;
+          }
+        }
+      }
     },
     {
-      label: "菜单类型 1 分类 2菜单 3方法按钮",
+      label: "菜单类型",
       prop: "menuType",
-      minWidth: 120
+      minWidth: 80,
+      formatter: ({ menuType }) => {
+        for (const t in menuOptions) {
+          if (menuOptions[t].value == menuType) {
+            return menuOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "权限",
@@ -69,14 +106,9 @@ export function useSysMenu() {
       minWidth: 120
     },
     {
-      label: "菜单父id",
-      prop: "parentId",
-      minWidth: 120
-    },
-    {
       label: "是否缓存",
       prop: "noCache",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "前端组件路径",
@@ -86,48 +118,41 @@ export function useSysMenu() {
     {
       label: "排序倒叙",
       prop: "sort",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "是否隐藏",
       prop: "hidden",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "创建者",
       prop: "createBy",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "更新者",
       prop: "updateBy",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "创建时间",
       prop: "createdAt",
-      minWidth: 120,
+      minWidth: 140,
       formatter: ({ createdAt }) =>
         dayjs(createdAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "最后更新时间",
       prop: "updatedAt",
-      minWidth: 120,
+      minWidth: 140,
       formatter: ({ updatedAt }) =>
         dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
-      label: "删除时间",
-      prop: "deletedAt",
-      minWidth: 120,
-      formatter: ({ deletedAt }) =>
-        dayjs(deletedAt).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];
@@ -155,14 +180,34 @@ export function useSysMenu() {
     console.log("handleSelectionChange", val);
   }
 
+  function formatHigherDeptOptions(treeList) {
+    // 根据返回数据的status字段值判断追加是否禁用disabled字段，返回处理后的树结构，用于上级部门级联选择器的展示（实际开发中也是如此，不可能前端需要的每个字段后端都会返回，这时需要前端自行根据后端返回的某些字段做逻辑处理）
+    if (!treeList || !treeList.length) return;
+    const newTreeList = [];
+    for (let i = 0; i < treeList.length; i++) {
+      treeList[i].disabled = true;
+      formatHigherDeptOptions(treeList[i].children);
+      newTreeList.push(treeList[i]);
+    }
+    return newTreeList;
+  }
+
   async function onSearch() {
     loading.value = true;
     const { data } = await getSysMenuPage(toRaw(qform));
-    dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
-
+    let newData = data;
+    if (!isAllEmpty(qform.title)) {
+      // 前端搜索部门名称
+      newData = newData.filter(item => item.title.includes(qform.title));
+    }
+    if (!isAllEmpty(qform.platformType)) {
+      // 前端搜索状态
+      newData = newData.filter(
+        item => item.platformType === qform.platformType
+      );
+    }
+    dataList.value = handleTree(newData); // 处理成树结构
+    //console.log(dataList);
     setTimeout(() => {
       loading.value = false;
     }, 500);
@@ -179,13 +224,14 @@ export function useSysMenu() {
       title: `${title}菜单`,
       props: {
         formInline: {
+          higherDeptOptions: formatHigherDeptOptions(cloneDeep(dataList.value)),
           id: row?.id ?? 0,
-          menuName: row?.menuName ?? "",
-          title: row?.title ?? "",
+          menuName: row?.menuName ?? null,
+          title: row?.title ?? null,
           icon: row?.icon ?? "",
           path: row?.path ?? "",
-          paths: row?.paths ?? "",
-          menuType: row?.menuType ?? 0,
+          platformType: row?.platformType ?? 1,
+          menuType: row?.menuType ?? 1,
           permission: row?.permission ?? "",
           parentId: row?.parentId ?? 0,
           noCache: row?.noCache ?? 0,
@@ -251,7 +297,8 @@ export function useSysMenu() {
     loading,
     columns,
     dataList,
-    pagination,
+    platformOptions,
+    menuOptions,
     onSearch,
     resetForm,
     openDialog,

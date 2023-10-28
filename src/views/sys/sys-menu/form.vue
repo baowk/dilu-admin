@@ -3,14 +3,17 @@ import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { SysMenuFormProps } from "@/api/sys/sys-menu";
 
+import { useSysMenu } from "./utils/hook";
+
 const props = withDefaults(defineProps<SysMenuFormProps>(), {
   formInline: () => ({
+    higherDeptOptions: [],
     id: 0,
     menuName: null,
     title: null,
     icon: null,
     path: null,
-    paths: null,
+    platformType: null,
     menuType: 0,
     permission: null,
     parentId: 0,
@@ -29,6 +32,8 @@ const formRules = reactive(<FormRules>{
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
+const { platformOptions, menuOptions } = useSysMenu();
+
 function getRef() {
   return ruleFormRef.value;
 }
@@ -41,14 +46,28 @@ defineExpose({ getRef });
     ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
-    label-width="82px"
+    label-width="102px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
+    <el-form-item label="上级菜单" prop="parentId">
+      <el-cascader
+        class="w-full"
+        v-model="newFormInline.parentId"
+        :options="newFormInline.higherDeptOptions"
+        :props="{
+          value: 'id',
+          label: 'title',
+          emitPath: false,
+          checkStrictly: true
+        }"
         clearable
-        placeholder="请输入主键"
-      />
+        filterable
+        placeholder="请选择上级部门"
+      >
+        <template #default="{ node, data }">
+          <span>{{ data.title }}</span>
+          <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+        </template>
+      </el-cascader>
     </el-form-item>
     <el-form-item label="菜单名" prop="menuName">
       <el-input
@@ -78,19 +97,35 @@ defineExpose({ getRef });
         placeholder="请输入路径"
       />
     </el-form-item>
-    <el-form-item label="路径ids/分割" prop="paths">
-      <el-input
-        v-model="newFormInline.paths"
+    <el-form-item label="平台类型" prop="paths">
+      <el-select
+        v-model="newFormInline.platformType"
+        placeholder="请选择平台类型"
+        class="w-full"
         clearable
-        placeholder="请输入路径ids/分割"
-      />
+      >
+        <el-option
+          v-for="(item, index) in platformOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-    <el-form-item label="菜单类型 1 分类 2菜单 3方法按钮" prop="menuType">
-      <el-input
-        v-model.number="newFormInline.menuType"
+    <el-form-item label="菜单类型" prop="menuType">
+      <el-select
+        v-model="newFormInline.menuType"
+        placeholder="请选择菜单类型"
+        class="w-full"
         clearable
-        placeholder="请输入菜单类型 1 分类 2菜单 3方法按钮"
-      />
+      >
+        <el-option
+          v-for="(item, index) in menuOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="权限" prop="permission">
       <el-input
@@ -99,18 +134,14 @@ defineExpose({ getRef });
         placeholder="请输入权限"
       />
     </el-form-item>
-    <el-form-item label="菜单父id" prop="parentId">
-      <el-input
-        v-model.number="newFormInline.parentId"
-        clearable
-        placeholder="请输入菜单父id"
-      />
-    </el-form-item>
     <el-form-item label="是否缓存" prop="noCache">
-      <el-input
-        v-model.number="newFormInline.noCache"
-        clearable
-        placeholder="请输入是否缓存"
+      <el-switch
+        v-model="newFormInline.noCache"
+        :active-value="1"
+        :inactive-value="2"
+        active-text="是"
+        inactive-text="否"
+        inline-prompt
       />
     </el-form-item>
     <el-form-item label="前端组件路径" prop="component">
@@ -128,10 +159,13 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="是否隐藏" prop="hidden">
-      <el-input
-        v-model.number="newFormInline.hidden"
-        clearable
-        placeholder="请输入是否隐藏"
+      <el-switch
+        v-model="newFormInline.hidden"
+        :active-value="1"
+        :inactive-value="2"
+        active-text="是"
+        inactive-text="否"
+        inline-prompt
       />
     </el-form-item>
   </el-form>

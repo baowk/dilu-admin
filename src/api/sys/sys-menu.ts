@@ -1,14 +1,14 @@
 import { http } from "@/utils/http";
-import { Result, PageResult } from "@/api/common";
+import { Result } from "@/api/common";
 //import { SysMenu } from "@/api/sys/sys-menu.d";
 
 //Api
 
 /** 获取菜单管理列表 */
 export const getSysMenuPage = (data?: object) => {
-  return http.request<Result<PageResult<SysMenu>>>(
+  return http.request<Result<Array<SysMenu>>>(
     "post",
-    "/api/v1/sys/sys-menu/page",
+    "/api/v1/sys/sys-menu/all",
     {
       data
     }
@@ -57,8 +57,8 @@ interface SysMenu {
   icon: string;
   /** 路径 */
   path: string;
-  /** 路径ids/分割 */
-  paths: string;
+  /** 平台类型 */
+  platformType: number;
   /** 菜单类型 1 分类 2菜单 3方法按钮 */
   menuType: number;
   /** 权限 */
@@ -86,6 +86,7 @@ interface SysMenu {
 }
 
 interface SysMenuFormItemProps {
+  higherDeptOptions: Record<string, unknown>[];
   /** 主键 */
   id: number;
   /** 菜单名 */
@@ -96,8 +97,8 @@ interface SysMenuFormItemProps {
   icon: string;
   /** 路径 */
   path: string;
-  /** 路径ids/分割 */
-  paths: string;
+  /** 平台类型 */
+  platformType: number;
   /** 菜单类型 1 分类 2菜单 3方法按钮 */
   menuType: number;
   /** 权限 */
