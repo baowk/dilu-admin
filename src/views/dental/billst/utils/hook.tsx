@@ -1,0 +1,125 @@
+import { stQuery, stDay, stMonth } from "@/api/dental/bill";
+import { addDialog } from "@/components/ReDialog";
+import { reactive, ref, onMounted, toRaw } from "vue";
+
+export function useBillSt() {
+  const qform = reactive({
+    begin: null,
+    end: null,
+    deptPath: null,
+    userId: null,
+    teamId: null
+  });
+
+  const dataList = ref([]);
+  const loading = ref(true);
+
+  const columns: TableColumnList = [
+    {
+      label: "咨询师",
+      prop: "name",
+      minWidth: 110
+    },
+    {
+      label: "目标",
+      prop: "target",
+      minWidth: 120
+    },
+    {
+      label: "留存",
+      prop: "newCustomerCnt",
+      minWidth: 110
+    },
+    {
+      label: "初诊",
+      prop: "firstDiagnosis",
+      minWidth: 110
+    },
+    {
+      label: "成交",
+      prop: "deal",
+      minWidth: 120
+    },
+    {
+      label: "实收",
+      prop: "paid",
+      minWidth: 120
+    },
+    {
+      label: "收回上月欠款",
+      prop: "debt",
+      minWidth: 120
+    },
+    {
+      label: "退款",
+      prop: "refund",
+      minWidth: 120
+    }
+  ];
+
+  function toStDay() {
+    stDay(qform).then(res => {
+      if (res.code == 200) {
+        const txt = res.data;
+        addDialog({
+          title: "日报表",
+          contentRenderer: () => <div>{txt}</div>
+        });
+      }
+    });
+  }
+
+  function toStMonth() {
+    stMonth(qform).then(res => {
+      if (res.code == 200) {
+        const ds = res.data;
+        let txts = "";
+        for (const i in ds) {
+          txts = txts + "<p>" + ds[i] + "</p>";
+        }
+        addDialog({
+          title: "月报表",
+          contentRenderer: () => <div>{txts}</div>
+        });
+      }
+    });
+  }
+
+  function handleSelectionChange(val) {
+    console.log("handleSelectionChange", val);
+  }
+
+  async function onSearch() {
+    loading.value = true;
+    const { data } = await stQuery(toRaw(qform));
+    dataList.value = data;
+    setTimeout(() => {
+      loading.value = false;
+    }, 500);
+  }
+
+  const resetForm = formEl => {
+    if (!formEl) return;
+    formEl.resetFields();
+    //onSearch();
+  };
+
+  /** 数据权限 可自行开发 */
+  // function handleDatabase() {}
+
+  onMounted(() => {
+    onSearch();
+  });
+
+  return {
+    qform,
+    loading,
+    columns,
+    dataList,
+    toStDay,
+    toStMonth,
+    onSearch,
+    resetForm,
+    handleSelectionChange
+  };
+}

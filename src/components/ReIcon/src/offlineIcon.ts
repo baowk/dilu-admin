@@ -31,6 +31,8 @@ import Planet from "@iconify-icons/ri/planet-line";
 import Task from "@iconify-icons/ri/task-line";
 import CalendarCheck from "@iconify-icons/ri/calendar-check-line";
 import OpenArm from "@iconify-icons/ri/open-arm-line";
+import Table from "@iconify-icons/ri/table-line";
+import Generate from "@iconify-icons/ri/ai-generate";
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -58,3 +60,5 @@ addIcon("planet", Planet);
 addIcon("task", Task);
 addIcon("calendarCheck", CalendarCheck);
 addIcon("openArm", OpenArm);
+addIcon("table", Table);
+addIcon("generate", Generate);

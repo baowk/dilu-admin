@@ -15,20 +15,16 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useSysUser() {
   const form = reactive({
-    id: 0,
+    page: null,
+    pageSize: null,
     username: null,
     phone: null,
     email: null,
-    password: null,
     nickname: null,
     name: null,
     avatar: null,
-    bio: null,
     birthday: null,
     gender: null,
-    roleId: 0,
-    post: null,
-    remark: null,
     status: 0
   });
   const formRef = ref();
@@ -100,21 +96,21 @@ export function useSysUser() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={row.gender === 1 ? "" : "danger"}
+          type={row.gender === "1" ? "" : "danger"}
           effect="plain"
         >
-          {row.gender === 1 ? "男" : "女"}
+          {row.gender === "1" ? "男" : "女"}
         </el-tag>
       )
     },
     {
       label: "角色ID",
-      prop: "roleId",
+      prop: "platformRoleId",
       minWidth: 120
     },
     {
-      label: "岗位",
-      prop: "post",
+      label: "锁定",
+      prop: "lockTime",
       minWidth: 120
     },
     {
@@ -174,7 +170,7 @@ export function useSysUser() {
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];
@@ -237,8 +233,8 @@ export function useSysUser() {
           bio: row?.bio ?? "",
           birthday: row?.birthday ?? "",
           gender: row?.gender ?? "",
-          roleId: row?.roleId ?? 0,
-          post: row?.post ?? "",
+          platformRoleId: row?.platformRoleId ?? 0,
+          lockTime: row?.lockTime ?? null,
           remark: row?.remark ?? "",
           status: row?.status ?? 0
         }

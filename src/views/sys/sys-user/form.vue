@@ -45,13 +45,6 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
     <el-form-item label="用户名" prop="username">
       <el-input
         v-model="newFormInline.username"
@@ -108,32 +101,25 @@ defineExpose({ getRef });
         placeholder="请输入签名"
       />
     </el-form-item>
-    <el-form-item label="生日 格式 yyyy-MM-dd" prop="birthday">
+    <el-form-item label="生日" prop="birthday">
       <el-input
         v-model="newFormInline.birthday"
         clearable
         placeholder="请输入生日 格式 yyyy-MM-dd"
       />
     </el-form-item>
-    <el-form-item label="性别 1男 2女 3未知" prop="gender">
+    <el-form-item label="性别" prop="gender">
       <el-input
         v-model="newFormInline.gender"
         clearable
         placeholder="请输入性别 1男 2女 3未知"
       />
     </el-form-item>
-    <el-form-item label="角色ID" prop="roleId">
+    <el-form-item label="角色" prop="platformRoleId">
       <el-input
-        v-model.number="newFormInline.roleId"
+        v-model.number="newFormInline.platformRoleId"
         clearable
         placeholder="请输入角色ID"
-      />
-    </el-form-item>
-    <el-form-item label="岗位" prop="post">
-      <el-input
-        v-model="newFormInline.post"
-        clearable
-        placeholder="请输入岗位"
       />
     </el-form-item>
     <el-form-item label="备注" prop="remark">

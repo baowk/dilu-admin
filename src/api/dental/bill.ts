@@ -54,6 +54,31 @@ export const identify = (data?: object) => {
   );
 };
 
+/** 统计查询 */
+export const stQuery = (data?: object) => {
+  return http.request<Result<BillFormItemProps>>(
+    "post",
+    "/api/v1/dental/st/query",
+    {
+      data
+    }
+  );
+};
+
+/** 日报表 */
+export const stDay = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/dental/st/day", {
+    data
+  });
+};
+
+/** 月报表 */
+export const stMonth = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/dental/st/month", {
+    data
+  });
+};
+
 //Model
 
 /** 账单 */
@@ -174,4 +199,20 @@ interface BillFormProps {
   formInline: BillFormItemProps;
 }
 
-export type { BillFormItemProps, BillFormProps, Bill };
+interface BillUserSt {
+  userId: number;
+  name: string;
+  target: string; //目标
+  newCustomerCnt: number; //留存任务
+  firstDiagnosis: number; //导诊任务
+  deal: string; //成交
+  paid: string; //实收
+  debt: string; //补上月欠款
+  refund: string; //退款
+}
+
+interface BillReport {
+  data: string;
+}
+
+export type { BillFormItemProps, BillFormProps, Bill, BillUserSt, BillReport };

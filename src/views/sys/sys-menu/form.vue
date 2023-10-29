@@ -56,7 +56,7 @@ defineExpose({ getRef });
         :props="{
           value: 'id',
           label: 'title',
-          emitPath: false,
+
           checkStrictly: true
         }"
         clearable

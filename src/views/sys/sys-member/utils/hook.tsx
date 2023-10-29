@@ -109,10 +109,10 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={row.gender === 1 ? "" : "danger"}
+          type={row.gender === "1" ? "" : "danger"}
           effect="plain"
         >
-          {row.gender === 1 ? "男" : "女"}
+          {row.gender === "1" ? "男" : "女"}
         </el-tag>
       )
     },
@@ -324,7 +324,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           password: row?.password ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
-          sex: row?.gender ?? "",
+          gender: row?.gender ?? "",
           status: row?.status ?? 1,
           remark: row?.remark ?? ""
         }

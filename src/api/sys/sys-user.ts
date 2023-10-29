@@ -70,9 +70,7 @@ interface SysUser {
   /** 性别 1男 2女 3未知 */
   gender: string;
   /** 角色ID */
-  roleId: number;
-  /** 岗位 */
-  post: string;
+  platformRoleId: number;
   /** 备注 */
   remark: string;
   /** 状态 1冻结 2正常 3默认 */
@@ -86,7 +84,7 @@ interface SysUser {
   /** 最后更新时间 */
   updatedAt: Date;
   /** 删除时间 */
-  deletedAt: Date;
+  lockTime: Date;
 }
 
 interface SysUserFormItemProps {
@@ -110,12 +108,12 @@ interface SysUserFormItemProps {
   bio: string;
   /** 生日 格式 yyyy-MM-dd */
   birthday: string;
+  /** 锁定时间 */
+  lockTime: Date;
   /** 性别 1男 2女 3未知 */
   gender: string;
   /** 角色ID */
-  roleId: number;
-  /** 岗位 */
-  post: string;
+  platformRoleId: number;
   /** 备注 */
   remark: string;
   /** 状态 1冻结 2正常 3默认 */

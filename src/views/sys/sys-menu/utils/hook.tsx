@@ -64,17 +64,20 @@ export function useSysMenu() {
     {
       label: "显示名称",
       prop: "title",
-      minWidth: 200
+      minWidth: 200,
+      align: "left"
     },
     {
       label: "图标",
       prop: "icon",
-      minWidth: 80
+      minWidth: 80,
+      align: "left"
     },
     {
       label: "路径",
       prop: "path",
-      minWidth: 120
+      minWidth: 120,
+      align: "left"
     },
     {
       label: "平台类型",
@@ -103,7 +106,8 @@ export function useSysMenu() {
     {
       label: "权限",
       prop: "permission",
-      minWidth: 120
+      minWidth: 120,
+      align: "left"
     },
     {
       label: "是否缓存",
@@ -113,7 +117,8 @@ export function useSysMenu() {
     {
       label: "前端组件路径",
       prop: "component",
-      minWidth: 120
+      minWidth: 120,
+      align: "left"
     },
     {
       label: "排序倒叙",
@@ -185,7 +190,7 @@ export function useSysMenu() {
     if (!treeList || !treeList.length) return;
     const newTreeList = [];
     for (let i = 0; i < treeList.length; i++) {
-      treeList[i].disabled = true;
+      treeList[i].disabled = false;
       formatHigherDeptOptions(treeList[i].children);
       newTreeList.push(treeList[i]);
     }
