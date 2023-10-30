@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getSysApiPage, createSysApi, updateSysApi, delSysApi } from "@/api/sys/sys-api";
+import {
+  getSysApiPage,
+  createSysApi,
+  updateSysApi,
+  delSysApi
+} from "@/api/sys/sys-api";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -12,7 +17,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useSysApi() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,status: 0,
+    pageSize: 10,
+    status: 0
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -26,7 +32,6 @@ export function useSysApi() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "主键编码",
       prop: "id",
@@ -126,12 +131,12 @@ export function useSysApi() {
       title: `${title}接口`,
       props: {
         formInline: {
-          id: row?.id ?? 0 ,
+          id: row?.id ?? 0,
           title: row?.title ?? "",
           method: row?.method ?? "",
           path: row?.path ?? "",
-          permType: row?.permType ?? 0 ,
-          status: row?.status ?? 0 ,
+          permType: row?.permType ?? 0,
+          status: row?.status ?? 0
         }
       },
       width: "48%",
@@ -166,7 +171,7 @@ export function useSysApi() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }

@@ -17,6 +17,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useBill() {
   const qform = reactive({
+    page: 1,
+    pageSize: 10,
     no: null,
     customerId: null,
     customerName: null,
@@ -311,11 +313,13 @@ export function useBill() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    qform.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    qform.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {
