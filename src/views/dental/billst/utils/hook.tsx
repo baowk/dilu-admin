@@ -1,6 +1,6 @@
 import { stQuery, stDay, stMonth } from "@/api/dental/bill";
 import { addDialog } from "@/components/ReDialog";
-import { reactive, ref, onMounted, toRaw } from "vue";
+import { reactive, ref, onMounted, toRaw, h } from "vue";
 
 export function useBillSt() {
   const qform = reactive({
@@ -13,6 +13,7 @@ export function useBillSt() {
 
   const dataList = ref([]);
   const loading = ref(true);
+  const items = ref([]);
 
   const columns: TableColumnList = [
     {
@@ -60,10 +61,16 @@ export function useBillSt() {
   function toStDay() {
     stDay(qform).then(res => {
       if (res.code == 200) {
-        const txt = res.data;
+        items.value = res.data;
         addDialog({
           title: "日报表",
-          contentRenderer: () => <div>{txt}</div>
+          contentRenderer: () =>
+            h(
+              "div",
+              items.value.map((item, index) => {
+                return h("div", { key: index }, item);
+              })
+            )
         });
       }
     });
@@ -72,14 +79,16 @@ export function useBillSt() {
   function toStMonth() {
     stMonth(qform).then(res => {
       if (res.code == 200) {
-        const ds = res.data;
-        let txts = "";
-        for (const i in ds) {
-          txts = txts + "<p>" + ds[i] + "</p>";
-        }
+        items.value = res.data;
         addDialog({
           title: "月报表",
-          contentRenderer: () => <div>{txts}</div>
+          contentRenderer: () =>
+            h(
+              "div",
+              items.value.map((item, index) => {
+                return h("div", { key: index }, item);
+              })
+            )
         });
       }
     });

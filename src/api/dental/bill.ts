@@ -67,16 +67,20 @@ export const stQuery = (data?: object) => {
 
 /** 日报表 */
 export const stDay = (data?: object) => {
-  return http.request<Result<string>>("post", "/api/v1/dental/st/day", {
+  return http.request<Result<Array<string>>>("post", "/api/v1/dental/st/day", {
     data
   });
 };
 
 /** 月报表 */
 export const stMonth = (data?: object) => {
-  return http.request<Result<string>>("post", "/api/v1/dental/st/month", {
-    data
-  });
+  return http.request<Result<Array<string>>>(
+    "post",
+    "/api/v1/dental/st/month",
+    {
+      data
+    }
+  );
 };
 
 //Model
