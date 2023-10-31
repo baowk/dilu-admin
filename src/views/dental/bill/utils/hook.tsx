@@ -162,6 +162,16 @@ export function useBill() {
       prop: "paidAmount",
       minWidth: 110
     },
+    {
+      label: "回收上月欠款",
+      prop: "debtAmount",
+      minWidth: 110
+    },
+    {
+      label: "退款",
+      prop: "refundAmount",
+      minWidth: 110
+    },
     // {
     //   label: "关联订单",
     //   prop: "linkId",
@@ -361,7 +371,7 @@ export function useBill() {
           realAmount: row?.realAmount ?? "",
           paidAmount: row?.paidAmount ?? "",
           linkId: row?.linkId ?? 0,
-          tradeAt: row?.tradeAt ?? new Date(),
+          tradeAt: row?.tradeAt ?? null,
           tradeType: row?.tradeType ?? null,
           dentalCount: row?.dentalCount ?? 0,
           brand: row?.brand ?? null,

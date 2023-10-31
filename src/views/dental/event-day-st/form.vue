@@ -48,7 +48,7 @@ defineExpose({ getRef });
       <el-date-picker
         v-model="newFormInline.day"
         type="date"
-        placeholder="Pick a day"
+        placeholder="选择日期"
       />
     </el-form-item>
     <el-form-item label="咨询师" prop="userId">

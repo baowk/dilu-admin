@@ -167,6 +167,10 @@ interface BillFormItemProps {
   realAmount: string;
   /** 已支付金额 */
   paidAmount: string;
+  /** 收回上月欠款 */
+  debtAmount: string;
+  /** 退款 */
+  refundAmount: string;
   /** 关联订单 */
   linkId: number;
   /** 交易日期 */
