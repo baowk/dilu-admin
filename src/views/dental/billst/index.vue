@@ -83,6 +83,7 @@ const {
         <pure-table
           align-whole="center"
           showOverflowTooltip
+          show-summary
           table-layout="auto"
           :loading="loading"
           :size="size"
