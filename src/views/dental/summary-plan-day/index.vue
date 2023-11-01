@@ -40,7 +40,6 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    
       <el-form-item>
         <el-button
           type="primary"
@@ -73,7 +72,6 @@ const {
           table-layout="auto"
           :loading="loading"
           :size="size"
-          adaptive
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
