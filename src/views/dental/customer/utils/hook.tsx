@@ -19,7 +19,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useCustomer() {
   const form = reactive({
-    id: 0,
+    page: 1,
+    pageSize: 10,
     name: null,
     phone: null,
     wechat: null,
@@ -171,11 +172,11 @@ export function useCustomer() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.pageSize = val;
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val;
   }
 
   function handleSelectionChange(val) {

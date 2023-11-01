@@ -15,7 +15,9 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useTargetTask() {
   const qform = reactive({
-    dayType: 30
+    dayType: 30,
+    page: 1,
+    pageSize: 10
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -50,7 +52,7 @@ export function useTargetTask() {
     {
       label: "时间类型",
       prop: "dayType",
-      minWidth: 120,
+      minWidth: 80,
       formatter: ({ dayType }) => {
         for (const t in taskOptions) {
           if (taskOptions[t].value == dayType) {
@@ -62,7 +64,7 @@ export function useTargetTask() {
     {
       label: "时间",
       prop: "day",
-      minWidth: 120
+      minWidth: 90
     },
     // {
     //   label: "团队id",
@@ -70,9 +72,9 @@ export function useTargetTask() {
     //   minWidth: 120
     // },
     {
-      label: "用户id",
+      label: "咨询师",
       prop: "userId",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ userId }) => getUserName(userId)
     },
     // {
@@ -83,28 +85,28 @@ export function useTargetTask() {
     {
       label: "留存任务",
       prop: "newCustomerCnt",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "导诊任务",
       prop: "firstDiagnosis",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "成交任务",
       prop: "deal",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "创建者",
       prop: "createBy",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ createBy }) => getUserName(createBy)
     },
     {
       label: "更新者",
       prop: "updateBy",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ updateBy }) => getUserName(updateBy)
     },
     {
@@ -124,7 +126,7 @@ export function useTargetTask() {
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];
@@ -141,11 +143,11 @@ export function useTargetTask() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    qform.pageSize = val;
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    qform.page = val;
   }
 
   function handleSelectionChange(val) {

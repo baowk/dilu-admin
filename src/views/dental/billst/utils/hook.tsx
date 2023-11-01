@@ -4,6 +4,8 @@ import { reactive, ref, onMounted, toRaw, h } from "vue";
 
 export function useBillSt() {
   const qform = reactive({
+    page: 1,
+    pageSize: 10,
     begin: null,
     end: null,
     deptPath: null,
@@ -26,18 +28,9 @@ export function useBillSt() {
       prop: "target",
       minWidth: 120
     },
+
     {
-      label: "留存",
-      prop: "newCustomerCnt",
-      minWidth: 110
-    },
-    {
-      label: "初诊",
-      prop: "firstDiagnosis",
-      minWidth: 110
-    },
-    {
-      label: "成交",
+      label: "成交金额",
       prop: "deal",
       minWidth: 120
     },
@@ -55,6 +48,26 @@ export function useBillSt() {
       label: "退款",
       prop: "refund",
       minWidth: 120
+    },
+    {
+      label: "留存",
+      prop: "newCustomerCnt",
+      minWidth: 110
+    },
+    {
+      label: "初诊",
+      prop: "firstDiagnosis",
+      minWidth: 110
+    },
+    {
+      label: "复诊",
+      prop: "furtherDiagnosis",
+      minWidth: 110
+    },
+    {
+      label: "成交数",
+      prop: "dealCnt",
+      minWidth: 110
     }
   ];
 

@@ -17,7 +17,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useSummaryPlanDay() {
   const form = reactive({
-    id: 0,
+    page: 1,
+    pageSize: 10,
     day: 0,
     teamId: 0,
     userId: 0,
@@ -41,12 +42,12 @@ export function useSummaryPlanDay() {
     {
       label: "主键",
       prop: "id",
-      minWidth: 80
+      minWidth: 70
     },
     {
       label: "天",
       prop: "day",
-      minWidth: 80
+      minWidth: 100
     },
     {
       label: "咨询师",
@@ -119,11 +120,11 @@ export function useSummaryPlanDay() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.pageSize = val;
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val;
   }
 
   function handleSelectionChange(val) {
