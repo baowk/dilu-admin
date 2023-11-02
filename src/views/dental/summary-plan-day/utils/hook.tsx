@@ -63,26 +63,26 @@ export function useSummaryPlanDay() {
     {
       label: "今日总结",
       prop: "summary",
-      minWidth: 260
+      minWidth: 240
     },
     {
       label: "明日计划",
       prop: "plan",
-      minWidth: 260
+      minWidth: 240
     },
     {
       label: "创建时间",
       prop: "createdAt",
-      minWidth: 110,
+      minWidth: 120,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "更新时间",
       prop: "updatedAt",
-      minWidth: 110,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      minWidth: 120,
+      formatter: ({ updatedAt }) =>
+        dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",

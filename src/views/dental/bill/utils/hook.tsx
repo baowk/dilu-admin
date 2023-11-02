@@ -142,7 +142,7 @@ export function useBill() {
       minWidth: 110
     },
     {
-      label: "用户",
+      label: "咨询师",
       prop: "userId",
       minWidth: 110,
       formatter: ({ userId }) => getUserName(userId)
