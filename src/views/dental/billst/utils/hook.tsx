@@ -77,6 +77,7 @@ export function useBillSt() {
         items.value = res.data;
         addDialog({
           title: "日报表",
+          fullscreenIcon: true,
           contentRenderer: () =>
             h(
               "div",
@@ -95,6 +96,7 @@ export function useBillSt() {
         items.value = res.data;
         addDialog({
           title: "月报表",
+          fullscreenIcon: true,
           contentRenderer: () =>
             h(
               "div",

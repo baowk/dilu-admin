@@ -192,7 +192,7 @@ export function useEventDaySt() {
 
   function openDialog(title = "新增", row?: EventDayStFormItemProps) {
     addDialog({
-      title: `${title}EventDaySt`,
+      title: `${title}日留存`,
       props: {
         formInline: {
           id: row?.id ?? 0,

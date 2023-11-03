@@ -56,23 +56,13 @@ const {
         >
           搜索
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
+        <!-- <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           重置
-        </el-button>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="toStDay"
-        >
+        </el-button> -->
+        <el-button type="primary" :loading="loading" @click="toStDay">
           日报表
         </el-button>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="toStMonth"
-        >
+        <el-button type="primary" :loading="loading" @click="toStMonth">
           月报表
         </el-button>
       </el-form-item>
