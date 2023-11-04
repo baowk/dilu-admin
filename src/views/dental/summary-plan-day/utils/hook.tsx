@@ -47,7 +47,8 @@ export function useSummaryPlanDay() {
     {
       label: "天",
       prop: "day",
-      minWidth: 100
+      minWidth: 100,
+      formatter: ({ day }) => dayjs(day).format("YYYY-MM-DD")
     },
     {
       label: "咨询师",

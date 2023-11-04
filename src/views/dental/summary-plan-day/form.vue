@@ -48,10 +48,10 @@ defineExpose({ getRef });
       />
     </el-form-item> -->
     <el-form-item label="天" prop="day">
-      <el-input
-        v-model.number="newFormInline.day"
-        clearable
-        placeholder="请输入天"
+      <el-date-picker
+        v-model="newFormInline.day"
+        type="date"
+        placeholder="选择日期"
       />
     </el-form-item>
     <el-form-item label="咨询师" prop="userId">

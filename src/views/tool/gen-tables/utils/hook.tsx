@@ -2,26 +2,30 @@ import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
 import {
+  type GenTablesFormItemProps,
   getGenTablesPage,
   createGenTables,
   updateGenTables,
-  delGenTables
+  delGenTables,
+  getDbs
 } from "@/api/sys/gen-tables";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type GenTablesFormItemProps } from "@/api/sys/gen-tables";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useGenTables() {
   const qform = reactive({
     page: 1,
-    pageSize: 10
+    pageSize: 10,
+    tableName: null,
+    dbName: null
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
+  const dbOptions = ref([]);
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
@@ -32,142 +36,142 @@ export function useGenTables() {
   });
   const columns: TableColumnList = [
     {
-      label: "",
+      label: "id",
       prop: "tableId",
       minWidth: 120
     },
     {
-      label: "",
-      prop: "dbName",
-      minWidth: 120
-    },
-    {
-      label: "",
+      label: "表名",
       prop: "tableName",
       minWidth: 120
     },
     {
-      label: "",
+      label: "库名",
+      prop: "dbName",
+      minWidth: 120
+    },
+    {
+      label: "描述",
       prop: "tableComment",
       minWidth: 120
     },
     {
-      label: "",
+      label: "类名",
       prop: "className",
       minWidth: 120
     },
+    // {
+    //   label: "tplCategory",
+    //   prop: "tplCategory",
+    //   minWidth: 120
+    // },
     {
-      label: "",
-      prop: "tplCategory",
-      minWidth: 120
-    },
-    {
-      label: "",
+      label: "包名",
       prop: "packageName",
       minWidth: 120
     },
     {
-      label: "",
+      label: "模块",
       prop: "moduleName",
       minWidth: 120
     },
+    // {
+    //   label: "前端文件名",
+    //   prop: "moduleFrontName",
+    //   minWidth: 120
+    // },
     {
-      label: "前端文件名",
-      prop: "moduleFrontName",
-      minWidth: 120
-    },
-    {
-      label: "",
+      label: "业务名",
       prop: "businessName",
       minWidth: 120
     },
     {
-      label: "",
+      label: "方法名",
       prop: "functionName",
       minWidth: 120
     },
     {
-      label: "",
+      label: "作者",
       prop: "functionAuthor",
       minWidth: 120
     },
+    // {
+    //   label: "pkColumn",
+    //   prop: "pkColumn",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "pkGoField",
+    //   prop: "pkGoField",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "pkJsonField",
+    //   prop: "pkJsonField",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "options",
+    //   prop: "options",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "treeCode",
+    //   prop: "treeCode",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "treeParentCode",
+    //   prop: "treeParentCode",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "treeName",
+    //   prop: "treeName",
+    //   minWidth: 120
+    // },
+    // {
+    //   label: "tree",
+    //   prop: "tree",
+    //   minWidth: 120
+    // },
     {
-      label: "",
-      prop: "pkColumn",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "pkGoField",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "pkJsonField",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "options",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "treeCode",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "treeParentCode",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "treeName",
-      minWidth: 120
-    },
-    {
-      label: "",
-      prop: "tree",
-      minWidth: 120
-    },
-    {
-      label: "",
+      label: "crud",
       prop: "crud",
       minWidth: 120
     },
     {
-      label: "",
+      label: "remark",
       prop: "remark",
       minWidth: 120
     },
     {
-      label: "",
+      label: "isDataScope",
       prop: "isDataScope",
       minWidth: 120
     },
     {
-      label: "",
+      label: "isActions",
       prop: "isActions",
       minWidth: 120
     },
     {
-      label: "",
+      label: "isAuth",
       prop: "isAuth",
       minWidth: 120
     },
     {
-      label: "",
+      label: "isLogicalDelete",
       prop: "isLogicalDelete",
       minWidth: 120
     },
     {
-      label: "",
+      label: "logicalDelete",
       prop: "logicalDelete",
       minWidth: 120
     },
     {
-      label: "",
+      label: "logicalDeleteColumn",
       prop: "logicalDeleteColumn",
       minWidth: 120
     },
@@ -247,6 +251,12 @@ export function useGenTables() {
     setTimeout(() => {
       loading.value = false;
     }, 500);
+  }
+
+  function onGetDbs() {
+    getDbs().then(res => {
+      dbOptions.value = res.data;
+    });
   }
 
   const resetForm = formEl => {
@@ -339,6 +349,7 @@ export function useGenTables() {
   // function handleDatabase() {}
 
   onMounted(() => {
+    onGetDbs();
     onSearch();
   });
 
@@ -348,6 +359,7 @@ export function useGenTables() {
     columns,
     dataList,
     pagination,
+    dbOptions,
     onSearch,
     resetForm,
     openDialog,

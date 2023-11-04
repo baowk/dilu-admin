@@ -13,8 +13,14 @@ const props = withDefaults(defineProps<SysMemberFormProps>(), {
     phone: null,
     deptPath: null,
     deptId: 0,
-    postTag: 0,
-    status: 0
+    postId: 0,
+    roles: null,
+    status: 0,
+    gender: null,
+    birthday: null,
+    entryTime: null,
+    retireTime: null,
+    Birthday: null
   })
 });
 
@@ -93,7 +99,7 @@ defineExpose({ getRef });
     </el-form-item>
     <el-form-item label="职位标签 1主管 2副主管 3员工" prop="postTag">
       <el-input
-        v-model.number="newFormInline.postTag"
+        v-model.number="newFormInline.postId"
         clearable
         placeholder="请输入职位标签 1主管 2副主管 3员工"
       />

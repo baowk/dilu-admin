@@ -1,8 +1,8 @@
 import { http } from "@/utils/http";
-import { Result, PageResult } from "@/api/common";
+import { Result, PageResult, Option } from "@/api/common";
 //import { GenTables } from "@/api/sys/gen-tables.d";
 
-//Api 
+//Api
 
 /** 获取GenTables管理列表 */
 export const getGenTablesPage = (data?: object) => {
@@ -24,30 +24,48 @@ export const getGenTables = (data?: object) => {
 
 /** 创建GenTables */
 export const createGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/create", {
-    data
-  });
+  return http.request<Result<GenTables>>(
+    "post",
+    "/api/v1/sys/gen-tables/create",
+    {
+      data
+    }
+  );
 };
 
 /** 更新GenTables */
 export const updateGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/update",{
-    data
-  });
+  return http.request<Result<GenTables>>(
+    "post",
+    "/api/v1/sys/gen-tables/update",
+    {
+      data
+    }
+  );
 };
 
 /** 删除GenTables */
 export const delGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/del",{
+  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/del", {
     data
   });
+};
+
+/** 获取数据库 */
+export const getDbs = (data?: object) => {
+  return http.request<Result<Array<Option<string>>>>(
+    "post",
+    "/api/tools/gen/dbs",
+    {
+      data
+    }
+  );
 };
 
 //Model
 
 /** GenTables */
 interface GenTables {
-  
   /**  */
   tableId: number;
   /**  */
@@ -116,9 +134,7 @@ interface GenTables {
   updateBy: number;
 }
 
-
 interface GenTablesFormItemProps {
-  
   /**  */
   tableId: number;
   /**  */

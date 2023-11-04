@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import tree from "./tree.vue";
-import { useRole } from "./utils/hook";
+import { useGenTables } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -13,20 +12,17 @@ import Refresh from "@iconify-icons/ep/refresh";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 
 defineOptions({
-  name: "sys-member"
+  name: "gen-tables"
 });
 
-const treeRef = ref();
 const formRef = ref();
 const {
-  form,
+  qform,
   loading,
   columns,
   dataList,
   pagination,
-  treeData,
-  treeLoading,
-  onTreeSelect,
+  dbOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -34,32 +30,41 @@ const {
   handleSizeChange,
   handleCurrentChange,
   handleSelectionChange
-} = useRole();
+} = useGenTables();
 </script>
 
 <template>
-  <div class="flex justify-between">
-    <tree
-      ref="treeRef"
-      class="min-w-[200px] mr-2"
-      :treeData="treeData"
-      :treeLoading="treeLoading"
-      @tree-select="onTreeSelect"
-    />
+  <div class="main">
     <el-form
       ref="formRef"
       :inline="true"
-      :model="form"
+      :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="状态 1正常 ：" prop="status">
-        <el-input
-          v-model="form.name"
-          placeholder="请输入状态 1正常 "
+      <el-form-item label="库名：" prop="dbName">
+        <el-select
+          v-model="qform.dbName"
+          placeholder="请选择库名"
           clearable
-          class="!w-[200px]"
+          class="!w-[180px]"
+        >
+          <el-option
+            v-for="(item, index) in dbOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="表名：" prop="tableName">
+        <el-input
+          v-model="qform.tableName"
+          placeholder="请输入表名"
+          clearable
+          class="!w-[180px]"
         />
       </el-form-item>
+
       <el-form-item>
         <el-button
           type="primary"
@@ -75,15 +80,17 @@ const {
       </el-form-item>
     </el-form>
 
-    <PureTableBar title="会员列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="列表" :columns="columns" @refresh="onSearch">
       <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
-        >
-          新增会员
-        </el-button>
+        <Auth value="sys:genTables:add">
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(AddFill)"
+            @click="openDialog()"
+          >
+            导入
+          </el-button>
+        </Auth>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -106,32 +113,36 @@ const {
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
-            >
-              修改
-            </el-button>
-            <el-popconfirm
-              :title="`是否确认删除会员名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
-            >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="primary"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
-                >
-                  删除
-                </el-button>
-              </template>
-            </el-popconfirm>
+            <Auth value="sys:genTables:edit">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(EditPen)"
+                @click="openDialog('编辑', row)"
+              >
+                修改
+              </el-button>
+            </Auth>
+            <Auth value="sys:genTables:remove">
+              <el-popconfirm
+                :title="`是否确认删除GenTables名称为${row.name}的这条数据`"
+                @confirm="handleDelete(row)"
+              >
+                <template #reference>
+                  <el-button
+                    class="reset-margin"
+                    link
+                    type="primary"
+                    :size="size"
+                    :icon="useRenderIcon(Delete)"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-popconfirm>
+            </Auth>
           </template>
         </pure-table>
       </template>

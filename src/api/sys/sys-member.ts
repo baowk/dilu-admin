@@ -72,7 +72,11 @@ interface SysMember {
   /** 部门id */
   deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
-  postTag: number;
+  postId: number;
+  roles: string;
+  entryTime: Date;
+  retireTime: Date;
+  birthday: Date;
   /** 状态 1正常  */
   status: number;
   /** 创建者 */
@@ -83,8 +87,6 @@ interface SysMember {
   createdAt: Date;
   /** 最后更新时间 */
   updatedAt: Date;
-  /** 删除时间 */
-  deletedAt: Date;
 }
 
 interface SysMemberFormItemProps {
@@ -105,9 +107,13 @@ interface SysMemberFormItemProps {
   /** 部门id */
   deptId: number;
   /** 职位标签 1主管 2副主管 3员工 */
-  postTag: number;
+  postId: number;
   /** 状态 1正常  */
   status: number;
+  roles: string;
+  entryTime: Date;
+  retireTime: Date;
+  birthday: Date;
 }
 interface SysMemberFormProps {
   formInline: SysMemberFormItemProps;

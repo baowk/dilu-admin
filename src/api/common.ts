@@ -30,3 +30,9 @@ export type PageResult<T> = {
   /** 当前页数 */
   currentPage?: number;
 };
+
+export type Option<T> = {
+  label: string;
+  /** 值 */
+  value: T;
+};

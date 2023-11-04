@@ -44,9 +44,9 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   const form = reactive({
     // 左侧部门树的id
     deptId: 0,
-    username: "",
-    phone: "",
-    status: 0
+    name: null,
+    phone: null,
+    status: null
   });
   const formRef = ref();
   const ruleFormRef = ref();
@@ -74,27 +74,8 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       reserveSelection: true // 数据刷新后保留选项
     },
     {
-      label: "用户编号",
-      prop: "id",
-      width: 90
-    },
-    {
-      label: "用户头像",
-      prop: "avatar",
-      cellRenderer: ({ row }) => (
-        <el-image
-          fit="cover"
-          preview-teleported={true}
-          src={row.avatar}
-          preview-src-list={Array.of(row.avatar)}
-          class="w-[24px] h-[24px] rounded-full align-middle"
-        />
-      ),
-      width: 90
-    },
-    {
-      label: "用户名称",
-      prop: "username",
+      label: "姓名",
+      prop: "name",
       minWidth: 130
     },
     {
@@ -145,6 +126,13 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           onChange={() => onChange(scope as any)}
         />
       )
+    },
+    {
+      label: "入职时间",
+      minWidth: 90,
+      prop: "entryTime",
+      formatter: ({ entryTime }) =>
+        dayjs(entryTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "创建时间",

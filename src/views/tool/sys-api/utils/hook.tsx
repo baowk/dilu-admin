@@ -33,51 +33,53 @@ export function useSysApi() {
   });
   const columns: TableColumnList = [
     {
-      label: "主键编码",
+      label: "主键",
       prop: "id",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "标题",
       prop: "title",
-      minWidth: 120
+      minWidth: 120,
+      align: "left"
     },
     {
       label: "请求类型",
       prop: "method",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "请求地址",
       prop: "path",
-      minWidth: 120
+      minWidth: 180,
+      align: "left"
     },
     {
-      label: "权限类型（1：无需认证 2:须token 3：须鉴权）",
+      label: "权限类型",
       prop: "permType",
-      minWidth: 120
+      minWidth: 80
     },
     {
-      label: "状态 3 DEF 2 OK 1 del",
+      label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "更新者",
       prop: "updateBy",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "最后更新时间",
       prop: "updatedAt",
-      minWidth: 120,
+      minWidth: 130,
       formatter: ({ updatedAt }) =>
         dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];

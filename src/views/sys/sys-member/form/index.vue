@@ -2,23 +2,28 @@
 import { ref } from "vue";
 import ReCol from "@/components/ReCol";
 import { formRules } from "../utils/rule";
-import { FormProps } from "../utils/types";
+import { SysMemberFormProps } from "@/api/sys/sys-member";
 import { usePublicHooks } from "@/utils/hooks";
 
-const props = withDefaults(defineProps<FormProps>(), {
+const props = withDefaults(defineProps<SysMemberFormProps>(), {
   formInline: () => ({
     title: "新增",
     higherDeptOptions: [],
-    parentId: 0,
-    nickname: "",
-    username: "",
-    password: "",
-    phone: "",
-    email: "",
-    gender: "",
-    status: 1,
-    age: 0,
-    remark: ""
+    id: 0,
+    teamId: 0,
+    userId: 0,
+    nickname: null,
+    name: null,
+    phone: null,
+    deptPath: null,
+    deptId: 0,
+    postId: 0,
+    roles: null,
+    status: 0,
+    gender: null,
+    birthday: null,
+    entryTime: null,
+    retireTime: null
   })
 });
 
@@ -52,7 +57,7 @@ defineExpose({ getRef });
   >
     <el-row :gutter="30">
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="用户昵称" prop="nickname">
+        <el-form-item label="昵称" prop="nickname">
           <el-input
             v-model="newFormInline.nickname"
             clearable
@@ -61,26 +66,11 @@ defineExpose({ getRef });
         </el-form-item>
       </re-col>
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="用户名称" prop="username">
+        <el-form-item label="姓名" prop="username">
           <el-input
-            v-model="newFormInline.username"
+            v-model="newFormInline.name"
             clearable
             placeholder="请输入用户名称"
-          />
-        </el-form-item>
-      </re-col>
-
-      <re-col
-        :value="12"
-        :xs="24"
-        :sm="24"
-        v-if="newFormInline.title === '新增'"
-      >
-        <el-form-item label="用户密码" prop="password">
-          <el-input
-            v-model="newFormInline.password"
-            clearable
-            placeholder="请输入用户密码"
           />
         </el-form-item>
       </re-col>
@@ -95,12 +85,11 @@ defineExpose({ getRef });
       </re-col>
 
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="年龄" prop="age">
+        <el-form-item label="生日" prop="birthday">
           <el-input
-            v-model.number="newFormInline.age"
-            type="number"
+            v-model="newFormInline.birthday"
             clearable
-            placeholder="年龄"
+            placeholder="生日"
           />
         </el-form-item>
       </re-col>
@@ -115,9 +104,9 @@ defineExpose({ getRef });
         </el-form-item>
       </re-col>
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="用户性别">
+        <el-form-item label="性别">
           <el-select
-            v-model="newFormInline.sex"
+            v-model="newFormInline.gender"
             placeholder="请选择用户性别"
             class="w-full"
             clearable
@@ -136,7 +125,7 @@ defineExpose({ getRef });
         <el-form-item label="归属部门">
           <el-cascader
             class="w-full"
-            v-model="newFormInline.parentId"
+            v-model="newFormInline.deptId"
             :options="newFormInline.higherDeptOptions"
             :props="{
               value: 'id',
@@ -174,12 +163,22 @@ defineExpose({ getRef });
         </el-form-item>
       </re-col>
 
-      <re-col>
-        <el-form-item label="备注">
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="职位标签" prop="postTag">
           <el-input
-            v-model="newFormInline.remark"
-            placeholder="请输入备注信息"
-            type="textarea"
+            v-model.number="newFormInline.postId"
+            clearable
+            placeholder="请输入职位标签"
+          />
+        </el-form-item>
+      </re-col>
+
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="角色" prop="roles">
+          <el-input
+            v-model.number="newFormInline.roles"
+            clearable
+            placeholder="请输入角色"
           />
         </el-form-item>
       </re-col>

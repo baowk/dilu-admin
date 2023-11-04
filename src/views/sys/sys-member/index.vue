@@ -5,9 +5,7 @@ import { useUser } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-import Upload from "@iconify-icons/ri/upload-line";
 import Role from "@iconify-icons/ri/admin-line";
-import Password from "@iconify-icons/ri/lock-password-line";
 import More from "@iconify-icons/ep/more-filled";
 import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
@@ -40,8 +38,6 @@ const {
   onTreeSelect,
   handleUpdate,
   handleDelete,
-  handleUpload,
-  handleReset,
   handleRole,
   handleSizeChange,
   onSelectionCancel,
@@ -66,10 +62,10 @@ const {
         :model="form"
         class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
       >
-        <el-form-item label="用户名称：" prop="username">
+        <el-form-item label="姓名：" prop="username">
           <el-input
-            v-model="form.username"
-            placeholder="请输入用户名称"
+            v-model="form.name"
+            placeholder="请输入姓名"
             clearable
             class="!w-[160px]"
           />
@@ -108,11 +104,7 @@ const {
         </el-form-item>
       </el-form>
 
-      <PureTableBar
-        title="用户管理（仅演示，操作后不生效）"
-        :columns="columns"
-        @refresh="onSearch"
-      >
+      <PureTableBar title="用户管理" :columns="columns" @refresh="onSearch">
         <template #buttons>
           <el-button
             type="primary"
@@ -205,30 +197,6 @@ const {
                 />
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>
-                      <el-button
-                        :class="buttonClass"
-                        link
-                        type="primary"
-                        :size="size"
-                        :icon="useRenderIcon(Upload)"
-                        @click="handleUpload(row)"
-                      >
-                        上传头像
-                      </el-button>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <el-button
-                        :class="buttonClass"
-                        link
-                        type="primary"
-                        :size="size"
-                        :icon="useRenderIcon(Password)"
-                        @click="handleReset(row)"
-                      >
-                        重置密码
-                      </el-button>
-                    </el-dropdown-item>
                     <el-dropdown-item>
                       <el-button
                         :class="buttonClass"
