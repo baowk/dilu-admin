@@ -40,6 +40,12 @@ export function useBillSt() {
       minWidth: 120
     },
     {
+      label: "欠款",
+      prop: "curdebt",
+      minWidth: 120,
+      cellRenderer: ({ row }) => <dev>{row.deal - row.paid}</dev>
+    },
+    {
       label: "收回上月欠款",
       prop: "debt",
       minWidth: 120
