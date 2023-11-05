@@ -1,17 +1,21 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getGenColumnsPage, createGenColumns, updateGenColumns, delGenColumns } from "@/api/sys/gen-columns";
+import {
+  getGenColumnsPage,
+  createGenColumns,
+  updateGenColumns,
+  delGenColumns
+} from "@/api/tool/gen-columns";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type GenColumnsFormItemProps } from "@/api/sys/gen-columns";
+import { type GenColumnsFormItemProps } from "@/api/tool/gen-columns";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useGenColumns() {
-  const qform = reactive({
-  });
+  const qform = reactive({});
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
@@ -24,7 +28,6 @@ export function useGenColumns() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "",
       prop: "columnId",
@@ -281,8 +284,8 @@ export function useGenColumns() {
       title: `${title}GenColumns`,
       props: {
         formInline: {
-          columnId: row?.columnId ?? 0 ,
-          tableId: row?.tableId ?? 0 ,
+          columnId: row?.columnId ?? 0,
+          tableId: row?.tableId ?? 0,
           columnName: row?.columnName ?? "",
           columnComment: row?.columnComment ?? "",
           columnType: row?.columnType ?? "",
@@ -299,22 +302,22 @@ export function useGenColumns() {
           queryType: row?.queryType ?? "",
           htmlType: row?.htmlType ?? "",
           dictType: row?.dictType ?? "",
-          sort: row?.sort ?? 0 ,
+          sort: row?.sort ?? 0,
           list: row?.list ?? "",
-          pk: row?.pk ?? 0 ,
-          required: row?.required ?? 0 ,
-          superColumn: row?.superColumn ?? 0 ,
-          usableColumn: row?.usableColumn ?? 0 ,
-          increment: row?.increment ?? 0 ,
-          insert: row?.insert ?? 0 ,
-          edit: row?.edit ?? 0 ,
-          query: row?.query ?? 0 ,
+          pk: row?.pk ?? 0,
+          required: row?.required ?? 0,
+          superColumn: row?.superColumn ?? 0,
+          usableColumn: row?.usableColumn ?? 0,
+          increment: row?.increment ?? 0,
+          insert: row?.insert ?? 0,
+          edit: row?.edit ?? 0,
+          query: row?.query ?? 0,
           remark: row?.remark ?? "",
           fkTableName: row?.fkTableName ?? "",
           fkTableNameClass: row?.fkTableNameClass ?? "",
           fkTableNamePackage: row?.fkTableNamePackage ?? "",
           fkLabelId: row?.fkLabelId ?? "",
-          fkLabelName: row?.fkLabelName ?? "",
+          fkLabelName: row?.fkLabelName ?? ""
         }
       },
       width: "48%",
@@ -349,7 +352,7 @@ export function useGenColumns() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }

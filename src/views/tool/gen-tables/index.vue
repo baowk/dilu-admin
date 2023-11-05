@@ -26,6 +26,7 @@ const {
   onSearch,
   resetForm,
   openDialog,
+  importDialog,
   handleDelete,
   handleSizeChange,
   handleCurrentChange,
@@ -86,7 +87,7 @@ const {
           <el-button
             type="primary"
             :icon="useRenderIcon(AddFill)"
-            @click="openDialog()"
+            @click="importDialog()"
           >
             导入
           </el-button>
@@ -108,7 +109,6 @@ const {
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
           }"
-          @selection-change="handleSelectionChange"
           @page-size-change="handleSizeChange"
           @page-current-change="handleCurrentChange"
         >

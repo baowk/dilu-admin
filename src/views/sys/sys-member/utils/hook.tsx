@@ -9,13 +9,14 @@ import croppingUpload from "../upload.vue";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
-import type { FormItemProps, RoleFormItemProps } from "./types";
+import type { RoleFormItemProps } from "./types";
 import { hideTextAtIndex, getKeyList, isAllEmpty } from "@pureadmin/utils";
 import { getRoleIds, getAllRoleList } from "@/api/sys/sys-role";
 
 import { getDeptAll } from "@/api/sys/sys-dept";
 
 import {
+  type SysMemberFormProps,
   getSysMemberPage,
   createSysMember,
   updateSysMember
@@ -299,17 +300,17 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     return newTreeList;
   }
 
-  function openDialog(title = "新增", row?: FormItemProps) {
+  function openDialog(title = "新增", row?: SysMemberFormProps) {
     addDialog({
       title: `${title}用户`,
       props: {
         formInline: {
           title,
           higherDeptOptions: formatHigherDeptOptions(higherDeptOptions.value),
-          parentId: row?.dept.id ?? 0,
+          id: row?.id ?? 0,
           nickname: row?.nickname ?? "",
-          username: row?.username ?? "",
-          password: row?.password ?? "",
+          username: row?.name ?? "",
+          entryTime: row?.entryTime ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
           gender: row?.gender ?? "",
@@ -324,7 +325,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
+        const curData = options.props.formInline as SysMemberFormProps;
         FormRef.validate(valid => {
           if (valid) {
             console.log("curData", curData);

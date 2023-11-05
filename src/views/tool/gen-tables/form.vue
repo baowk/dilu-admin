@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
-import { GenTablesFormProps } from "@/api/sys/gen-tables";
+import { GenTablesFormProps } from "@/api/tool/gen-tables";
 
 const props = withDefaults(defineProps<GenTablesFormProps>(), {
   formInline: () => ({

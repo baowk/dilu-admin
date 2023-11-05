@@ -6,11 +6,11 @@ import {
   createSysApi,
   updateSysApi,
   delSysApi
-} from "@/api/sys/sys-api";
+} from "@/api/tool/sys-api";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type SysApiFormItemProps } from "@/api/sys/sys-api";
+import { type SysApiFormItemProps } from "@/api/tool/sys-api";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 

@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
+import impTable from "../importTable.vue";
 import { message } from "@/utils/message";
 import {
   type GenTablesFormItemProps,
@@ -8,12 +9,12 @@ import {
   updateGenTables,
   delGenTables,
   getDbs
-} from "@/api/sys/gen-tables";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
-import { addDialog } from "@/components/ReDialog";
+} from "@/api/tool/gen-tables";
+import { listDbTable, importTable } from "@/api/tool/gen";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { addDialog, closeDialog } from "@/components/ReDialog";
+import { getKeyList } from "@pureadmin/utils";
 
 export function useGenTables() {
   const qform = reactive({
@@ -22,13 +23,31 @@ export function useGenTables() {
     tableName: null,
     dbName: null
   });
+
+  // 查询参数
+  const impForm = reactive({
+    page: 1,
+    pageSize: 10,
+    dbName: null,
+    tableName: undefined,
+    tableComment: undefined
+  });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
   const dbOptions = ref([]);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
+  // 表数据
+  const dbTableList = ref([]);
+  const tables = ref([]);
+
   const pagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 10,
+    currentPage: 1,
+    background: true
+  });
+
+  const impPagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
@@ -214,6 +233,44 @@ export function useGenTables() {
     }
   ];
 
+  const dbcolumns: TableColumnList = [
+    {
+      label: "勾选列", // 如果需要表格多选，此处label必须设置
+      type: "selection",
+      fixed: "left",
+      reserveSelection: true // 数据刷新后保留选项
+    },
+    {
+      label: "表名",
+      prop: "tableName",
+      minWidth: 120
+    },
+    {
+      label: "库名",
+      prop: "tableSchema",
+      minWidth: 120
+    },
+    {
+      label: "描述",
+      prop: "tableComment",
+      minWidth: 120
+    },
+    {
+      label: "最后更新时间",
+      prop: "updatedAt",
+      minWidth: 120,
+      formatter: ({ updatedAt }) =>
+        dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
+    },
+    {
+      label: "删除时间",
+      prop: "deletedAt",
+      minWidth: 120,
+      formatter: ({ deletedAt }) =>
+        dayjs(deletedAt).format("YYYY-MM-DD HH:mm:ss")
+    }
+  ];
+
   function handleDelete(row) {
     delGenTables({ ids: [row.id] }).then(res => {
       if (res.code == 200) {
@@ -221,6 +278,39 @@ export function useGenTables() {
         onSearch();
       } else {
         message(`删除失败`, { type: "error" });
+      }
+    });
+  }
+
+  // 查询表数据
+  function getDbTableList() {
+    listDbTable(impForm).then(res => {
+      if (res.code === 200) {
+        dbTableList.value = res.data.list;
+        impPagination.total = res.data.total;
+        impPagination.currentPage = res.data.currentPage;
+        impPagination.pageSize = res.data.pageSize;
+      }
+    });
+  }
+
+  /** 导入按钮操作 */
+  function handleImportTable() {
+    const tbs = getKeyList(tables.value, "tableName");
+    const tableForm = {
+      dbName: impForm.dbName,
+      tables: tbs
+    };
+    importTable(tableForm).then(res => {
+      if (res.code === 200) {
+        onSearch();
+        message("导入成功", {
+          type: "success"
+        });
+      } else {
+        message("导入失败", {
+          type: "error"
+        });
       }
     });
   }
@@ -237,7 +327,17 @@ export function useGenTables() {
 
   function handleSelectionChange(val) {
     console.log("handleSelectionChange", val);
-    onSearch();
+    tables.value = val;
+  }
+
+  function handleDbSizeChange(val: number) {
+    impForm.pageSize = val;
+    getDbTableList();
+  }
+
+  function handleDbCurrentChange(val: number) {
+    impForm.page = val;
+    getDbTableList();
   }
 
   async function onSearch() {
@@ -267,7 +367,7 @@ export function useGenTables() {
 
   function openDialog(title = "新增", row?: GenTablesFormItemProps) {
     addDialog({
-      title: `${title}GenTables`,
+      title: `${title}编辑`,
       props: {
         formInline: {
           tableId: row?.tableId ?? 0,
@@ -300,7 +400,7 @@ export function useGenTables() {
           logicalDeleteColumn: row?.logicalDeleteColumn ?? ""
         }
       },
-      width: "48%",
+      width: "60%",
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
@@ -345,6 +445,17 @@ export function useGenTables() {
     });
   }
 
+  function importDialog() {
+    addDialog({
+      title: `导入`,
+      width: "70%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(impTable, { ref: formRef })
+    });
+  }
+
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
@@ -357,15 +468,24 @@ export function useGenTables() {
     qform,
     loading,
     columns,
+    dbcolumns,
     dataList,
     pagination,
     dbOptions,
+    dbTableList,
+    impForm,
+    impPagination,
+    getDbTableList,
+    handleImportTable,
     onSearch,
     resetForm,
     openDialog,
+    importDialog,
     handleDelete,
     handleSizeChange,
     handleCurrentChange,
+    handleDbSizeChange,
+    handleDbCurrentChange,
     handleSelectionChange
   };
 }
