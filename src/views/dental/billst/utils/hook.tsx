@@ -21,59 +21,63 @@ export function useBillSt() {
     {
       label: "咨询师",
       prop: "name",
-      minWidth: 110
+      minWidth: 100
     },
     {
       label: "目标",
       prop: "target",
-      minWidth: 120
+      minWidth: 90
     },
 
     {
       label: "成交金额",
       prop: "deal",
-      minWidth: 120
+      minWidth: 90
     },
     {
       label: "实收",
       prop: "paid",
-      minWidth: 120
+      minWidth: 90
     },
     {
       label: "欠款",
-      prop: "curdebt",
-      minWidth: 120,
-      cellRenderer: ({ row }) => <dev>{row.deal - row.paid}</dev>
+      prop: "curDebt",
+      minWidth: 90
     },
     {
       label: "收回上月欠款",
       prop: "debt",
-      minWidth: 120
+      minWidth: 100
     },
     {
       label: "退款",
       prop: "refund",
-      minWidth: 120
+      minWidth: 90
+    },
+    {
+      label: "总实收",
+      prop: "total",
+      minWidth: 100
     },
     {
       label: "留存",
       prop: "newCustomerCnt",
-      minWidth: 110
+      minWidth: 80
     },
     {
       label: "初诊",
       prop: "firstDiagnosis",
-      minWidth: 110
+      minWidth: 80
     },
     {
       label: "复诊",
       prop: "furtherDiagnosis",
-      minWidth: 110
+      minWidth: 80
     },
     {
       label: "成交数",
       prop: "dealCnt",
-      minWidth: 110
+      minWidth: 80
     }
   ];
 
