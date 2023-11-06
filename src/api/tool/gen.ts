@@ -19,6 +19,13 @@ export const importTable = (data?: object) => {
   });
 };
 
+/** GenCode */
+export const GenCode = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/tools/gen/code", {
+    data
+  });
+};
+
 /** GenTables */
 interface DbTable {
   tableName: string;

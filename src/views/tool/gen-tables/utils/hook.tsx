@@ -10,7 +10,7 @@ import {
   delGenTables,
   getDbs
 } from "@/api/tool/gen-tables";
-import { listDbTable, importTable } from "@/api/tool/gen";
+import { listDbTable, importTable, GenCode } from "@/api/tool/gen";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { addDialog, closeDialog } from "@/components/ReDialog";
@@ -272,7 +272,7 @@ export function useGenTables() {
   ];
 
   function handleDelete(row) {
-    delGenTables({ ids: [row.id] }).then(res => {
+    delGenTables({ ids: [row.tableId] }).then(res => {
       if (res.code == 200) {
         message(`删除成功`, { type: "success" });
         onSearch();
@@ -280,6 +280,29 @@ export function useGenTables() {
         message(`删除失败`, { type: "error" });
       }
     });
+  }
+
+  function handleGen(row) {
+    const genForm = {
+      tableId: row.tableId,
+      force: false
+    };
+    GenCode(genForm).then(res => {
+      if (res.code == 200) {
+        message(`生成成功`, { type: "success" });
+        onSearch();
+      } else {
+        message(`生成失败`, { type: "error" });
+      }
+    });
+    // delGenTables({ ids: [row.tableId] }).then(res => {
+    //   if (res.code == 200) {
+    //     message(`删除成功`, { type: "success" });
+    //     onSearch();
+    //   } else {
+    //     message(`删除失败`, { type: "error" });
+    //   }
+    // });
   }
 
   // 查询表数据
@@ -326,7 +349,6 @@ export function useGenTables() {
   }
 
   function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
     tables.value = val;
   }
 
@@ -475,6 +497,7 @@ export function useGenTables() {
     dbTableList,
     impForm,
     impPagination,
+    handleGen,
     getDbTableList,
     handleImportTable,
     onSearch,

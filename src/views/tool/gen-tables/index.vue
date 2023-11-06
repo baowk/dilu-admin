@@ -30,7 +30,7 @@ const {
   handleDelete,
   handleSizeChange,
   handleCurrentChange,
-  handleSelectionChange
+  handleGen
 } = useGenTables();
 </script>
 
@@ -127,7 +127,7 @@ const {
             </Auth>
             <Auth value="sys:genTables:remove">
               <el-popconfirm
-                :title="`是否确认删除GenTables名称为${row.name}的这条数据`"
+                :title="`要删除 ${row.tableName} 吗`"
                 @confirm="handleDelete(row)"
               >
                 <template #reference>
@@ -143,6 +143,17 @@ const {
                 </template>
               </el-popconfirm>
             </Auth>
+            <!--Auth value="sys:genTables:gen"-->
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              @click="handleGen(row)"
+            >
+              生成
+            </el-button>
+            <!--/Auth-->
           </template>
         </pure-table>
       </template>
