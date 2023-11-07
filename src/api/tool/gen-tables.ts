@@ -8,45 +8,30 @@ import { Result, PageResult, Option } from "@/api/common";
 export const getGenTablesPage = (data?: object) => {
   return http.request<Result<PageResult<GenTables>>>(
     "post",
-    "/api/v1/sys/gen-tables/page",
+    "/api/v1/tools/gen/page",
     {
       data
     }
   );
 };
 
-/** 获取GenTables */
-export const getGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/get", {
+// /** 获取GenTables */
+// export const getGenTables = (data?: object) => {
+//   return http.request<Result<GenTables>>("post", "/api/v1/tools/gen/get", {
+//     data
+//   });
+// };
+
+/** 更新GenTables */
+export const updateGenTables = (data?: object) => {
+  return http.request<Result<GenTables>>("post", "/api/v1/tools/gen/update", {
     data
   });
 };
 
-/** 创建GenTables */
-export const createGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>(
-    "post",
-    "/api/v1/sys/gen-tables/create",
-    {
-      data
-    }
-  );
-};
-
-/** 更新GenTables */
-export const updateGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>(
-    "post",
-    "/api/v1/sys/gen-tables/update",
-    {
-      data
-    }
-  );
-};
-
 /** 删除GenTables */
 export const delGenTables = (data?: object) => {
-  return http.request<Result<GenTables>>("post", "/api/v1/sys/gen-tables/del", {
+  return http.request<Result<GenTables>>("post", "/api/v1/tools/gen/del", {
     data
   });
 };
@@ -55,12 +40,49 @@ export const delGenTables = (data?: object) => {
 export const getDbs = (data?: object) => {
   return http.request<Result<Array<Option<string>>>>(
     "post",
-    "/api/tools/gen/dbs",
+    "/api/v1/tools/gen/dbs",
     {
       data
     }
   );
 };
+
+/** 获取GenTables管理列表 */
+export const listDbTable = (data?: object) => {
+  return http.request<Result<PageResult<DbTable>>>(
+    "post",
+    "/api/v1/tools/gen/db/tables",
+    {
+      data
+    }
+  );
+};
+
+/** 获取GenTables */
+export const importTable = (data?: object) => {
+  return http.request<Result<DbTable>>("post", "/api/v1/tools/gen/add", {
+    data
+  });
+};
+
+/** GenCode */
+export const GenCode = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/tools/gen/code", {
+    data
+  });
+};
+
+/** GenTables */
+interface DbTable {
+  tableName: string;
+  tableSchema: string;
+  engine: string;
+  tableRows: string;
+  tableCollation: string;
+  createTime: string;
+  updateTime: string;
+  tableComment: string;
+}
 
 //Model
 
@@ -196,4 +218,4 @@ interface GenTablesFormProps {
   formInline: GenTablesFormItemProps;
 }
 
-export type { GenTablesFormItemProps, GenTablesFormProps, GenTables };
+export type { GenTablesFormItemProps, GenTablesFormProps, GenTables, DbTable };

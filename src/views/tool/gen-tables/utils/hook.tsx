@@ -5,15 +5,16 @@ import { message } from "@/utils/message";
 import {
   type GenTablesFormItemProps,
   getGenTablesPage,
-  createGenTables,
   updateGenTables,
   delGenTables,
-  getDbs
+  getDbs,
+  listDbTable,
+  importTable,
+  GenCode
 } from "@/api/tool/gen-tables";
-import { listDbTable, importTable, GenCode } from "@/api/tool/gen";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
-import { addDialog, closeDialog } from "@/components/ReDialog";
+import { addDialog } from "@/components/ReDialog";
 import { getKeyList } from "@pureadmin/utils";
 
 export function useGenTables() {
