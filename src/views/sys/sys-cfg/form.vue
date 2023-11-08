@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<SysCfgFormProps>(), {
     value: null,
     type: null,
     remark: null,
-    status: 0,
+    status: 0
   })
 });
 
@@ -37,57 +37,50 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-  <el-form-item label="主键编码" prop="id">
+    <el-form-item label="主键编码" prop="id">
       <el-input
         v-model.number="newFormInline.id"
         clearable
         placeholder="请输入主键编码"
       />
     </el-form-item>
-  <el-form-item label="名字" prop="name">
+    <el-form-item label="名字" prop="name">
       <el-input
         v-model="newFormInline.name"
         clearable
         placeholder="请输入名字"
       />
     </el-form-item>
-  <el-form-item label="key" prop="key">
-      <el-input
-        v-model="newFormInline.key"
-        clearable
-        placeholder="请输入key"
-      />
+    <el-form-item label="key" prop="key">
+      <el-input v-model="newFormInline.key" clearable placeholder="请输入key" />
     </el-form-item>
-  <el-form-item label="Value" prop="value">
+    <el-form-item label="Value" prop="value">
       <el-input
         v-model="newFormInline.value"
         clearable
         placeholder="请输入Value"
       />
     </el-form-item>
-  <el-form-item label="Type" prop="type">
+    <el-form-item label="Type" prop="type">
       <el-input
         v-model="newFormInline.type"
         clearable
         placeholder="请输入Type"
       />
     </el-form-item>
-  <el-form-item label="Remark" prop="remark">
+    <el-form-item label="Remark" prop="remark">
       <el-input
         v-model="newFormInline.remark"
         clearable
         placeholder="请输入Remark"
       />
     </el-form-item>
-  <el-form-item label="Status" prop="status">
+    <el-form-item label="Status" prop="status">
       <el-input
         v-model.number="newFormInline.status"
         clearable
         placeholder="请输入Status"
       />
     </el-form-item>
-  
-  
-  
   </el-form>
 </template>

@@ -40,7 +40,7 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="Status：" prop="status">
+      <el-form-item label="Status：" prop="status">
         <el-input
           v-model="qform.status"
           placeholder="请输入Status"
@@ -111,7 +111,7 @@ const {
               <el-popconfirm
                 :title="`是否确认删除配置名称为${row.name}的这条数据`"
                 @confirm="handleDelete(row)"
-                >
+              >
                 <template #reference>
                   <el-button
                     class="reset-margin"

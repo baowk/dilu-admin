@@ -10,7 +10,8 @@ import {
   getDbs,
   listDbTable,
   importTable,
-  GenCode
+  GenCode,
+  GenMenuApi
 } from "@/api/tool/gen-tables";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -229,7 +230,7 @@ export function useGenTables() {
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 340,
       slot: "operation"
     }
   ];
@@ -296,14 +297,21 @@ export function useGenTables() {
         message(`生成失败`, { type: "error" });
       }
     });
-    // delGenTables({ ids: [row.tableId] }).then(res => {
-    //   if (res.code == 200) {
-    //     message(`删除成功`, { type: "success" });
-    //     onSearch();
-    //   } else {
-    //     message(`删除失败`, { type: "error" });
-    //   }
-    // });
+  }
+
+  function handleGenMenu(row) {
+    const genForm = {
+      tableId: row.tableId,
+      menuId: 0
+    };
+    GenMenuApi(genForm).then(res => {
+      if (res.code == 200) {
+        message(`生成成功`, { type: "success" });
+        onSearch();
+      } else {
+        message(`生成失败`, { type: "error" });
+      }
+    });
   }
 
   // 查询表数据
@@ -434,33 +442,18 @@ export function useGenTables() {
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
-            if (title === "新增") {
-              createGenTables(curData).then(res => {
-                if (res.code == 200) {
-                  message(res.msg, {
-                    type: "success"
-                  });
-                  onSearch(); // 刷新表格数据
-                } else {
-                  message(res.msg, {
-                    type: "error"
-                  });
-                }
-              });
-            } else {
-              updateGenTables(curData).then(res => {
-                if (res.code == 200) {
-                  message(res.msg, {
-                    type: "success"
-                  });
-                  onSearch(); // 刷新表格数据
-                } else {
-                  message(res.msg, {
-                    type: "error"
-                  });
-                }
-              });
-            }
+            updateGenTables(curData).then(res => {
+              if (res.code == 200) {
+                message(res.msg, {
+                  type: "success"
+                });
+                onSearch(); // 刷新表格数据
+              } else {
+                message(res.msg, {
+                  type: "error"
+                });
+              }
+            });
             done(); // 关闭弹框
           }
         });
@@ -506,6 +499,7 @@ export function useGenTables() {
     openDialog,
     importDialog,
     handleDelete,
+    handleGenMenu,
     handleSizeChange,
     handleCurrentChange,
     handleDbSizeChange,

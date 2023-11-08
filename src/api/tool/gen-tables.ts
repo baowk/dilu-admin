@@ -72,6 +72,12 @@ export const GenCode = (data?: object) => {
   });
 };
 
+export const GenMenuApi = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/tools/gen/menu", {
+    data
+  });
+};
+
 /** GenTables */
 interface DbTable {
   tableName: string;

@@ -30,7 +30,8 @@ const {
   handleDelete,
   handleSizeChange,
   handleCurrentChange,
-  handleGen
+  handleGen,
+  handleGenMenu
 } = useGenTables();
 </script>
 
@@ -151,7 +152,16 @@ const {
               :size="size"
               @click="handleGen(row)"
             >
-              生成
+              代码生成
+            </el-button>
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              @click="handleGenMenu(row)"
+            >
+              菜单接口生成
             </el-button>
             <!--/Auth-->
           </template>
