@@ -371,7 +371,7 @@ export function useBill() {
           realAmount: row?.realAmount ?? "",
           paidAmount: row?.paidAmount ?? "",
           linkId: row?.linkId ?? 0,
-          tradeAt: row?.tradeAt ?? null,
+          tradeAt: row?.tradeAt ?? new Date(),
           tradeType: row?.tradeType ?? null,
           dentalCount: row?.dentalCount ?? 0,
           brand: row?.brand ?? null,

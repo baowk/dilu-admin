@@ -157,7 +157,7 @@ export function useSummaryPlanDay() {
       props: {
         formInline: {
           id: row?.id ?? 0,
-          day: row?.day ?? null,
+          day: row?.day ?? new Date(),
           teamId: row?.teamId ?? 0,
           userId: row?.userId ?? null,
           deptPath: row?.deptPath ?? "",
