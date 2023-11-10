@@ -19,7 +19,7 @@ export function useEventDaySt() {
   const qform = reactive({
     page: 1,
     pageSize: 10,
-    userId: 0,
+    userId: null,
     deptPath: null,
     begin: null,
     end: null
