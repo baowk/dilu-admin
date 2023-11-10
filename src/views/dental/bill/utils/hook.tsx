@@ -232,12 +232,12 @@ export function useBill() {
     {
       label: "医生",
       prop: "doctor",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "全半口",
       prop: "pack",
-      minWidth: 120,
+      minWidth: 80,
       formatter: ({ pack }) => {
         for (const t in packOptions) {
           if (packOptions[t].value == pack) {
@@ -256,7 +256,7 @@ export function useBill() {
     {
       label: "标签",
       prop: "tags",
-      minWidth: 120
+      minWidth: 80
     },
     // {
     //   label: "项目",
@@ -266,7 +266,7 @@ export function useBill() {
     {
       label: "全科项目",
       prop: "otherPrj",
-      minWidth: 120
+      minWidth: 80
     },
     {
       label: "备注",
