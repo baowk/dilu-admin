@@ -19,9 +19,6 @@ export function useBill() {
   const qform = reactive({
     page: 1,
     pageSize: 10,
-    no: null,
-    customerId: null,
-    customerName: null,
     userId: null,
     name: null,
     teamId: 0,
@@ -30,7 +27,8 @@ export function useBill() {
     tradeType: null,
     brand: null,
     brandName: null,
-    implant: 0,
+    begin: null,
+    end: null,
     pack: null,
     tags: null
   });
@@ -102,7 +100,7 @@ export function useBill() {
     },
     {
       value: 3,
-      label: "补上月欠款"
+      label: "收回欠款"
     },
     {
       value: 10,
@@ -129,7 +127,7 @@ export function useBill() {
     {
       label: "主键",
       prop: "id",
-      minWidth: 80
+      minWidth: 60
     },
     // {
     //   label: "订单号",
@@ -139,12 +137,12 @@ export function useBill() {
     {
       label: "顾客",
       prop: "customerName",
-      minWidth: 110
+      minWidth: 80
     },
     {
       label: "咨询师",
       prop: "userId",
-      minWidth: 110,
+      minWidth: 80,
       formatter: ({ userId }) => getUserName(userId)
     },
     // {
@@ -155,22 +153,22 @@ export function useBill() {
     {
       label: "折后金额",
       prop: "realAmount",
-      minWidth: 110
+      minWidth: 90
     },
     {
       label: "已支付金额",
       prop: "paidAmount",
-      minWidth: 110
+      minWidth: 90
     },
     {
-      label: "回收上月欠款",
+      label: "收回欠款",
       prop: "debtAmount",
-      minWidth: 110
+      minWidth: 90
     },
     {
       label: "退款",
       prop: "refundAmount",
-      minWidth: 110
+      minWidth: 80
     },
     // {
     //   label: "关联订单",
@@ -180,13 +178,13 @@ export function useBill() {
     {
       label: "交易日期",
       prop: "tradeAt",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ tradeAt }) => dayjs(tradeAt).format("YYYY-MM-DD")
     },
     {
       label: "交易类型",
       prop: "tradeType",
-      minWidth: 80,
+      minWidth: 90,
       formatter: ({ tradeType }) => {
         for (const t in tradeOptions) {
           if (tradeOptions[t].value == tradeType) {
@@ -198,7 +196,7 @@ export function useBill() {
     {
       label: "已种/颗数",
       prop: "dentalCount",
-      minWidth: 80,
+      minWidth: 90,
       cellRenderer: ({ row }) => (
         <dev>
           {row.implantedCount}/{row.dentalCount}
@@ -213,7 +211,7 @@ export function useBill() {
     {
       label: "品牌",
       prop: "brand",
-      minWidth: 80,
+      minWidth: 70,
       formatter: ({ brand }) => {
         for (const t in brandOptions) {
           if (brandOptions[t].value == brand) {
@@ -229,15 +227,11 @@ export function useBill() {
     //   formatter: ({ implantDate }) =>
     //     dayjs(implantDate).format("YYYY-MM-DD HH:mm:ss")
     // },
+
     {
-      label: "医生",
-      prop: "doctor",
-      minWidth: 80
-    },
-    {
-      label: "全半口",
+      label: "项目类型",
       prop: "pack",
-      minWidth: 80,
+      minWidth: 70,
       formatter: ({ pack }) => {
         for (const t in packOptions) {
           if (packOptions[t].value == pack) {
@@ -246,23 +240,6 @@ export function useBill() {
         }
       }
     },
-    // {
-    //   label: "预定回款日期",
-    //   prop: "paybackDate",
-    //   minWidth: 120,
-    //   formatter: ({ paybackDate }) =>
-    //     dayjs(paybackDate).format("YYYY-MM-DD HH:mm:ss")
-    // },
-    {
-      label: "标签",
-      prop: "tags",
-      minWidth: 80
-    },
-    // {
-    //   label: "项目",
-    //   prop: "prjName",
-    //   minWidth: 120
-    // },
     {
       label: "全科项目",
       prop: "otherPrj",
@@ -273,17 +250,40 @@ export function useBill() {
       prop: "remark",
       minWidth: 120
     },
+    // {
+    //   label: "预定回款日期",
+    //   prop: "paybackDate",
+    //   minWidth: 120,
+    //   formatter: ({ paybackDate }) =>
+    //     dayjs(paybackDate).format("YYYY-MM-DD HH:mm:ss")
+    // },
+    {
+      label: "医生",
+      prop: "doctor",
+      minWidth: 80
+    },
+    {
+      label: "标签",
+      prop: "tags",
+      minWidth: 80
+    },
+    // {
+    //   label: "项目",
+    //   prop: "prjName",
+    //   minWidth: 120
+    // },
+
     {
       label: "创建时间",
       prop: "createdAt",
-      minWidth: 120,
+      minWidth: 160,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "更新时间",
       prop: "updatedAt",
-      minWidth: 120,
+      minWidth: 160,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },

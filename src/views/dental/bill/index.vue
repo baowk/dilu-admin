@@ -23,6 +23,7 @@ const {
   dataList,
   pagination,
   tradeOptions,
+  members,
   onSearch,
   resetForm,
   openDialog,
@@ -41,7 +42,21 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="交易类型：" prop="tradeType">
+      <el-form-item label="时间：" prop="begin">
+        <el-date-picker
+          v-model="qform.begin"
+          type="date"
+          placeholder="选择开始时间"
+        />
+      </el-form-item>
+      <el-form-item label="~" prop="end">
+        <el-date-picker
+          v-model="qform.end"
+          type="date"
+          placeholder="选择结束时间"
+        />
+      </el-form-item>
+      <el-form-item label="类型：" prop="tradeType">
         <el-select
           v-model="qform.tradeType"
           placeholder="请选择交易类型"
@@ -53,6 +68,21 @@ const {
             :key="index"
             :label="item.label"
             :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="咨询师" prop="userId">
+        <el-select
+          v-model="qform.userId"
+          placeholder="请选择咨询师"
+          class="w-full"
+          clearable
+        >
+          <el-option
+            v-for="(item, index) in members"
+            :key="index"
+            :label="item.name"
+            :value="item.userId"
           />
         </el-select>
       </el-form-item>
