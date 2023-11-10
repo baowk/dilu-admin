@@ -16,19 +16,13 @@ import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useEventDaySt() {
-  const form = reactive({
+  const qform = reactive({
     page: 1,
     pageSize: 10,
-    day: 0,
-    teamId: 0,
     userId: 0,
     deptPath: null,
-    newCustomerCnt: 0,
-    firstDiagnosis: 0,
-    furtherDiagnosis: 0,
-    deal: 0,
-    invitation: 0,
-    rest: 0
+    begin: null,
+    end: null
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -173,7 +167,7 @@ export function useEventDaySt() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getEventDayStPage(toRaw(form));
+    const { data } = await getEventDayStPage(toRaw(qform));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -262,7 +256,7 @@ export function useEventDaySt() {
   });
 
   return {
-    form,
+    qform,
     loading,
     columns,
     dataList,

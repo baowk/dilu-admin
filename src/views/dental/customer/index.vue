@@ -34,7 +34,7 @@ const {
 
 <template>
   <div class="main">
-    <el-form
+    <!-- <el-form
       ref="formRef"
       :inline="true"
       :model="form"
@@ -53,7 +53,7 @@ const {
           重置
         </el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
 
     <PureTableBar title="客户列表" :columns="columns" @refresh="onSearch">
       <template #buttons>

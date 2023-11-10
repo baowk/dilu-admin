@@ -17,11 +17,12 @@ defineOptions({
 
 const formRef = ref();
 const {
-  form,
+  qform,
   loading,
   columns,
   dataList,
   pagination,
+  members,
   onSearch,
   resetForm,
   openDialog,
@@ -37,9 +38,38 @@ const {
     <el-form
       ref="formRef"
       :inline="true"
-      :model="form"
+      :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
+      <el-form-item label="时间：" prop="begin">
+        <el-date-picker
+          v-model="qform.begin"
+          type="date"
+          placeholder="选择开始时间"
+        />
+      </el-form-item>
+      <el-form-item label="~" prop="end">
+        <el-date-picker
+          v-model="qform.end"
+          type="date"
+          placeholder="选择结束时间"
+        />
+      </el-form-item>
+      <el-form-item label="咨询师" prop="userId">
+        <el-select
+          v-model="qform.userId"
+          placeholder="请选择咨询师"
+          class="w-full"
+          clearable
+        >
+          <el-option
+            v-for="(item, index) in members"
+            :key="index"
+            :label="item.name"
+            :value="item.userId"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
