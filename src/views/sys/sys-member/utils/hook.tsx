@@ -264,7 +264,12 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getSysMemberPage(toRaw(form));
+    const { code, msg, data } = await getSysMemberPage(toRaw(form));
+    if (code !== 200) {
+      loading.value = false;
+      message(msg, { type: "error" });
+      return;
+    }
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -309,7 +314,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           higherDeptOptions: formatHigherDeptOptions(higherDeptOptions.value),
           id: row?.id ?? 0,
           nickname: row?.nickname ?? "",
-          username: row?.name ?? "",
+          name: row?.name ?? "",
           entryTime: row?.entryTime ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",

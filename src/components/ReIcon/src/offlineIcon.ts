@@ -33,6 +33,8 @@ import CalendarCheck from "@iconify-icons/ri/calendar-check-line";
 import OpenArm from "@iconify-icons/ri/open-arm-line";
 import Table from "@iconify-icons/ri/table-line";
 import Generate from "@iconify-icons/ri/ai-generate";
+import Operation from "@iconify-icons/ep/operation";
+import SwapLine from "@iconify-icons/ri/swap-line";
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -62,3 +64,5 @@ addIcon("calendarCheck", CalendarCheck);
 addIcon("openArm", OpenArm);
 addIcon("table", Table);
 addIcon("generate", Generate);
+addIcon("operation", Operation);
+addIcon("swapLine", SwapLine);

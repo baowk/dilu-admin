@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { SysUserFormProps } from "@/api/sys/sys-user";
+import { useSysUser } from "./utils/hook";
 
 const props = withDefaults(defineProps<SysUserFormProps>(), {
   formInline: () => ({
@@ -34,6 +35,8 @@ const newFormInline = ref(props.formInline);
 function getRef() {
   return ruleFormRef.value;
 }
+
+const { genderOptions } = useSysUser();
 
 defineExpose({ getRef });
 </script>
@@ -109,11 +112,19 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="性别" prop="gender">
-      <el-input
+      <el-select
         v-model="newFormInline.gender"
+        placeholder="请选择用户性别"
+        class="w-full"
         clearable
-        placeholder="请输入性别 1男 2女 3未知"
-      />
+      >
+        <el-option
+          v-for="(item, index) in genderOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="角色" prop="platformRoleId">
       <el-input
@@ -129,7 +140,7 @@ defineExpose({ getRef });
         placeholder="请输入备注"
       />
     </el-form-item>
-    <el-form-item label="状态 1冻结 2正常 3默认" prop="status">
+    <el-form-item label="状态" prop="status">
       <el-input
         v-model.number="newFormInline.status"
         clearable

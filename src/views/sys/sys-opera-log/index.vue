@@ -40,7 +40,7 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="操作状态 1:成功 2:失败：" prop="status">
+      <el-form-item label="操作状态：" prop="status">
         <el-input
           v-model="qform.status"
           placeholder="请输入操作状态 1:成功 2:失败"

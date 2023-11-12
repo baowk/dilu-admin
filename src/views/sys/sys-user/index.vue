@@ -40,7 +40,7 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="状态 1冻结 2正常 3默认：" prop="status">
+      <el-form-item label="状态：" prop="status">
         <el-input
           v-model="form.name"
           placeholder="请输入状态 1冻结 2正常 3默认"

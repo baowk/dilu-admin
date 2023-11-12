@@ -201,7 +201,12 @@ export function useCustomer() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getCustomerPage(toRaw(form));
+    const { code, msg, data } = await getCustomerPage(toRaw(form));
+    if (code !== 200) {
+      loading.value = false;
+      message(msg, { type: "error" });
+      return;
+    }
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;

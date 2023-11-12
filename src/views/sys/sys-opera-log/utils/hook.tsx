@@ -56,7 +56,7 @@ export function useSysOperaLog() {
       minWidth: 120
     },
     {
-      label: "请求方式 GET POST PUT DELETE",
+      label: "请求方式",
       prop: "requestMethod",
       minWidth: 120
     },
@@ -96,7 +96,7 @@ export function useSysOperaLog() {
       minWidth: 120
     },
     {
-      label: "操作状态 1:成功 2:失败",
+      label: "操作状态",
       prop: "status",
       minWidth: 120
     },

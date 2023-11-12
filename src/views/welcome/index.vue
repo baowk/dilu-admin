@@ -5,5 +5,5 @@ defineOptions({
 </script>
 
 <template>
-  <h1>牙医系统</h1>
+  <h1>的卢牙医管理系统</h1>
 </template>

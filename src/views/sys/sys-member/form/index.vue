@@ -29,11 +29,11 @@ const props = withDefaults(defineProps<SysMemberFormProps>(), {
 
 const sexOptions = [
   {
-    value: 1,
+    value: "1",
     label: "男"
   },
   {
-    value: 2,
+    value: "2",
     label: "女"
   }
 ];
@@ -57,20 +57,20 @@ defineExpose({ getRef });
   >
     <el-row :gutter="30">
       <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="姓名" prop="name">
+          <el-input
+            v-model="newFormInline.name"
+            clearable
+            placeholder="请输入用户名称"
+          />
+        </el-form-item>
+      </re-col>
+      <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="昵称" prop="nickname">
           <el-input
             v-model="newFormInline.nickname"
             clearable
             placeholder="请输入用户昵称"
-          />
-        </el-form-item>
-      </re-col>
-      <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="姓名" prop="username">
-          <el-input
-            v-model="newFormInline.name"
-            clearable
-            placeholder="请输入用户名称"
           />
         </el-form-item>
       </re-col>

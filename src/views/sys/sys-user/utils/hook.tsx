@@ -38,6 +38,18 @@ export function useSysUser() {
     currentPage: 1,
     background: true
   });
+
+  const genderOptions = [
+    {
+      value: "1",
+      label: "男"
+    },
+    {
+      value: "2",
+      label: "女"
+    }
+  ];
+
   const columns: TableColumnList = [
     // {
     //   label: "主键",
@@ -226,7 +238,7 @@ export function useSysUser() {
           username: row?.username ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
-          password: row?.password ?? "",
+          password: null,
           nickname: row?.nickname ?? "",
           name: row?.name ?? "",
           avatar: row?.avatar ?? "",
@@ -297,6 +309,7 @@ export function useSysUser() {
     columns,
     dataList,
     pagination,
+    genderOptions,
     onSearch,
     resetForm,
     openDialog,
