@@ -16,6 +16,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useRole() {
   const form = reactive({
+    page: 1,
+    pageSize: 10,
     id: 0,
     name: null,
     owner: 0,
@@ -87,11 +89,13 @@ export function useRole() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {

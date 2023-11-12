@@ -144,10 +144,12 @@ export function useTargetTask() {
 
   function handleSizeChange(val: number) {
     qform.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
     qform.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {

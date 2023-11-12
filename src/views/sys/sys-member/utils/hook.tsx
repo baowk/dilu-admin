@@ -43,6 +43,8 @@ import {
 
 export function useUser(tableRef: Ref, treeRef: Ref) {
   const form = reactive({
+    page: 1,
+    pageSize: 10,
     // 左侧部门树的id
     deptId: 0,
     name: null,
@@ -230,11 +232,13 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val;
+    onSearch();
   }
 
   /** 当CheckBox选择项发生变化时会触发该事件 */

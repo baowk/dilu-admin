@@ -13,18 +13,17 @@ import { addDialog } from "@/components/ReDialog";
 import { type SysRoleFormItemProps } from "@/api/sys/sys-role";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { on } from "events";
 
 export function useSysRole() {
   const form = reactive({
-    id: 0,
+    page: 1,
+    pageSize: 10,
     name: null,
     status: 0,
     roleKey: null,
-    roleSort: 0,
     flag: null,
-    remark: null,
-    admin: 0,
-    dataScope: null
+    admin: 0
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -134,11 +133,13 @@ export function useSysRole() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {

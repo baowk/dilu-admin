@@ -138,11 +138,13 @@ export function useEventDaySt() {
   }
 
   function handleSizeChange(val: number) {
-    form.pageSize = val;
+    qform.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    form.page = val;
+    qform.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {

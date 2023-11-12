@@ -173,10 +173,12 @@ export function useCustomer() {
 
   function handleSizeChange(val: number) {
     form.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
     form.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {
