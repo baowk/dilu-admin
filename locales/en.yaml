@@ -22,6 +22,7 @@ buttons:
   hswholeExitFullScreen: ExitFull
   hscontentFullScreen: Content FullScreen
   hscontentExitFullScreen: Content ExitFullScreen
+  hsMyinfo: Myinfo
 menus:
   hshome: Home
   hslogin: Login
