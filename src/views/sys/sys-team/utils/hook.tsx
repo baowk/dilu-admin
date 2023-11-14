@@ -71,7 +71,6 @@ export function useRole() {
     },
     {
       label: "操作",
-      fixed: "right",
       width: 240,
       slot: "operation"
     }

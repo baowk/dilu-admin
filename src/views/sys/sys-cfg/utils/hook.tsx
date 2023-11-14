@@ -79,7 +79,6 @@ export function useSysCfg() {
     },
     {
       label: "操作",
-      fixed: "right",
       width: 140,
       slot: "operation"
     }

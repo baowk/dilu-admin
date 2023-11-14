@@ -40,14 +40,14 @@ export function useEventDaySt() {
     {
       label: "时间",
       prop: "day",
-      minWidth: 120,
+      minWidth: 110,
       formatter: ({ day }) =>
         dayjs(String(day), "YYYYMMDD").format("YYYY-MM-DD")
     },
     {
       label: "咨询师",
       prop: "userId",
-      minWidth: 120,
+      minWidth: 100,
       formatter: ({ userId }) => getUserName(userId)
     },
     {
@@ -120,7 +120,6 @@ export function useEventDaySt() {
 
     {
       label: "操作",
-      fixed: "right",
       width: 140,
       slot: "operation"
     }

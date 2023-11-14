@@ -149,12 +149,6 @@ export function useSysOperaLog() {
       label: "更新者",
       prop: "updateBy",
       minWidth: 120
-    },
-    {
-      label: "操作",
-      fixed: "right",
-      width: 140,
-      slot: "operation"
     }
   ];
 

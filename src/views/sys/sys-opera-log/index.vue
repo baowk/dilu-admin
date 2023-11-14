@@ -93,40 +93,7 @@ const {
           @selection-change="handleSelectionChange"
           @page-size-change="handleSizeChange"
           @page-current-change="handleCurrentChange"
-        >
-          <template #operation="{ row }">
-            <Auth value="sys:sysOperaLog:edit">
-              <el-button
-                class="reset-margin"
-                link
-                type="primary"
-                :size="size"
-                :icon="useRenderIcon(EditPen)"
-                @click="openDialog('编辑', row)"
-              >
-                修改
-              </el-button>
-            </Auth>
-            <Auth value="sys:sysOperaLog:remove">
-              <el-popconfirm
-                :title="`是否确认删除操作日志名称为${row.name}的这条数据`"
-                @confirm="handleDelete(row)"
-              >
-                <template #reference>
-                  <el-button
-                    class="reset-margin"
-                    link
-                    type="primary"
-                    :size="size"
-                    :icon="useRenderIcon(Delete)"
-                  >
-                    删除
-                  </el-button>
-                </template>
-              </el-popconfirm>
-            </Auth>
-          </template>
-        </pure-table>
+        />
       </template>
     </PureTableBar>
   </div>

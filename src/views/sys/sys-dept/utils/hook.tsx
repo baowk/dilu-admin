@@ -110,7 +110,6 @@ export function useSysDept() {
     },
     {
       label: "操作",
-      fixed: "right",
       width: 160,
       slot: "operation"
     }
