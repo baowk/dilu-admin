@@ -4,7 +4,7 @@
 
 ## 介绍
 
-本系统是 [dilu的vue前端页面](https://github.com/baowk/dilu)，基于 [vue-pure-admin 精简版](https://github.com/pure-admin/pure-admin-thin)
+本系统是 dilu的vue前端页面,[点击查看的卢后端服务](https://github.com/baowk/dilu)，基于 [vue-pure-admin 精简版](https://github.com/pure-admin/pure-admin-thin)
 
 ## 演示地址
 [演示地址](http://dilu.youwan.art/),系统做了saas化设计，主账号直接dilu登录，团队账户为tangtang，密码默认。
@@ -20,7 +20,7 @@ git clone https://github.com/baowk/dilu-admin.git
 - 安装依赖
 
 ```bash
-cd vue-pure-admin
+cd dilu-admin
 
 pnpm install
 
