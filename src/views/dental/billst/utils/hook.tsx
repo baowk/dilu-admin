@@ -109,9 +109,9 @@ export function useBillSt() {
           fullscreenIcon: true,
           contentRenderer: () =>
             h(
-              "div",
+              "ul",
               items.value.map((item, index) => {
-                return h("div", { key: index }, item);
+                return h("li", { key: index }, item);
               })
             )
         });
