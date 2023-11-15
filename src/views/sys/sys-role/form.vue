@@ -76,28 +76,18 @@ defineExpose({ getRef });
     </el-form-item>
 
     <el-form-item label="授权菜单" prop="menuIds">
-      <el-cascader
-        class="w-full"
+      <el-tree
+        :data="newFormInline.higherDeptOptions"
         v-model="newFormInline.menuIds"
-        :options="newFormInline.higherDeptOptions"
+        node-key="id"
+        show-checkbox
+        :default-expanded-keys="newFormInline.menuIds"
+        :default-checked-keys="newFormInline.menuIds"
         :props="{
-          value: 'id',
-          label: 'title',
-          multiple: true,
-          emitPath: true
+          label: 'title'
         }"
-        collapse-tags
-        collapse-tags-tooltip
-        max-collapse-tags="3"
-        clearable
-        filterable
-        placeholder="请选择授权菜单"
       >
-        <template #default="{ node, data }">
-          <span>{{ data.title }}</span>
-          <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-        </template>
-      </el-cascader>
+      </el-tree>
     </el-form-item>
   </el-form>
 </template>
