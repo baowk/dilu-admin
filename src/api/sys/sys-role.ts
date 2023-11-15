@@ -44,26 +44,10 @@ export const delSysRole = (data?: object) => {
 };
 
 /** 用户管理-获取所有角色列表 */
-export const getAllRoleList = () => {
+export const getRoleList = () => {
   return http.request<Result<Array<SysRole>>>(
     "post",
     "/api/v1/sys/sys-role/list"
-  );
-};
-
-/** 用户管理-根据userId，获取对应角色id列表（userId：用户id） */
-export const getRoleIds = (data?: object) => {
-  return http.request<Result<SysRole>>("post", "", { data });
-};
-
-/** 获取角色管理列表 */
-export const getRoleList = (data?: object) => {
-  return http.request<Result<PageResult<SysRole>>>(
-    "post",
-    "/api/v1/sys/sys-role/page",
-    {
-      data
-    }
   );
 };
 
@@ -81,15 +65,11 @@ interface SysRole {
   roleKey: string;
   /** 排序 */
   roleSort: number;
-  /** flag */
-  flag: string;
+  /**团队id */
+  teamId: number;
   /** 备注 */
   remark: string;
   /** 管理员 */
-  admin: number;
-  /** 数据权限 */
-  dataScope: string;
-  /** 创建者 */
   createBy: number;
   /** 更新者 */
   updateBy: number;
@@ -97,8 +77,7 @@ interface SysRole {
   createdAt: Date;
   /** 最后更新时间 */
   updatedAt: Date;
-  /** 删除时间 */
-  deletedAt: Date;
+  menuIds: Array<number>;
 }
 
 interface SysRoleFormItemProps {
@@ -112,14 +91,12 @@ interface SysRoleFormItemProps {
   roleKey: string;
   /** 排序 */
   roleSort: number;
-  /** flag */
-  flag: string;
+  /**团队id */
+  teamId: number;
   /** 备注 */
   remark: string;
-  /** 管理员 */
-  admin: number;
-  /** 数据权限 */
-  dataScope: string;
+  menuIds: Array<number>;
+  higherDeptOptions: Record<string, unknown>[];
 }
 interface SysRoleFormProps {
   formInline: SysRoleFormItemProps;

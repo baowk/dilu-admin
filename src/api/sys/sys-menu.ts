@@ -15,6 +15,17 @@ export const getSysMenuPage = (data?: object) => {
   );
 };
 
+/** 获取菜单管理列表 */
+export const getSysMenuGrant = (data?: object) => {
+  return http.request<Result<Array<SysMenu>>>(
+    "post",
+    "/api/v1/sys/sys-menu/grant",
+    {
+      data
+    }
+  );
+};
+
 /** 获取菜单 */
 export const getSysMenu = (data?: object) => {
   return http.request<Result<SysMenu>>("post", "/api/v1/sys/sys-menu/get", {

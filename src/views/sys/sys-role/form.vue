@@ -7,13 +7,13 @@ const props = withDefaults(defineProps<SysRoleFormProps>(), {
   formInline: () => ({
     id: 0,
     name: null,
-    status: 0,
     roleKey: null,
+    status: 0,
     roleSort: 0,
-    flag: null,
     remark: null,
-    admin: 0,
-    dataScope: null
+    menuIds: null,
+    teamId: null,
+    higherDeptOptions: []
   })
 });
 
@@ -39,13 +39,6 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
     <el-form-item label="角色名称" prop="name">
       <el-input
         v-model="newFormInline.name"
@@ -74,13 +67,6 @@ defineExpose({ getRef });
         placeholder="请输入排序"
       />
     </el-form-item>
-    <el-form-item label="flag" prop="flag">
-      <el-input
-        v-model="newFormInline.flag"
-        clearable
-        placeholder="请输入flag"
-      />
-    </el-form-item>
     <el-form-item label="备注" prop="remark">
       <el-input
         v-model="newFormInline.remark"
@@ -88,19 +74,30 @@ defineExpose({ getRef });
         placeholder="请输入备注"
       />
     </el-form-item>
-    <el-form-item label="管理员" prop="admin">
-      <el-input
-        v-model.number="newFormInline.admin"
+
+    <el-form-item label="授权菜单" prop="menuIds">
+      <el-cascader
+        class="w-full"
+        v-model="newFormInline.menuIds"
+        :options="newFormInline.higherDeptOptions"
+        :props="{
+          value: 'id',
+          label: 'title',
+          multiple: true,
+          emitPath: true
+        }"
+        collapse-tags
+        collapse-tags-tooltip
+        max-collapse-tags="3"
         clearable
-        placeholder="请输入管理员"
-      />
-    </el-form-item>
-    <el-form-item label="数据权限" prop="dataScope">
-      <el-input
-        v-model="newFormInline.dataScope"
-        clearable
-        placeholder="请输入数据权限"
-      />
+        filterable
+        placeholder="请选择授权菜单"
+      >
+        <template #default="{ node, data }">
+          <span>{{ data.title }}</span>
+          <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+        </template>
+      </el-cascader>
     </el-form-item>
   </el-form>
 </template>

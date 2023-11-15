@@ -11,7 +11,7 @@ import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
 import type { RoleFormItemProps } from "./types";
 import { hideTextAtIndex, getKeyList, isAllEmpty } from "@pureadmin/utils";
-import { getRoleIds, getAllRoleList } from "@/api/sys/sys-role";
+import { getRoleList } from "@/api/sys/sys-role";
 
 import { getDeptAll } from "@/api/sys/sys-dept";
 
@@ -122,8 +122,8 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           v-model={scope.row.status}
           active-value={1}
           inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
+          active-text="正常"
+          inactive-text="离职"
           inline-prompt
           style={switchStyle.value}
           onChange={() => onChange(scope as any)}
@@ -134,8 +134,19 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       label: "入职时间",
       minWidth: 90,
       prop: "entryTime",
-      formatter: ({ entryTime }) =>
-        dayjs(entryTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ entryTime }) => dayjs(entryTime).format("YYYY-MM-DD")
+    },
+    {
+      label: "离职时间",
+      minWidth: 90,
+      prop: "retireTime",
+      formatter: ({ retireTime }) => dayjs(retireTime).format("YYYY-MM-DD")
+    },
+    {
+      label: "生日",
+      minWidth: 90,
+      prop: "birthday",
+      formatter: ({ birthday }) => dayjs(birthday).format("YYYY-MM-DD")
     },
     {
       label: "创建时间",
@@ -484,7 +495,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       title: `分配 ${row.username} 用户的角色`,
       props: {
         formInline: {
-          username: row?.username ?? "",
+          name: row?.name ?? "",
           nickname: row?.nickname ?? "",
           roleOptions: roleOptions.value ?? [],
           ids
@@ -515,7 +526,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     treeLoading.value = false;
 
     // 角色列表
-    roleOptions.value = (await getAllRoleList()).data;
+    roleOptions.value = (await getRoleList()).data;
   });
 
   return {

@@ -22,7 +22,7 @@ interface FormProps {
 }
 
 interface RoleFormItemProps {
-  username: string;
+  name: string;
   nickname: string;
   /** 角色列表 */
   roleOptions: any[];

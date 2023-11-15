@@ -71,11 +71,15 @@ interface SysMember {
   deptPath: string;
   /** 部门id */
   deptId: number;
-  /** 职位标签 1主管 2副主管 3员工 */
+  /** 职位标签 -1系统超管 1 团队拥有者 2主管 4副主管 8员工 */
   postId: number;
+  /**角色id */
   roles: string;
+  /**入职时间 */
   entryTime: Date;
+  /**离职时间 */
   retireTime: Date;
+  /**生日 */
   birthday: Date;
   /** 状态 1正常  */
   status: number;
@@ -106,13 +110,17 @@ interface SysMemberFormItemProps {
   deptPath: string;
   /** 部门id */
   deptId: number;
-  /** 职位标签 1主管 2副主管 3员工 */
+  /**角色id */
+  roles: string;
+  /** 职位标签 -1系统超管 1 团队拥有者 2主管 4副主管 8员工 */
   postId: number;
   /** 状态 1正常  */
   status: number;
-  roles: string;
+  /**入职时间 */
   entryTime: Date;
+  /**离职时间 */
   retireTime: Date;
+  /**生日 */
   birthday: Date;
 }
 interface SysMemberFormProps {
