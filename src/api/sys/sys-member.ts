@@ -83,6 +83,7 @@ interface SysMember {
   birthday: Date;
   /** 状态 1正常  */
   status: number;
+  gender: string;
   /** 创建者 */
   createBy: number;
   /** 更新者 */
@@ -122,6 +123,7 @@ interface SysMemberFormItemProps {
   retireTime: Date;
   /**生日 */
   birthday: Date;
+  gender: string;
 }
 interface SysMemberFormProps {
   formInline: SysMemberFormItemProps;

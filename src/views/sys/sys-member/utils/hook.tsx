@@ -157,7 +157,6 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     },
     {
       label: "操作",
-      fixed: "right",
       width: 180,
       slot: "operation"
     }
@@ -490,9 +489,13 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   /** 分配角色 */
   async function handleRole(row) {
     // 选中的角色列表
-    const ids = (await getRoleIds({ userId: row.id })).data ?? [];
+    const idsStr = row.roles ? row.roles.split(",") : [];
+    const ids: number[] = new Array(idsStr.length);
+    for (let i = 0; i < idsStr.length; i++) {
+      ids[i] = parseInt(idsStr[i]);
+    }
     addDialog({
-      title: `分配 ${row.username} 用户的角色`,
+      title: `分配 ${row.name} 用户的角色`,
       props: {
         formInline: {
           name: row?.name ?? "",
@@ -508,8 +511,14 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       contentRenderer: () => h(roleForm),
       beforeSure: (done, { options }) => {
         const curData = options.props.formInline as RoleFormItemProps;
-        console.log("curIds", curData.ids);
-        // 根据实际业务使用curData.ids和row里的某些字段去调用修改角色接口即可
+        row.roles = curData.ids.join(",");
+        updateSysMember(row).then(res => {
+          if (res.code === 200) {
+            message(`更新成功`, { type: "success" });
+          }
+        });
+        onSearch();
+
         done(); // 关闭弹框
       }
     });
