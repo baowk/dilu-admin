@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Search from "./search/index.vue";
 import Notice from "./notice/index.vue";
+//import User from "./user/index.vue";
 import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
@@ -17,6 +18,7 @@ const {
   device,
   logout,
   onPanel,
+  onMyinfo,
   pureApp,
   username,
   userAvatar,
@@ -84,6 +86,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <!-- <User id="header-notice" /> -->
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
         <span class="select-none el-dropdown-link navbar-bg-hover">
@@ -92,9 +95,9 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
-            <el-dropdown-item @click="logout">
+            <el-dropdown-item>
               <IconifyIconOffline :icon="UserLine" style="margin: 5px" />
-              {{ t("buttons.hsMyinfo") }}
+              <router-link to="/my">{{ t("buttons.hsMyinfo") }}</router-link>
             </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline

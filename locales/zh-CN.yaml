@@ -25,6 +25,7 @@ buttons:
   hsMyinfo: 个人中心
 menus:
   hshome: 首页
+  hsmyinfo: 我的
   hslogin: 登录
   hsabnormal: 异常页面
   hsfourZeroFour: "404"

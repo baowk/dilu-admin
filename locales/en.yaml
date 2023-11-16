@@ -25,6 +25,7 @@ buttons:
   hsMyinfo: Myinfo
 menus:
   hshome: Home
+  hsmyinfo: My
   hslogin: Login
   hsabnormal: Abnormal Page
   hsfourZeroFour: "404"

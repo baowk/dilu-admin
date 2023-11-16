@@ -21,6 +21,15 @@ export default {
         title: $t("menus.hshome"),
         showLink: VITE_HIDE_HOME === "true" ? false : true
       }
+    },
+    {
+      path: "/my",
+      name: "My",
+      component: () => import("@/views/my/index.vue"),
+      meta: {
+        title: $t("menus.hsmyinfo"),
+        showLink: false
+      }
     }
   ]
 } as RouteConfigsTable;

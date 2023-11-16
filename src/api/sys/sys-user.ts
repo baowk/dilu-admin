@@ -123,4 +123,18 @@ interface SysUserFormProps {
   formInline: SysUserFormItemProps;
 }
 
-export type { SysUserFormItemProps, SysUserFormProps, SysUser };
+interface ResetPwdFormItemProps {
+  namename: string;
+  oldPwd: string;
+  newPwd: string;
+}
+interface ResetPwdFormProps {
+  formInline: ResetPwdFormItemProps;
+}
+
+export type {
+  SysUserFormItemProps,
+  SysUserFormProps,
+  SysUser,
+  ResetPwdFormProps
+};

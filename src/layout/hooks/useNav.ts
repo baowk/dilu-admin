@@ -95,6 +95,8 @@ export function useNav() {
     emitter.emit("openPanel");
   }
 
+  function onMyinfo() {}
+
   function toggleSideBar() {
     pureApp.toggleSideBar();
   }
@@ -133,6 +135,7 @@ export function useNav() {
     $storage,
     backTopMenu,
     onPanel,
+    onMyinfo,
     getDivStyle,
     changeTitle,
     toggleSideBar,
