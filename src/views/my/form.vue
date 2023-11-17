@@ -36,40 +36,13 @@ function getRef() {
   return ruleFormRef.value;
 }
 
-const { genderOptions, resetDialog } = useSysUser();
+const { genderOptions } = useSysUser();
 
 defineExpose({ getRef });
 </script>
 
 <template>
-  <el-space direction="vertical">
-    <el-card class="box-card" style="width: 650px">
-      <template #header>
-        <div class="card-header">
-          <span>企业信息</span>
-          <el-button class="button" text>修改</el-button>
-        </div>
-      </template>
-      <div class="text item">
-        <span>企业名：</span><span>{{ newFormInline.username }}</span>
-      </div>
-    </el-card>
-    <el-card class="box-card" style="width: 650px">
-      <template #header>
-        <div class="card-header">
-          <span>我的</span>
-          <el-button class="button" text>修改</el-button>
-          <el-button class="button" text @click="resetDialog"
-            >修改密码</el-button
-          >
-        </div>
-      </template>
-      <div class="text item">
-        <span>用户名：</span><span>{{ newFormInline.username }}</span>
-      </div>
-    </el-card>
-  </el-space>
-  <!-- <el-form
+  <el-form
     ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
@@ -94,6 +67,13 @@ defineExpose({ getRef });
         v-model="newFormInline.email"
         clearable
         placeholder="请输入邮箱"
+      />
+    </el-form-item>
+    <el-form-item label="密码" prop="password">
+      <el-input
+        v-model="newFormInline.password"
+        clearable
+        placeholder="请输入密码"
       />
     </el-form-item>
     <el-form-item label="昵称" prop="nickname">
@@ -167,5 +147,5 @@ defineExpose({ getRef });
         placeholder="请输入状态 1冻结 2正常 3默认"
       />
     </el-form-item>
-  </el-form> -->
+  </el-form>
 </template>

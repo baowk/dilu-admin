@@ -43,6 +43,12 @@ export const delSysUser = (data?: object) => {
   });
 };
 
+export const changePwd = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/sys/changePwd", {
+    data
+  });
+};
+
 //Model
 
 /** 用户 */
@@ -124,9 +130,10 @@ interface SysUserFormProps {
 }
 
 interface ResetPwdFormItemProps {
-  namename: string;
+  username: string;
   oldPwd: string;
   newPwd: string;
+  rePwd: string;
 }
 interface ResetPwdFormProps {
   formInline: ResetPwdFormItemProps;

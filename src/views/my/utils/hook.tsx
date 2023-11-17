@@ -1,15 +1,20 @@
 import dayjs from "dayjs";
-// import editForm from "../form.vue";
+import editForm from "../form.vue";
+import pwdForm from "../pwd.vue";
 import { message } from "@/utils/message";
 import {
   getSysUserPage,
   createSysUser,
   updateSysUser,
-  delSysUser
+  delSysUser,
+  changePwd
 } from "@/api/sys/sys-user";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type SysUserFormItemProps } from "@/api/sys/sys-user";
+import {
+  type SysUserFormItemProps,
+  type ResetPwdFormProps
+} from "@/api/sys/sys-user";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
@@ -298,6 +303,47 @@ export function useSysUser() {
     });
   }
 
+  function resetDialog() {
+    addDialog({
+      title: `重置密码`,
+      props: {
+        formInline: {
+          username: null,
+          oldPwd: null,
+          newPwd: null,
+          rePwd: null
+        }
+      },
+      width: "48%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(pwdForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as ResetPwdFormProps;
+        FormRef.validate(valid => {
+          if (valid) {
+            changePwd(curData).then(res => {
+              if (res.code == 200) {
+                message(res.msg, {
+                  type: "success"
+                });
+                onSearch(); // 刷新表格数据
+              } else {
+                message(res.msg, {
+                  type: "error"
+                });
+              }
+            });
+
+            done(); // 关闭弹框
+          }
+        });
+      }
+    });
+  }
+
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
@@ -312,6 +358,7 @@ export function useSysUser() {
     dataList,
     pagination,
     genderOptions,
+    resetDialog,
     onSearch,
     resetForm,
     openDialog,
