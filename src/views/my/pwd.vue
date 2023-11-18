@@ -45,6 +45,7 @@ defineExpose({ getRef });
       <el-input
         v-model="newFormInline.oldPwd"
         clearable
+        show-password
         placeholder="请输入密码"
       />
     </el-form-item>
@@ -52,6 +53,7 @@ defineExpose({ getRef });
       <el-input
         v-model="newFormInline.newPwd"
         clearable
+        show-password
         placeholder="请输入密码"
       />
     </el-form-item>
@@ -59,6 +61,7 @@ defineExpose({ getRef });
       <el-input
         v-model="newFormInline.rePwd"
         clearable
+        show-password
         placeholder="请输入密码"
       />
     </el-form-item>
