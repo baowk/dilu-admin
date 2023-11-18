@@ -15,8 +15,8 @@ export interface Team {
   postId: number;
   roles: string;
   gender: number;
-  entryTime: Date;
-  birthday: Date;
+  entryTime: Date | string;
+  birthday: Date | string;
 }
 
 export interface TeamInfo {
@@ -29,6 +29,11 @@ export interface TeamInfo {
 export const sessionKey = "team-info";
 //export const TokenKey = "team-info";
 
+export function getTeamInfo() {
+  return new Promise<TeamInfo>(resolve => {
+    resolve(storageSession().getItem(sessionKey));
+  });
+}
 /** 获取`团队` */
 export function getTeams(): TeamInfo {
   // 此处与`TokenKey`相同，此写法解决初始化时`Cookies`中不存在`TokenKey`报错
@@ -46,11 +51,21 @@ export function selectTeamId(teamId: number) {
   getTeams().select = teamId;
 }
 
-export function setTeams(data: Array<Team>) {
+export function setTeams(data: Array<Team>, select?: number) {
   if (data.length > 0) {
-    //Cookies.set(TokenKey, cookieString);
+    let curSelect = 0;
+    if (select) {
+      data.forEach(item => {
+        if (item.teamId === select) {
+          curSelect = select;
+        }
+      });
+    }
+    if (curSelect === 0) {
+      curSelect = data[0].teamId;
+    }
     storageSession().setItem(sessionKey, {
-      select: data[0].teamId,
+      select: curSelect,
       teams: data
     });
   }

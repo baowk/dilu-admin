@@ -1,261 +1,64 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import pwdForm from "../pwd.vue";
+import teamForm from "../teamForm.vue";
 import { message } from "@/utils/message";
 import {
-  getSysUserPage,
-  createSysUser,
-  updateSysUser,
-  delSysUser,
-  changePwd
-} from "@/api/sys/sys-user";
-import { usePublicHooks } from "@/utils/hooks";
-import { addDialog } from "@/components/ReDialog";
-import {
-  type SysUserFormItemProps,
+  genderOptions,
+  getMyUserInfo,
+  changePwd,
   type ResetPwdFormProps
 } from "@/api/sys/sys-user";
-import { type PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, h, toRaw } from "vue";
 
-export function useSysUser() {
-  const form = reactive({
-    page: null,
-    pageSize: null,
-    username: null,
-    phone: null,
-    email: null,
-    nickname: null,
-    name: null,
-    avatar: null,
-    birthday: null,
-    gender: null,
-    status: 0
-  });
+import { changeMyInfo, type SysMemberFormProps } from "@/api/sys/sys-member";
+
+import { changeTeam, SysTeamFormProps } from "@/api/sys/sys-team";
+
+import { getTeamInfo, type TeamInfo, Team, setTeams } from "@/utils/team";
+import { getMyTeams } from "@/api/user";
+import { addDialog } from "@/components/ReDialog";
+import { ref, onMounted, h } from "vue";
+
+export function useMyUserInfo() {
   const formRef = ref();
-  const dataList = ref([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
+  const teamInfo = ref<TeamInfo>();
+  const myInfo = ref<Team>();
 
-  const genderOptions = [
+  const postOptions = [
     {
-      value: "1",
-      label: "男"
+      value: -1,
+      label: "超管"
     },
     {
-      value: "2",
-      label: "女"
+      value: 2,
+      label: "部门主管"
+    },
+    {
+      value: 4,
+      label: "副主管"
+    },
+    {
+      value: 8,
+      label: "员工"
     }
   ];
-
-  const columns: TableColumnList = [
-    // {
-    //   label: "主键",
-    //   prop: "id",
-    //   minWidth: 120
-    // },
-    {
-      label: "用户名",
-      prop: "username",
-      minWidth: 120
-    },
-    {
-      label: "手机号",
-      prop: "phone",
-      minWidth: 120
-    },
-    {
-      label: "邮箱",
-      prop: "email",
-      minWidth: 120
-    },
-    // {
-    //   label: "密码",
-    //   prop: "password",
-    //   minWidth: 120
-    // },
-    {
-      label: "昵称",
-      prop: "nickname",
-      minWidth: 120
-    },
-    {
-      label: "姓名",
-      prop: "name",
-      minWidth: 120
-    },
-    {
-      label: "头像",
-      prop: "avatar",
-      minWidth: 120
-    },
-    {
-      label: "签名",
-      prop: "bio",
-      minWidth: 120
-    },
-    {
-      label: "生日",
-      prop: "birthday",
-      minWidth: 120
-    },
-    {
-      label: "性别",
-      prop: "gender",
-      minWidth: 80,
-      cellRenderer: ({ row, props }) => (
-        <el-tag
-          size={props.size}
-          type={row.gender === "1" ? "" : "danger"}
-          effect="plain"
-        >
-          {row.gender === "1" ? "男" : "女"}
-        </el-tag>
-      )
-    },
-    {
-      label: "角色ID",
-      prop: "platformRoleId",
-      minWidth: 120
-    },
-    {
-      label: "锁定",
-      prop: "lockTime",
-      minWidth: 120
-    },
-    {
-      label: "备注",
-      prop: "remark",
-      minWidth: 120
-    },
-    {
-      label: "状态",
-      prop: "status",
-      minWidth: 80,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
-          inline-prompt
-          style={switchStyle.value}
-        />
-      )
-    },
-    {
-      label: "创建者",
-      prop: "createBy",
-      minWidth: 120
-    },
-    {
-      label: "更新者",
-      prop: "updateBy",
-      minWidth: 120
-    },
-    {
-      label: "创建时间",
-      prop: "createdAt",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
-      label: "最后更新时间",
-      prop: "updatedAt",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
-    // {
-    //   label: "删除时间",
-    //   prop: "deletedAt",
-    //   minWidth: 120,
-    //   formatter: ({ createTime }) =>
-    //     dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    // },
-    {
-      label: "操作",
-      fixed: "right",
-      width: 140,
-      slot: "operation"
-    }
-  ];
-
-  function handleDelete(row) {
-    delSysUser({ ids: [row.id] }).then(res => {
-      if (res.code == 200) {
-        message(`删除成功`, { type: "success" });
-        onSearch();
-      } else {
-        message(`删除失败`, { type: "error" });
-      }
-    });
-  }
-
-  function handleSizeChange(val: number) {
-    form.pageSize = val;
-    onSearch();
-  }
-
-  function handleCurrentChange(val: number) {
-    form.page = val;
-    onSearch();
-  }
-
-  function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
-  }
-
-  async function onSearch() {
-    loading.value = true;
-    const { data } = await getSysUserPage(toRaw(form));
-    dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
-
-    setTimeout(() => {
-      loading.value = false;
-    }, 500);
-  }
 
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
-    onSearch();
   };
 
-  function openDialog(title = "新增", row?: SysUserFormItemProps) {
+  function openDialog(row?: Team) {
     addDialog({
-      title: `${title}用户`,
+      title: `修改我的信息`,
       props: {
         formInline: {
-          id: row?.id ?? 0,
-          username: row?.username ?? "",
           phone: row?.phone ?? "",
-          email: row?.email ?? "",
-          password: null,
           nickname: row?.nickname ?? "",
           name: row?.name ?? "",
-          avatar: row?.avatar ?? "",
-          bio: row?.bio ?? "",
           birthday: row?.birthday ?? "",
-          gender: row?.gender ?? "",
-          platformRoleId: row?.platformRoleId ?? 0,
-          lockTime: row?.lockTime ?? null,
-          remark: row?.remark ?? "",
-          status: row?.status ?? 0
+          gender: row?.gender ?? ""
         }
       },
       width: "48%",
@@ -265,37 +68,25 @@ export function useSysUser() {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as SysUserFormItemProps;
+        const curData = options.props.formInline as SysMemberFormProps;
         FormRef.validate(valid => {
           if (valid) {
-            // 表单规则校验通过
-            if (title === "新增") {
-              createSysUser(curData).then(res => {
-                if (res.code == 200) {
-                  message(res.msg, {
-                    type: "success"
-                  });
-                  onSearch(); // 刷新表格数据
-                } else {
-                  message(res.msg, {
-                    type: "error"
-                  });
-                }
-              });
-            } else {
-              updateSysUser(curData).then(res => {
-                if (res.code == 200) {
-                  message(res.msg, {
-                    type: "success"
-                  });
-                  onSearch(); // 刷新表格数据
-                } else {
-                  message(res.msg, {
-                    type: "error"
-                  });
-                }
-              });
-            }
+            console.log("curData", curData);
+            changeMyInfo(curData).then(res => {
+              if (res.code == 200) {
+                getMyTeams().then(res => {
+                  setTeams(res.data, teamInfo.value.select);
+                  onLoadTeam(); // 刷新表格数据
+                });
+                message(res.msg, {
+                  type: "success"
+                });
+              } else {
+                message(res.msg, {
+                  type: "error"
+                });
+              }
+            });
             done(); // 关闭弹框
           }
         });
@@ -305,7 +96,7 @@ export function useSysUser() {
 
   function resetDialog() {
     addDialog({
-      title: `重置密码`,
+      title: `修改密码`,
       props: {
         formInline: {
           username: null,
@@ -329,7 +120,7 @@ export function useSysUser() {
                 message(res.msg, {
                   type: "success"
                 });
-                onSearch(); // 刷新表格数据
+                onLoadTeam(); // 刷新表格数据
               } else {
                 message(res.msg, {
                   type: "error"
@@ -344,27 +135,100 @@ export function useSysUser() {
     });
   }
 
+  function openTeamDialog(teamId: number) {
+    addDialog({
+      title: `修改企业名称`,
+      props: {
+        formInline: {
+          name: null,
+          id: teamId
+        }
+      },
+      width: "48%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(teamForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as SysTeamFormProps;
+        FormRef.validate(valid => {
+          if (valid) {
+            changeTeam(curData).then(res => {
+              if (res.code == 200) {
+                getMyTeams().then(res => {
+                  setTeams(res.data, teamInfo.value.select);
+                  onLoadTeam(); // 刷新表格数据
+                });
+                message(res.msg, {
+                  type: "success"
+                });
+              } else {
+                message(res.msg, {
+                  type: "error"
+                });
+              }
+            });
+
+            done(); // 关闭弹框
+          }
+        });
+      }
+    });
+  }
+
+  function onLoadTeam() {
+    loading.value = true;
+    getTeamInfo().then(res => {
+      console.log(res);
+      teamInfo.value = res;
+      if (teamInfo.value) {
+        for (let i = 0; i < teamInfo.value.teams.length; i++) {
+          if (teamInfo.value.select == teamInfo.value.teams[i].teamId) {
+            myInfo.value = teamInfo.value.teams[i];
+            myInfo.value.birthday = dayjs(myInfo.value.birthday).format(
+              "YYYY-MM-DD"
+            );
+            myInfo.value.entryTime = dayjs(myInfo.value.entryTime).format(
+              "YYYY-MM-DD"
+            );
+          }
+        }
+      } else {
+        myInfo.value.teamName = "dilu system";
+        myInfo.value.teamId = -1;
+        getMyUserInfo().then(res => {
+          if (res.code == 200) {
+            myInfo.value = res.data;
+            myInfo.value.birthday = dayjs(myInfo.value.birthday).format(
+              "YYYY-MM-DD"
+            );
+          }
+        });
+      }
+    });
+
+    setTimeout(() => {
+      loading.value = false;
+    }, 500);
+  }
+
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
   onMounted(() => {
-    onSearch();
+    onLoadTeam();
   });
 
   return {
-    form,
     loading,
-    columns,
-    dataList,
-    pagination,
+    teamInfo,
+    myInfo,
     genderOptions,
+    postOptions,
+    openTeamDialog,
     resetDialog,
-    onSearch,
     resetForm,
-    openDialog,
-    handleDelete,
-    handleSizeChange,
-    handleCurrentChange,
-    handleSelectionChange
+    openDialog
   };
 }

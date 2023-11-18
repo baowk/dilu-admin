@@ -57,11 +57,11 @@ export function useSysRole() {
       prop: "name",
       minWidth: 120
     },
-    {
-      label: "状态",
-      prop: "status",
-      minWidth: 120
-    },
+    // {
+    //   label: "状态",
+    //   prop: "status",
+    //   minWidth: 120
+    // },
     {
       label: "角色代码",
       prop: "roleKey",

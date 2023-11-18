@@ -43,6 +43,13 @@ export const delSysTeam = (data?: object) => {
   });
 };
 
+/** 更新团队 */
+export const changeTeam = (data?: object) => {
+  return http.request<Result<SysTeam>>("post", "/api/v1/sys/sys-team/change", {
+    data
+  });
+};
+
 //Model
 
 /** 团队 */

@@ -49,6 +49,12 @@ export const changePwd = (data?: object) => {
   });
 };
 
+export const getMyUserInfo = (data?: object) => {
+  return http.request<Result<string>>("get", "/api/v1/sys/myUserinfo", {
+    data
+  });
+};
+
 //Model
 
 /** 用户 */
@@ -138,6 +144,17 @@ interface ResetPwdFormItemProps {
 interface ResetPwdFormProps {
   formInline: ResetPwdFormItemProps;
 }
+
+export const genderOptions = [
+  {
+    value: 1,
+    label: "男"
+  },
+  {
+    value: 2,
+    label: "女"
+  }
+];
 
 export type {
   SysUserFormItemProps,

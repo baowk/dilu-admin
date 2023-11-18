@@ -4,6 +4,7 @@ import ReCol from "@/components/ReCol";
 import { formRules } from "../utils/rule";
 import { SysMemberFormProps } from "@/api/sys/sys-member";
 import { usePublicHooks } from "@/utils/hooks";
+import { useUser } from "../utils/hook";
 
 const props = withDefaults(defineProps<SysMemberFormProps>(), {
   formInline: () => ({
@@ -27,19 +28,11 @@ const props = withDefaults(defineProps<SysMemberFormProps>(), {
   })
 });
 
-const sexOptions = [
-  {
-    value: "1",
-    label: "男"
-  },
-  {
-    value: "2",
-    label: "女"
-  }
-];
 const ruleFormRef = ref();
 const { switchStyle } = usePublicHooks();
 const newFormInline = ref(props.formInline);
+
+const { genderOptions } = useUser();
 
 function getRef() {
   return ruleFormRef.value;
@@ -112,7 +105,7 @@ defineExpose({ getRef });
             clearable
           >
             <el-option
-              v-for="(item, index) in sexOptions"
+              v-for="(item, index) in genderOptions"
               :key="index"
               :label="item.label"
               :value="item.value"

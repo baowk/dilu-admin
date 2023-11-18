@@ -51,6 +51,15 @@ export const delSysMember = (data?: object) => {
   });
 };
 
+export const changeMyInfo = (data?: object) => {
+  return http.request<Result<SysMember>>(
+    "post",
+    "/api/v1/sys/sys-member/changeMyInfo",
+    {
+      data
+    }
+  );
+};
 //Model
 
 /** 会员 */

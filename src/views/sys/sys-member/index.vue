@@ -36,7 +36,6 @@ const {
   onbatchDel,
   openDialog,
   onTreeSelect,
-  handleUpdate,
   handleDelete,
   handleRole,
   handleSizeChange,

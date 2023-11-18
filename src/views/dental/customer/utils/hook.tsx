@@ -10,6 +10,8 @@ import {
 
 import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
 
+import { genderOptions } from "@/api/sys/sys-user";
+
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
@@ -40,17 +42,6 @@ export function useCustomer() {
   const dataList = ref([]);
   const loading = ref(true);
   const members = ref(Array<SysMember>);
-
-  const genderOptions = [
-    {
-      value: 1,
-      label: "男"
-    },
-    {
-      value: 2,
-      label: "女"
-    }
-  ];
 
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();

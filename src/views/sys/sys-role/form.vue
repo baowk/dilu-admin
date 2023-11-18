@@ -46,13 +46,13 @@ defineExpose({ getRef });
         placeholder="请输入角色名称"
       />
     </el-form-item>
-    <el-form-item label="状态" prop="status">
+    <!-- <el-form-item label="状态" prop="status">
       <el-input
         v-model.number="newFormInline.status"
         clearable
         placeholder="请输入状态"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="角色代码" prop="roleKey">
       <el-input
         v-model="newFormInline.roleKey"

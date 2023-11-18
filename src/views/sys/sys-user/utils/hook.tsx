@@ -12,6 +12,7 @@ import { addDialog } from "@/components/ReDialog";
 import { type SysUserFormItemProps } from "@/api/sys/sys-user";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { genderOptions } from "@/api/sys/sys-user";
 
 export function useSysUser() {
   const form = reactive({
@@ -38,17 +39,6 @@ export function useSysUser() {
     currentPage: 1,
     background: true
   });
-
-  const genderOptions = [
-    {
-      value: "1",
-      label: "男"
-    },
-    {
-      value: "2",
-      label: "女"
-    }
-  ];
 
   const columns: TableColumnList = [
     // {
@@ -108,10 +98,10 @@ export function useSysUser() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={row.gender === "1" ? "" : "danger"}
+          type={row.gender === 1 ? "" : "danger"}
           effect="plain"
         >
-          {row.gender === "1" ? "男" : "女"}
+          {row.gender === 1 ? "男" : "女"}
         </el-tag>
       )
     },

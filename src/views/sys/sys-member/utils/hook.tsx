@@ -14,6 +14,7 @@ import { hideTextAtIndex, getKeyList, isAllEmpty } from "@pureadmin/utils";
 import { getRoleList } from "@/api/sys/sys-role";
 
 import { getDeptAll } from "@/api/sys/sys-dept";
+import { genderOptions } from "@/api/sys/sys-user";
 
 import {
   type SysMemberFormProps,
@@ -93,10 +94,10 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={row.gender === "1" ? "" : "danger"}
+          type={row.gender === 1 ? "" : "danger"}
           effect="plain"
         >
-          {row.gender === "1" ? "男" : "女"}
+          {row.gender === 1 ? "男" : "女"}
         </el-tag>
       )
     },
@@ -548,6 +549,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     selectedNum,
     pagination,
     buttonClass,
+    genderOptions,
     onSearch,
     resetForm,
     onbatchDel,
