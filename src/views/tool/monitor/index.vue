@@ -63,7 +63,7 @@ onMounted(() => {
           <el-divider />
           <span>内存：</span
           ><span
-            >{{ server?.ram?.usedMb }}/{{ server?.ram?.totalMb }} GB （{{
+            >{{ server?.ram?.usedMb }}/{{ server?.ram?.totalMb }} MB （{{
               server?.ram?.usedPercent
             }}%）</span
           >
