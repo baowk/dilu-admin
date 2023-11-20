@@ -78,6 +78,12 @@ export const GenMenuApi = (data?: object) => {
   });
 };
 
+export const getServer = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/tools/monitor", {
+    data
+  });
+};
+
 /** GenTables */
 interface DbTable {
   tableName: string;
