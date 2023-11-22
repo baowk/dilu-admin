@@ -8,6 +8,7 @@
 
 ## 演示地址
 [演示地址](http://dilu.youwan.art/),系统做了saas化设计，主账号直接dilu登录，团队账户为tangtang，密码默认。
+![d7f4b2513f7440d6c4c9bd932b4800f](https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f)
 
 ## 安装使用
 
