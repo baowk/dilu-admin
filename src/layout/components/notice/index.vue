@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { TabItem } from "./data";
-import { getUserNotices } from "@/api/notice/user-notice";
-import { getUserTasks } from "@/api/notice/task";
+import { getUserTasks, getUserNotices, Notice } from "@/api/notice/user-notice";
 import Bell from "@iconify-icons/ep/bell";
 import NoticeList from "./noticeList.vue";
 
 const noticesNum = ref(0);
-const notices = ref(Array<TabItem>());
+const notices = ref(Array<Notice>());
 const activeKey = ref();
 
 //notices.value.map(v => (noticesNum.value += v.list.length));
@@ -15,27 +13,15 @@ const activeKey = ref();
 function onNotices() {
   getUserNotices().then(res => {
     if (res.code == 200) {
-      const item = {
-        key: "1",
-        name: "通知",
-        total: res.data.total,
-        list: res.data.list
-      };
-      notices.value[0] = item;
-      noticesNum.value += res.data.total;
+      notices.value[0] = res.data;
+      noticesNum.value += res.data.count;
       activeKey.value = "1";
     }
   });
   getUserTasks().then(res => {
     if (res.code == 200) {
-      const item = {
-        key: "2",
-        name: "任务",
-        total: res.data.total,
-        list: res.data.list
-      };
-      notices.value[1] = item;
-      noticesNum.value += res.data.total;
+      notices.value[1] = res.data;
+      noticesNum.value += res.data.count;
     }
   });
 }
@@ -69,7 +55,7 @@ onMounted(() => {
           <span v-else>
             <template v-for="item in notices" :key="item.key">
               <el-tab-pane
-                :label="`${item.name}(${item.total})`"
+                :label="`${item.name}(${item.count})`"
                 :name="`${item.key}`"
               >
                 <el-scrollbar max-height="330px">

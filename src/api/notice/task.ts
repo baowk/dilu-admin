@@ -43,16 +43,6 @@ export const delTask = (data?: object) => {
   });
 };
 
-export const getUserTasks = (data?: object) => {
-  return http.request<Result<PageResult<Task>>>(
-    "post",
-    "/api/v1/notice/task/my",
-    {
-      data
-    }
-  );
-};
-
 //Model
 
 /** Task */

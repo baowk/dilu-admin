@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ListItem } from "./data";
+import dayjs from "dayjs";
+import { NoticeItem } from "@/api/notice/user-notice";
 import { ref, PropType, nextTick } from "vue";
 import { useNav } from "@/layout/hooks/useNav";
 import { deviceDetection } from "@pureadmin/utils";
 
 const props = defineProps({
   noticeItem: {
-    type: Object as PropType<ListItem>,
+    type: Object as PropType<NoticeItem>,
     default: () => {}
   }
 });
@@ -76,12 +77,12 @@ function hoverDescription(event, description) {
           </div>
         </el-tooltip>
         <el-tag
-          v-if="props.noticeItem?.extra"
+          v-if="props.noticeItem?.beginAt"
           :type="props.noticeItem?.status"
           size="small"
           class="notice-title-extra"
         >
-          {{ props.noticeItem?.beginAt }}
+          {{ dayjs(props.noticeItem?.beginAt * 1000).format("YYYY-MM-DD") }}
         </el-tag>
       </div>
 
@@ -101,7 +102,7 @@ function hoverDescription(event, description) {
         </div>
       </el-tooltip>
       <div class="notice-text-datetime text-[#00000073] dark:text-white">
-        {{ props.noticeItem.createdAt }}
+        {{ dayjs(props.noticeItem.createdAt * 1000).format("MM-DD HH:mm") }}
       </div>
     </div>
   </div>

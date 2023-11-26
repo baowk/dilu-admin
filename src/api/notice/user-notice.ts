@@ -60,13 +60,15 @@ export const delUserNotice = (data?: object) => {
 };
 
 export const getUserNotices = (data?: object) => {
-  return http.request<Result<PageResult<UserNotice>>>(
-    "post",
-    "/api/v1/notice/user-notice/my",
-    {
-      data
-    }
-  );
+  return http.request<Result<Notice>>("post", "/api/v1/notice/user-notice/my", {
+    data
+  });
+};
+
+export const getUserTasks = (data?: object) => {
+  return http.request<Result<Notice>>("post", "/api/v1/notice/task/my", {
+    data
+  });
 };
 
 //Model
@@ -127,4 +129,37 @@ interface UserNoticeFormProps {
   formInline: UserNoticeFormItemProps;
 }
 
-export type { UserNoticeFormItemProps, UserNoticeFormProps, UserNotice };
+interface NoticeItem {
+  id: number;
+  avatar: string;
+  title: string;
+  content: string;
+  type: number;
+  op: number;
+  opId: number;
+  createdAt: Date;
+  beginAt: Date;
+  /** 结束时间 */
+  endAt: Date;
+  /** 提醒时间 */
+  reminderTime: Date;
+  /** 状态1开启2关闭 */
+  status: number;
+  /** 提醒状态 1开启 2关闭 */
+  reminderStatus: number;
+}
+
+interface Notice {
+  key: string;
+  name: string;
+  total: number;
+  count: number;
+}
+
+export type {
+  UserNoticeFormItemProps,
+  UserNoticeFormProps,
+  UserNotice,
+  Notice,
+  NoticeItem
+};
