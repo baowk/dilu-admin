@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ListItem } from "./data";
+import dayjs from "dayjs";
+import { NoticeItem } from "@/api/notice/user-notice";
 import { ref, PropType, nextTick } from "vue";
 import { useNav } from "@/layout/hooks/useNav";
 import { deviceDetection } from "@pureadmin/utils";
 
 const props = defineProps({
   noticeItem: {
-    type: Object as PropType<ListItem>,
+    type: Object as PropType<NoticeItem>,
     default: () => {}
   }
 });
@@ -45,6 +46,44 @@ function hoverDescription(event, description) {
     ? (descriptionTooltip.value = true)
     : (descriptionTooltip.value = false);
 }
+
+function timeago(dateTimeStamp) {
+  if (dateTimeStamp == 0) {
+    return;
+  } else {
+    dateTimeStamp = dateTimeStamp * 1000;
+  }
+  const minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+  const hour = minute * 60;
+  const day = hour * 24;
+  const week = day * 7;
+  const now = new Date().getTime(); //获取当前时间毫秒
+  console.log(now);
+  const diffValue = now - dateTimeStamp; //时间差
+
+  if (diffValue < 0) {
+    return;
+  }
+  const minC = diffValue / minute; //计算时间差的分，时，天，周，月
+  const hourC = diffValue / hour;
+  const dayC = diffValue / day;
+  const weekC = diffValue / week;
+  let result = "";
+  if (weekC >= 1 && weekC <= 3) {
+    result = " " + parseInt(weekC) + "周前";
+  } else if (dayC >= 1 && dayC <= 6) {
+    result = " " + parseInt(dayC) + "天前";
+  } else if (hourC >= 1 && hourC <= 23) {
+    result = " " + parseInt(hourC) + "小时前";
+  } else if (minC >= 1 && minC <= 59) {
+    result = " " + parseInt(minC) + "分钟前";
+  } else if (diffValue >= 0 && diffValue <= minute) {
+    result = "刚刚";
+  } else {
+    dayjs(dateTimeStamp).format("MM-DD HH:mm");
+  }
+  return result;
+}
 </script>
 
 <template>
@@ -76,12 +115,20 @@ function hoverDescription(event, description) {
           </div>
         </el-tooltip>
         <el-tag
-          v-if="props.noticeItem?.extra"
-          :type="props.noticeItem?.status"
+          v-if="props.noticeItem?.beginAt"
+          :type="props.noticeItem?.status == 1 ? 'success' : 'info'"
           size="small"
           class="notice-title-extra"
         >
-          {{ props.noticeItem?.extra }}
+          {{ timeago(props.noticeItem?.beginAt) }}
+        </el-tag>
+        <el-tag
+          v-if="props.noticeItem?.type == 1"
+          :type="props.noticeItem?.status == 1 ? 'success' : 'info'"
+          size="small"
+          class="notice-title-extra"
+        >
+          {{ props.noticeItem?.status == 1 ? "未读" : "已读" }}
         </el-tag>
       </div>
 
@@ -89,19 +136,19 @@ function hoverDescription(event, description) {
         popper-class="notice-title-popper"
         :effect="tooltipEffect"
         :disabled="!descriptionTooltip"
-        :content="props.noticeItem.description"
+        :content="props.noticeItem.content"
         placement="top-start"
       >
         <div
           ref="descriptionRef"
           class="notice-text-description"
-          @mouseover="hoverDescription($event, props.noticeItem.description)"
+          @mouseover="hoverDescription($event, props.noticeItem.content)"
         >
-          {{ props.noticeItem.description }}
+          {{ props.noticeItem.content }}
         </div>
       </el-tooltip>
       <div class="notice-text-datetime text-[#00000073] dark:text-white">
-        {{ props.noticeItem.datetime }}
+        {{ timeago(props.noticeItem.createdAt) }}
       </div>
     </div>
   </div>

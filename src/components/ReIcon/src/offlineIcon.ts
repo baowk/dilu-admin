@@ -35,6 +35,8 @@ import Table from "@iconify-icons/ri/table-line";
 import Generate from "@iconify-icons/ri/ai-generate";
 import Operation from "@iconify-icons/ep/operation";
 import SwapLine from "@iconify-icons/ri/swap-line";
+import Bell from "@iconify-icons/ep/bell";
+import BellFill from "@iconify-icons/ep/bell-filled";
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -66,3 +68,5 @@ addIcon("table", Table);
 addIcon("generate", Generate);
 addIcon("operation", Operation);
 addIcon("swapLine", SwapLine);
+addIcon("bell", Bell);
+addIcon("bellFill", BellFill);

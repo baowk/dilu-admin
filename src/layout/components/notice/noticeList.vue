@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { PropType } from "vue";
-import { ListItem } from "./data";
-import NoticeItem from "./noticeItem.vue";
+import { NoticeItem } from "@/api/notice/user-notice";
+import NoticeItems from "./noticeItem.vue";
 
 const props = defineProps({
   list: {
-    type: Array as PropType<Array<ListItem>>,
+    type: Array as PropType<Array<NoticeItem>>,
     default: () => []
   }
 });
@@ -13,7 +13,7 @@ const props = defineProps({
 
 <template>
   <div v-if="props.list.length">
-    <NoticeItem
+    <NoticeItems
       v-for="(item, index) in props.list"
       :noticeItem="item"
       :key="index"
