@@ -116,11 +116,19 @@ function timeago(dateTimeStamp) {
         </el-tooltip>
         <el-tag
           v-if="props.noticeItem?.beginAt"
-          :type="props.noticeItem?.status"
+          :type="props.noticeItem?.status == 1 ? 'success' : 'info'"
           size="small"
           class="notice-title-extra"
         >
           {{ timeago(props.noticeItem?.beginAt) }}
+        </el-tag>
+        <el-tag
+          v-if="props.noticeItem?.type == 1"
+          :type="props.noticeItem?.status == 1 ? 'success' : 'info'"
+          size="small"
+          class="notice-title-extra"
+        >
+          {{ props.noticeItem?.status == 1 ? "未读" : "已读" }}
         </el-tag>
       </div>
 

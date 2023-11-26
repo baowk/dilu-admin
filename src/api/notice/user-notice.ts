@@ -137,12 +137,12 @@ interface NoticeItem {
   type: number;
   op: number;
   opId: number;
-  createdAt: Date;
-  beginAt: Date;
+  createdAt: number;
+  beginAt: number;
   /** 结束时间 */
-  endAt: Date;
+  endAt: number;
   /** 提醒时间 */
-  reminderTime: Date;
+  reminderTime: number;
   /** 状态1开启2关闭 */
   status: number;
   /** 提醒状态 1开启 2关闭 */
