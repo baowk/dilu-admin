@@ -1,7 +1,13 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import {type UserNoticeFormItemProps, getUserNoticePage, createUserNotice, updateUserNotice, delUserNotice } from "@/api/notice/user-notice";
+import {
+  type UserNoticeFormItemProps,
+  getUserNoticePage,
+  createUserNotice,
+  updateUserNotice,
+  delUserNotice
+} from "@/api/notice/user-notice";
 import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -9,13 +15,27 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useUserNotice() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,status: 0,
+    pageSize: 10,
+    status: null
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  //const switchLoadMap = ref({});
-  //const { switchStyle } = usePublicHooks();
+  const statusOptions = [
+    {
+      value: 1,
+      label: "未读"
+    },
+    {
+      value: 2,
+      label: "已读"
+    },
+    {
+      value: 3,
+      label: "回收站"
+    }
+  ];
+
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -23,14 +43,13 @@ export function useUserNotice() {
     background: true
   });
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
       minWidth: 120
     },
     {
-      label: "团队id",
+      label: "团队",
       prop: "teamId",
       minWidth: 120
     },
@@ -65,9 +84,16 @@ export function useUserNotice() {
       minWidth: 120
     },
     {
-      label: "状态 1未读 2已读 -1回收站",
+      label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ status }) => {
+        for (const t in statusOptions) {
+          if (statusOptions[t].value == status) {
+            return statusOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "创建人",
@@ -87,13 +113,6 @@ export function useUserNotice() {
       minWidth: 120,
       formatter: ({ updatedAt }) =>
         dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
-      label: "删除时间",
-      prop: "deleteAt",
-      minWidth: 120,
-      formatter: ({ deleteAt }) =>
-        dayjs(deleteAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -166,7 +185,7 @@ export function useUserNotice() {
           op: row?.op ?? null,
           opId: row?.opId ?? null,
           status: row?.status ?? null,
-          deleteAt: row?.deleteAt ?? null,
+          deleteAt: row?.deleteAt ?? null
         }
       },
       width: "48%",
@@ -201,7 +220,7 @@ export function useUserNotice() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }
@@ -227,6 +246,7 @@ export function useUserNotice() {
     columns,
     dataList,
     pagination,
+    statusOptions,
     onSearch,
     resetForm,
     openDialog,

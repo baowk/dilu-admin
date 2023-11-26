@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { Task } from "@/api/notice/task.d";
 
-//Api 
+//Api
 
 /** 获取Task管理列表 */
 export const getTaskPage = (data?: object) => {
@@ -31,23 +31,32 @@ export const createTask = (data?: object) => {
 
 /** 更新Task */
 export const updateTask = (data?: object) => {
-  return http.request<Result<Task>>("post", "/api/v1/notice/task/update",{
+  return http.request<Result<Task>>("post", "/api/v1/notice/task/update", {
     data
   });
 };
 
 /** 删除Task */
 export const delTask = (data?: object) => {
-  return http.request<Result<Task>>("post", "/api/v1/notice/task/del",{
+  return http.request<Result<Task>>("post", "/api/v1/notice/task/del", {
     data
   });
+};
+
+export const getUserTasks = (data?: object) => {
+  return http.request<Result<PageResult<Task>>>(
+    "post",
+    "/api/v1/notice/task/my",
+    {
+      data
+    }
+  );
 };
 
 //Model
 
 /** Task */
 interface Task {
-  
   /** 主键 */
   id: number;
   /** 团队id */
@@ -82,9 +91,7 @@ interface Task {
   deletedAt: Date;
 }
 
-
 interface TaskFormItemProps {
-  
   /** 主键 */
   id: number;
   /** 团队id */

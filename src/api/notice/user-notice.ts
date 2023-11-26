@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { UserNotice } from "@/api/notice/user-notice.d";
 
-//Api 
+//Api
 
 /** 获取用户通知管理列表 */
 export const getUserNoticePage = (data?: object) => {
@@ -17,37 +17,62 @@ export const getUserNoticePage = (data?: object) => {
 
 /** 获取用户通知 */
 export const getUserNotice = (data?: object) => {
-  return http.request<Result<UserNotice>>("post", "/api/v1/notice/user-notice/get", {
-    data
-  });
+  return http.request<Result<UserNotice>>(
+    "post",
+    "/api/v1/notice/user-notice/get",
+    {
+      data
+    }
+  );
 };
 
 /** 创建用户通知 */
 export const createUserNotice = (data?: object) => {
-  return http.request<Result<UserNotice>>("post", "/api/v1/notice/user-notice/create", {
-    data
-  });
+  return http.request<Result<UserNotice>>(
+    "post",
+    "/api/v1/notice/user-notice/create",
+    {
+      data
+    }
+  );
 };
 
 /** 更新用户通知 */
 export const updateUserNotice = (data?: object) => {
-  return http.request<Result<UserNotice>>("post", "/api/v1/notice/user-notice/update",{
-    data
-  });
+  return http.request<Result<UserNotice>>(
+    "post",
+    "/api/v1/notice/user-notice/update",
+    {
+      data
+    }
+  );
 };
 
 /** 删除用户通知 */
 export const delUserNotice = (data?: object) => {
-  return http.request<Result<UserNotice>>("post", "/api/v1/notice/user-notice/del",{
-    data
-  });
+  return http.request<Result<UserNotice>>(
+    "post",
+    "/api/v1/notice/user-notice/del",
+    {
+      data
+    }
+  );
+};
+
+export const getUserNotices = (data?: object) => {
+  return http.request<Result<PageResult<UserNotice>>>(
+    "post",
+    "/api/v1/notice/user-notice/my",
+    {
+      data
+    }
+  );
 };
 
 //Model
 
 /** 用户通知 */
 interface UserNotice {
-  
   /** 主键 */
   id: number;
   /** 团队id */
@@ -76,9 +101,7 @@ interface UserNotice {
   deleteAt: Date;
 }
 
-
 interface UserNoticeFormItemProps {
-  
   /** 主键 */
   id: number;
   /** 团队id */

@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { PubNotice } from "@/api/notice/pub-notice.d";
 
-//Api 
+//Api
 
 /** 获取公用通知管理列表 */
 export const getPubNoticePage = (data?: object) => {
@@ -17,37 +17,52 @@ export const getPubNoticePage = (data?: object) => {
 
 /** 获取公用通知 */
 export const getPubNotice = (data?: object) => {
-  return http.request<Result<PubNotice>>("post", "/api/v1/notice/pub-notice/get", {
-    data
-  });
+  return http.request<Result<PubNotice>>(
+    "post",
+    "/api/v1/notice/pub-notice/get",
+    {
+      data
+    }
+  );
 };
 
 /** 创建公用通知 */
 export const createPubNotice = (data?: object) => {
-  return http.request<Result<PubNotice>>("post", "/api/v1/notice/pub-notice/create", {
-    data
-  });
+  return http.request<Result<PubNotice>>(
+    "post",
+    "/api/v1/notice/pub-notice/create",
+    {
+      data
+    }
+  );
 };
 
 /** 更新公用通知 */
 export const updatePubNotice = (data?: object) => {
-  return http.request<Result<PubNotice>>("post", "/api/v1/notice/pub-notice/update",{
-    data
-  });
+  return http.request<Result<PubNotice>>(
+    "post",
+    "/api/v1/notice/pub-notice/update",
+    {
+      data
+    }
+  );
 };
 
 /** 删除公用通知 */
 export const delPubNotice = (data?: object) => {
-  return http.request<Result<PubNotice>>("post", "/api/v1/notice/pub-notice/del",{
-    data
-  });
+  return http.request<Result<PubNotice>>(
+    "post",
+    "/api/v1/notice/pub-notice/del",
+    {
+      data
+    }
+  );
 };
 
 //Model
 
 /** 公用通知 */
 interface PubNotice {
-  
   /** 主键 */
   id: number;
   /** 针对组消息 */
@@ -76,9 +91,7 @@ interface PubNotice {
   updatedAt: Date;
 }
 
-
 interface PubNoticeFormItemProps {
-  
   /** 主键 */
   id: number;
   /** 针对组消息 */

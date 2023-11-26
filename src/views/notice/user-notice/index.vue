@@ -22,6 +22,7 @@ const {
   columns,
   dataList,
   pagination,
+  statusOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -40,13 +41,20 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="状态 1未读 2已读 -1回收站：" prop="status">
-        <el-input
+      <el-form-item label="状态：" prop="status">
+        <el-select
           v-model="qform.status"
-          placeholder="请输入状态 1未读 2已读 -1回收站"
+          placeholder="请选择状态"
+          class="w-full"
           clearable
-          class="!w-[200px]"
-        />
+        >
+          <el-option
+            v-for="(item, index) in statusOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -111,7 +119,7 @@ const {
               <el-popconfirm
                 :title="`是否确认删除用户通知名称为${row.name}的这条数据`"
                 @confirm="handleDelete(row)"
-                >
+              >
                 <template #reference>
                   <el-button
                     class="reset-margin"

@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { TaskFormProps } from "@/api/notice/task";
+import { useTask } from "./utils/hook";
 
 const props = withDefaults(defineProps<TaskFormProps>(), {
   formInline: () => ({
@@ -17,9 +18,11 @@ const props = withDefaults(defineProps<TaskFormProps>(), {
     endAt: null,
     reminderTime: null,
     status: 0,
-    reminderStatus: 0,
+    reminderStatus: 0
   })
 });
+
+const { statusOptions, reminderStatusOptions } = useTask();
 
 /** 自定义表单规则校验 */
 const formRules = reactive(<FormRules>{
@@ -43,100 +46,115 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-  <el-form-item label="主键" prop="id">
+    <el-form-item label="主键" prop="id">
       <el-input
         v-model.number="newFormInline.id"
-        clearable
         placeholder="请输入主键"
+        disabled
       />
     </el-form-item>
-  <el-form-item label="团队id" prop="teamId">
-      <el-input
-        v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入团队id"
-      />
-    </el-form-item>
-  <el-form-item label="用户id" prop="userId">
-      <el-input
-        v-model.number="newFormInline.userId"
-        clearable
-        placeholder="请输入用户id"
-      />
-    </el-form-item>
-  <el-form-item label="任务标题" prop="title">
+    <el-form-item label="任务标题" prop="title">
       <el-input
         v-model="newFormInline.title"
         clearable
         placeholder="请输入任务标题"
       />
     </el-form-item>
-  <el-form-item label="任务内容" prop="content">
+    <el-form-item label="任务内容" prop="content">
       <el-input
         v-model="newFormInline.content"
         clearable
         placeholder="请输入任务内容"
+        type="textarea"
+        :rows="4"
       />
     </el-form-item>
-  <el-form-item label="任务类型" prop="taskType">
+    <el-form-item label="团队id" prop="teamId">
+      <el-input
+        v-model.number="newFormInline.teamId"
+        clearable
+        placeholder="请输入团队id"
+      />
+    </el-form-item>
+    <el-form-item label="用户id" prop="userId">
+      <el-input
+        v-model.number="newFormInline.userId"
+        clearable
+        placeholder="请输入用户id"
+      />
+    </el-form-item>
+
+    <el-form-item label="任务类型" prop="taskType">
       <el-input
         v-model.number="newFormInline.taskType"
         clearable
         placeholder="请输入任务类型"
       />
     </el-form-item>
-  <el-form-item label="操作类型" prop="op">
+    <el-form-item label="操作类型" prop="op">
       <el-input
         v-model.number="newFormInline.op"
         clearable
         placeholder="请输入操作类型"
       />
     </el-form-item>
-  <el-form-item label="操作id" prop="opId">
+    <el-form-item label="操作id" prop="opId">
       <el-input
         v-model.number="newFormInline.opId"
         clearable
         placeholder="请输入操作id"
       />
     </el-form-item>
-  <el-form-item label="开始时间" prop="beginAt">
-      <el-input
+    <el-form-item label="开始时间" prop="beginAt">
+      <el-date-picker
         v-model="newFormInline.beginAt"
-        clearable
-        placeholder="请输入开始时间"
+        type="datetime"
+        placeholder="选择日期"
       />
     </el-form-item>
-  <el-form-item label="结束时间" prop="endAt">
-      <el-input
+    <el-form-item label="结束时间" prop="endAt">
+      <el-date-picker
         v-model="newFormInline.endAt"
-        clearable
-        placeholder="请输入结束时间"
+        type="datetime"
+        placeholder="选择日期"
       />
     </el-form-item>
-  <el-form-item label="提醒时间" prop="reminderTime">
-      <el-input
+    <el-form-item label="提醒时间" prop="reminderTime">
+      <el-date-picker
         v-model="newFormInline.reminderTime"
-        clearable
-        placeholder="请输入提醒时间"
+        type="datetime"
+        placeholder="选择日期"
       />
     </el-form-item>
-  <el-form-item label="状态1开启2关闭" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
+    <el-form-item label="状态" prop="status">
+      <el-select
+        v-model="newFormInline.status"
+        placeholder="请选择状态"
+        class="w-full"
         clearable
-        placeholder="请输入状态1开启2关闭"
-      />
+      >
+        <el-option
+          v-for="(item, index) in statusOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-  <el-form-item label="提醒状态 1开启 2关闭" prop="reminderStatus">
-      <el-input
-        v-model.number="newFormInline.reminderStatus"
+    <el-form-item label="提醒状态" prop="reminderStatus">
+      <el-select
+        v-model="newFormInline.reminderStatus"
+        placeholder="请选择提醒状态"
+        class="w-full"
         clearable
-        placeholder="请输入提醒状态 1开启 2关闭"
-      />
+      >
+        <el-option
+          v-for="(item, index) in reminderStatusOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-  
-  
-  
-  
   </el-form>
 </template>

@@ -81,7 +81,7 @@ function hoverDescription(event, description) {
           size="small"
           class="notice-title-extra"
         >
-          {{ props.noticeItem?.extra }}
+          {{ props.noticeItem?.beginAt }}
         </el-tag>
       </div>
 
@@ -89,19 +89,19 @@ function hoverDescription(event, description) {
         popper-class="notice-title-popper"
         :effect="tooltipEffect"
         :disabled="!descriptionTooltip"
-        :content="props.noticeItem.description"
+        :content="props.noticeItem.content"
         placement="top-start"
       >
         <div
           ref="descriptionRef"
           class="notice-text-description"
-          @mouseover="hoverDescription($event, props.noticeItem.description)"
+          @mouseover="hoverDescription($event, props.noticeItem.content)"
         >
-          {{ props.noticeItem.description }}
+          {{ props.noticeItem.content }}
         </div>
       </el-tooltip>
       <div class="notice-text-datetime text-[#00000073] dark:text-white">
-        {{ props.noticeItem.datetime }}
+        {{ props.noticeItem.createdAt }}
       </div>
     </div>
   </div>

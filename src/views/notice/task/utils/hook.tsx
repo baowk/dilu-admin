@@ -1,7 +1,13 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import {type TaskFormItemProps, getTaskPage, createTask, updateTask, delTask } from "@/api/notice/task";
+import {
+  type TaskFormItemProps,
+  getTaskPage,
+  createTask,
+  updateTask,
+  delTask
+} from "@/api/notice/task";
 import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -9,7 +15,9 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useTask() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,status: 0,reminderStatus: 0,
+    pageSize: 10,
+    status: null,
+    reminderStatus: null
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -22,8 +30,30 @@ export function useTask() {
     currentPage: 1,
     background: true
   });
+
+  const statusOptions = [
+    {
+      value: 1,
+      label: "启用"
+    },
+    {
+      value: 2,
+      label: "关闭"
+    }
+  ];
+
+  const reminderStatusOptions = [
+    {
+      value: 1,
+      label: "提醒"
+    },
+    {
+      value: 2,
+      label: "不提醒"
+    }
+  ];
+
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
@@ -68,15 +98,13 @@ export function useTask() {
       label: "开始时间",
       prop: "beginAt",
       minWidth: 120,
-      formatter: ({ beginAt }) =>
-        dayjs(beginAt).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ beginAt }) => dayjs(beginAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "结束时间",
       prop: "endAt",
       minWidth: 120,
-      formatter: ({ endAt }) =>
-        dayjs(endAt).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ endAt }) => dayjs(endAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "提醒时间",
@@ -86,14 +114,28 @@ export function useTask() {
         dayjs(reminderTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
-      label: "状态1开启2关闭",
+      label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ status }) => {
+        for (const t in statusOptions) {
+          if (statusOptions[t].value == status) {
+            return statusOptions[t].label;
+          }
+        }
+      }
     },
     {
-      label: "提醒状态 1开启 2关闭",
+      label: "提醒状态",
       prop: "reminderStatus",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ reminderStatus }) => {
+        for (const t in reminderStatusOptions) {
+          if (reminderStatusOptions[t].value == reminderStatus) {
+            return reminderStatusOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "创建时间",
@@ -108,13 +150,6 @@ export function useTask() {
       minWidth: 120,
       formatter: ({ updatedAt }) =>
         dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
-    },
-    {
-      label: "删除时间",
-      prop: "deletedAt",
-      minWidth: 120,
-      formatter: ({ deletedAt }) =>
-        dayjs(deletedAt).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -190,7 +225,7 @@ export function useTask() {
           endAt: row?.endAt ?? null,
           reminderTime: row?.reminderTime ?? null,
           status: row?.status ?? null,
-          reminderStatus: row?.reminderStatus ?? null,
+          reminderStatus: row?.reminderStatus ?? null
         }
       },
       width: "48%",
@@ -225,7 +260,7 @@ export function useTask() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }
@@ -251,6 +286,8 @@ export function useTask() {
     columns,
     dataList,
     pagination,
+    statusOptions,
+    reminderStatusOptions,
     onSearch,
     resetForm,
     openDialog,

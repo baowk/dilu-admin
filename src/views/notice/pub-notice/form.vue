@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { PubNoticeFormProps } from "@/api/notice/pub-notice";
+import { usePubNotice } from "./utils/hook";
 
 const props = withDefaults(defineProps<PubNoticeFormProps>(), {
   formInline: () => ({
@@ -13,7 +14,7 @@ const props = withDefaults(defineProps<PubNoticeFormProps>(), {
     op: 0,
     opId: 0,
     status: 0,
-    expired: null,
+    expired: null
   })
 });
 
@@ -24,6 +25,8 @@ const formRules = reactive(<FormRules>{
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
+
+const { statusOptions } = usePubNotice();
 
 function getRef() {
   return ruleFormRef.value;
@@ -39,73 +42,72 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-  <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
-  <el-form-item label="针对组消息" prop="teamId">
+    <el-form-item label="团队" prop="teamId">
       <el-input
         v-model.number="newFormInline.teamId"
-        clearable
-        placeholder="请输入针对组消息"
+        disabled
+        placeholder="请输入团队"
       />
     </el-form-item>
-  <el-form-item label="标题" prop="title">
+    <el-form-item label="标题" prop="title">
       <el-input
         v-model="newFormInline.title"
         clearable
         placeholder="请输入标题"
       />
     </el-form-item>
-  <el-form-item label="内容" prop="content">
+    <el-form-item label="内容" prop="content">
       <el-input
         v-model="newFormInline.content"
         clearable
         placeholder="请输入内容"
+        type="textarea"
+        rows="3"
       />
     </el-form-item>
-  <el-form-item label="消息类型" prop="noticeType">
+    <el-form-item label="消息类型" prop="noticeType">
       <el-input
         v-model.number="newFormInline.noticeType"
         clearable
         placeholder="请输入消息类型"
       />
     </el-form-item>
-  <el-form-item label="操作类型" prop="op">
+    <el-form-item label="操作类型" prop="op">
       <el-input
         v-model.number="newFormInline.op"
         clearable
         placeholder="请输入操作类型"
       />
     </el-form-item>
-  <el-form-item label="操作id" prop="opId">
+    <el-form-item label="操作id" prop="opId">
       <el-input
         v-model.number="newFormInline.opId"
         clearable
         placeholder="请输入操作id"
       />
     </el-form-item>
-  <el-form-item label="状态" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
+    <el-form-item label="状态" prop="status">
+      <el-select
+        v-model="newFormInline.status"
+        placeholder="请选择状态"
+        class="w-full"
         clearable
-        placeholder="请输入状态"
-      />
+      >
+        <el-option
+          v-for="(item, index) in statusOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-  
-  
-  <el-form-item label="到期时间" prop="expired">
-      <el-input
+
+    <el-form-item label="到期时间" prop="expired">
+      <el-date-picker
         v-model="newFormInline.expired"
-        clearable
-        placeholder="请输入到期时间"
+        type="datetime"
+        placeholder="选择日期"
       />
     </el-form-item>
-  
-  
-  
   </el-form>
 </template>

@@ -22,6 +22,8 @@ const {
   columns,
   dataList,
   pagination,
+  statusOptions,
+  reminderStatusOptions,
   onSearch,
   resetForm,
   openDialog,
@@ -40,20 +42,35 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="状态1开启2关闭：" prop="status">
-        <el-input
+      <el-form-item label="状态：" prop="status">
+        <el-select
           v-model="qform.status"
-          placeholder="请输入状态1开启2关闭"
+          placeholder="请选择状态"
+          class="w-full"
           clearable
-          class="!w-[200px]"
-        />
-      </el-form-item><el-form-item label="提醒状态 1开启 2关闭：" prop="reminderStatus">
-        <el-input
+        >
+          <el-option
+            v-for="(item, index) in statusOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="提醒状态：" prop="reminderStatus">
+        <el-select
           v-model="qform.reminderStatus"
-          placeholder="请输入提醒状态 1开启 2关闭"
+          placeholder="请选择状态"
+          class="w-full"
           clearable
-          class="!w-[200px]"
-        />
+        >
+          <el-option
+            v-for="(item, index) in reminderStatusOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -118,7 +135,7 @@ const {
               <el-popconfirm
                 :title="`是否确认删除Task名称为${row.name}的这条数据`"
                 @confirm="handleDelete(row)"
-                >
+              >
                 <template #reference>
                   <el-button
                     class="reset-margin"

@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import type { FormRules } from "element-plus";
 import { UserNoticeFormProps } from "@/api/notice/user-notice";
+import { useUserNotice } from "./utils/hook";
 
 const props = withDefaults(defineProps<UserNoticeFormProps>(), {
   formInline: () => ({
@@ -14,7 +15,7 @@ const props = withDefaults(defineProps<UserNoticeFormProps>(), {
     op: 0,
     opId: 0,
     status: 0,
-    deleteAt: null,
+    deleteAt: null
   })
 });
 
@@ -30,6 +31,8 @@ function getRef() {
   return ruleFormRef.value;
 }
 
+const { statusOptions } = useUserNotice();
+
 defineExpose({ getRef });
 </script>
 
@@ -40,79 +43,69 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-  <el-form-item label="主键" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键"
-      />
-    </el-form-item>
-  <el-form-item label="团队id" prop="teamId">
+    <el-form-item label="团队id" prop="teamId">
       <el-input
         v-model.number="newFormInline.teamId"
-        clearable
+        disabled
         placeholder="请输入团队id"
       />
     </el-form-item>
-  <el-form-item label="用户id" prop="userId">
+    <el-form-item label="用户id" prop="userId">
       <el-input
         v-model.number="newFormInline.userId"
         clearable
         placeholder="请输入用户id"
       />
     </el-form-item>
-  <el-form-item label="标题" prop="title">
+    <el-form-item label="标题" prop="title">
       <el-input
         v-model="newFormInline.title"
         clearable
         placeholder="请输入标题"
       />
     </el-form-item>
-  <el-form-item label="内容" prop="content">
+    <el-form-item label="内容" prop="content">
       <el-input
         v-model="newFormInline.content"
         clearable
         placeholder="请输入内容"
       />
     </el-form-item>
-  <el-form-item label="消息类型" prop="noticeType">
+    <el-form-item label="消息类型" prop="noticeType">
       <el-input
         v-model.number="newFormInline.noticeType"
         clearable
         placeholder="请输入消息类型"
       />
     </el-form-item>
-  <el-form-item label="操作类型" prop="op">
+    <el-form-item label="操作类型" prop="op">
       <el-input
         v-model.number="newFormInline.op"
         clearable
         placeholder="请输入操作类型"
       />
     </el-form-item>
-  <el-form-item label="操作对象id" prop="opId">
+    <el-form-item label="操作对象id" prop="opId">
       <el-input
         v-model.number="newFormInline.opId"
         clearable
         placeholder="请输入操作对象id"
       />
     </el-form-item>
-  <el-form-item label="状态 1未读 2已读 -1回收站" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
+    <el-form-item label="状态" prop="status">
+      <el-select
+        v-model="newFormInline.status"
+        placeholder="请选择状态"
+        class="w-full"
         clearable
-        placeholder="请输入状态 1未读 2已读 -1回收站"
-      />
+      >
+        <el-option
+          v-for="(item, index) in statusOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
     </el-form-item>
-  
-  
-  
-  <el-form-item label="删除时间" prop="deleteAt">
-      <el-input
-        v-model="newFormInline.deleteAt"
-        clearable
-        placeholder="请输入删除时间"
-      />
-    </el-form-item>
-  
   </el-form>
 </template>

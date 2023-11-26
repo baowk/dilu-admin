@@ -1,7 +1,13 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import {type PubNoticeFormItemProps, getPubNoticePage, createPubNotice, updatePubNotice, delPubNotice } from "@/api/notice/pub-notice";
+import {
+  type PubNoticeFormItemProps,
+  getPubNoticePage,
+  createPubNotice,
+  updatePubNotice,
+  delPubNotice
+} from "@/api/notice/pub-notice";
 import { addDialog } from "@/components/ReDialog";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -9,7 +15,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function usePubNotice() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,status: 0,
+    pageSize: 10,
+    status: null
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -22,15 +29,26 @@ export function usePubNotice() {
     currentPage: 1,
     background: true
   });
+
+  const statusOptions = [
+    {
+      value: 1,
+      label: "正常"
+    },
+    {
+      value: 2,
+      label: "关闭"
+    }
+  ];
+
   const columns: TableColumnList = [
-  
     {
       label: "主键",
       prop: "id",
       minWidth: 120
     },
     {
-      label: "针对组消息",
+      label: "团队",
       prop: "teamId",
       minWidth: 120
     },
@@ -62,7 +80,14 @@ export function usePubNotice() {
     {
       label: "状态",
       prop: "status",
-      minWidth: 120
+      minWidth: 120,
+      formatter: ({ status }) => {
+        for (const t in statusOptions) {
+          if (statusOptions[t].value == status) {
+            return statusOptions[t].label;
+          }
+        }
+      }
     },
     {
       label: "创建人",
@@ -78,8 +103,7 @@ export function usePubNotice() {
       label: "到期时间",
       prop: "expired",
       minWidth: 120,
-      formatter: ({ expired }) =>
-        dayjs(expired).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ expired }) => dayjs(expired).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "创建时间",
@@ -165,7 +189,7 @@ export function usePubNotice() {
           op: row?.op ?? null,
           opId: row?.opId ?? null,
           status: row?.status ?? null,
-          expired: row?.expired ?? null,
+          expired: row?.expired ?? null
         }
       },
       width: "48%",
@@ -200,7 +224,7 @@ export function usePubNotice() {
                   });
                   onSearch(); // 刷新表格数据
                 } else {
-                  message( res.msg, {
+                  message(res.msg, {
                     type: "error"
                   });
                 }
@@ -226,6 +250,7 @@ export function usePubNotice() {
     columns,
     dataList,
     pagination,
+    statusOptions,
     onSearch,
     resetForm,
     openDialog,

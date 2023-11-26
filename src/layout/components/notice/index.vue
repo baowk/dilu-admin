@@ -1,19 +1,52 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { noticesData } from "./data";
-import NoticeList from "./noticeList.vue";
+import { ref, onMounted } from "vue";
+import { TabItem } from "./data";
+import { getUserNotices } from "@/api/notice/user-notice";
+import { getUserTasks } from "@/api/notice/task";
 import Bell from "@iconify-icons/ep/bell";
+import NoticeList from "./noticeList.vue";
 
 const noticesNum = ref(0);
-const notices = ref(noticesData);
-const activeKey = ref(noticesData[0].key);
+const notices = ref(Array<TabItem>());
+const activeKey = ref();
 
-notices.value.map(v => (noticesNum.value += v.list.length));
+//notices.value.map(v => (noticesNum.value += v.list.length));
+
+function onNotices() {
+  getUserNotices().then(res => {
+    if (res.code == 200) {
+      const item = {
+        key: "1",
+        name: "通知",
+        total: res.data.total,
+        list: res.data.list
+      };
+      notices.value[0] = item;
+      noticesNum.value += res.data.total;
+      activeKey.value = "1";
+    }
+  });
+  getUserTasks().then(res => {
+    if (res.code == 200) {
+      const item = {
+        key: "2",
+        name: "任务",
+        total: res.data.total,
+        list: res.data.list
+      };
+      notices.value[1] = item;
+      noticesNum.value += res.data.total;
+    }
+  });
+}
+onMounted(() => {
+  onNotices();
+});
 </script>
 
 <template>
   <el-dropdown trigger="click" placement="bottom-end">
-    <span class="dropdown-badge navbar-bg-hover select-none">
+    <span class="select-none dropdown-badge navbar-bg-hover">
       <el-badge :value="noticesNum" :max="99">
         <span class="header-notice-icon">
           <IconifyIconOffline :icon="Bell" />
@@ -36,7 +69,7 @@ notices.value.map(v => (noticesNum.value += v.list.length));
           <span v-else>
             <template v-for="item in notices" :key="item.key">
               <el-tab-pane
-                :label="`${item.name}(${item.list.length})`"
+                :label="`${item.name}(${item.total})`"
                 :name="`${item.key}`"
               >
                 <el-scrollbar max-height="330px">
