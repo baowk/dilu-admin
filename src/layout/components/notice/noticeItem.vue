@@ -46,6 +46,44 @@ function hoverDescription(event, description) {
     ? (descriptionTooltip.value = true)
     : (descriptionTooltip.value = false);
 }
+
+function timeago(dateTimeStamp) {
+  if (dateTimeStamp == 0) {
+    return;
+  } else {
+    dateTimeStamp = dateTimeStamp * 1000;
+  }
+  const minute = 1000 * 60; //把分，时，天，周，半个月，一个月用毫秒表示
+  const hour = minute * 60;
+  const day = hour * 24;
+  const week = day * 7;
+  const now = new Date().getTime(); //获取当前时间毫秒
+  console.log(now);
+  const diffValue = now - dateTimeStamp; //时间差
+
+  if (diffValue < 0) {
+    return;
+  }
+  const minC = diffValue / minute; //计算时间差的分，时，天，周，月
+  const hourC = diffValue / hour;
+  const dayC = diffValue / day;
+  const weekC = diffValue / week;
+  let result = "";
+  if (weekC >= 1 && weekC <= 3) {
+    result = " " + parseInt(weekC) + "周前";
+  } else if (dayC >= 1 && dayC <= 6) {
+    result = " " + parseInt(dayC) + "天前";
+  } else if (hourC >= 1 && hourC <= 23) {
+    result = " " + parseInt(hourC) + "小时前";
+  } else if (minC >= 1 && minC <= 59) {
+    result = " " + parseInt(minC) + "分钟前";
+  } else if (diffValue >= 0 && diffValue <= minute) {
+    result = "刚刚";
+  } else {
+    dayjs(dateTimeStamp).format("MM-DD HH:mm");
+  }
+  return result;
+}
 </script>
 
 <template>
@@ -82,7 +120,7 @@ function hoverDescription(event, description) {
           size="small"
           class="notice-title-extra"
         >
-          {{ dayjs(props.noticeItem?.beginAt * 1000).format("YYYY-MM-DD") }}
+          {{ timeago(props.noticeItem?.beginAt) }}
         </el-tag>
       </div>
 
@@ -102,7 +140,7 @@ function hoverDescription(event, description) {
         </div>
       </el-tooltip>
       <div class="notice-text-datetime text-[#00000073] dark:text-white">
-        {{ dayjs(props.noticeItem.createdAt * 1000).format("MM-DD HH:mm") }}
+        {{ timeago(props.noticeItem.createdAt) }}
       </div>
     </div>
   </div>
