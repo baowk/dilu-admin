@@ -74,13 +74,13 @@ export function useChat() {
       messages: msgs
     }).then(res => {
       if (res.code === 200) {
-        dataList.value.push({ role: "assistant", content: res.data });
+        if (res.data.length > 0) {
+          dataList.value.push({ role: "system", content: res.data });
+        }
       }
-    });
-    setTimeout(() => {
       qform.message = null;
       loading.value = false;
-    }, 500);
+    });
   }
 
   // function handleSizeChange(val: number) {

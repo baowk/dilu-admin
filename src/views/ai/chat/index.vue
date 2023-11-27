@@ -21,7 +21,17 @@ const { qform, loading, dataList, platformOptions, modelOptions, onChat } =
 
 <template>
   <div class="main">
-    <div>{{ dataList }}</div>
+    <el-scrollbar class="scrollbar">
+      <div v-for="(item, idx) in dataList" :key="idx">
+        <div v-if="item.role == 'user'" class="scrollbar-right-item">
+          {{ item.content }}
+        </div>
+        <div v-else class="scrollbar-left-item">
+          {{ item.content }}
+        </div>
+      </div>
+    </el-scrollbar>
+
     <el-form
       ref="formRef"
       :inline="true"
@@ -58,7 +68,7 @@ const { qform, loading, dataList, platformOptions, modelOptions, onChat } =
           />
         </el-select>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="问题：" prop="message">
         <el-input
           v-model="qform.message"
           placeholder="请输入问题"
@@ -88,5 +98,38 @@ const { qform, loading, dataList, platformOptions, modelOptions, onChat } =
   :deep(.el-form-item) {
     margin-bottom: 12px;
   }
+}
+
+.scrollbar {
+  overflow-y: scroll;
+  height: 600px;
+  background: white;
+}
+.scrollbar-left-item {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  max-width: 80%;
+  margin: 10px 30px;
+  text-align: left;
+  border-radius: 4px;
+  background: var(--el-color-info-light-9);
+  color: var(--el-color-danger);
+  border: 1px solid var(--el-color-danger);
+  padding: 10px;
+}
+
+.scrollbar-right-item {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  //max-width: 100%;
+  margin: 10px 30px 10px 130px;
+  text-align: left;
+  border-radius: 4px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+  border: 1px solid var(--el-color-primary);
+  padding: 10px;
 }
 </style>

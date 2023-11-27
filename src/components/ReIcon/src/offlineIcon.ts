@@ -37,6 +37,7 @@ import Operation from "@iconify-icons/ep/operation";
 import SwapLine from "@iconify-icons/ri/swap-line";
 import Bell from "@iconify-icons/ep/bell";
 import BellFill from "@iconify-icons/ep/bell-filled";
+import Ai from "@iconify-icons/ri/openai-line";
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -70,3 +71,4 @@ addIcon("operation", Operation);
 addIcon("swapLine", SwapLine);
 addIcon("bell", Bell);
 addIcon("bellFill", BellFill);
+addIcon("ai", Ai);
