@@ -71,6 +71,16 @@ export const getUserTasks = (data?: object) => {
   });
 };
 
+export const readNotice = (data?: object) => {
+  return http.request<Result<string>>(
+    "post",
+    "/api/v1/notice/user-notice/read",
+    {
+      data
+    }
+  );
+};
+
 //Model
 
 /** 用户通知 */
