@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { NoticeItem } from "@/api/notice/user-notice";
+import { NoticeItem, readNotice } from "@/api/notice/user-notice";
 import { ref, PropType, nextTick } from "vue";
 import { useNav } from "@/layout/hooks/useNav";
 import { deviceDetection } from "@pureadmin/utils";
@@ -58,7 +58,6 @@ function timeago(dateTimeStamp) {
   const day = hour * 24;
   const week = day * 7;
   const now = new Date().getTime(); //获取当前时间毫秒
-  console.log(now);
   const diffValue = now - dateTimeStamp; //时间差
 
   if (diffValue < 0) {
@@ -84,10 +83,21 @@ function timeago(dateTimeStamp) {
   }
   return result;
 }
+
+function read() {
+  readNotice({ key: props.noticeItem.type, id: props.noticeItem.id }).then(
+    res => {
+      if (res.code == 200) {
+        props.noticeItem.status = 2;
+      }
+    }
+  );
+}
 </script>
 
 <template>
   <div
+    @click="read"
     class="notice-container border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
   >
     <el-avatar
