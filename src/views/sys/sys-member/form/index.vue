@@ -4,7 +4,7 @@ import ReCol from "@/components/ReCol";
 import { formRules } from "../utils/rule";
 import { SysMemberFormProps } from "@/api/sys/sys-member";
 import { usePublicHooks } from "@/utils/hooks";
-import { useUser } from "../utils/hook";
+import { useMember } from "../utils/hook";
 
 const props = withDefaults(defineProps<SysMemberFormProps>(), {
   formInline: () => ({
@@ -32,7 +32,10 @@ const ruleFormRef = ref();
 const { switchStyle } = usePublicHooks();
 const newFormInline = ref(props.formInline);
 
-const { genderOptions } = useUser();
+const treeRef = ref();
+const tableRef = ref();
+
+const { genderOptions, postOptions } = useMember(tableRef, treeRef);
 
 function getRef() {
   return ruleFormRef.value;
@@ -78,16 +81,6 @@ defineExpose({ getRef });
       </re-col>
 
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="生日" prop="birthday">
-          <el-input
-            v-model="newFormInline.birthday"
-            clearable
-            placeholder="生日"
-          />
-        </el-form-item>
-      </re-col>
-
-      <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="邮箱" prop="email">
           <el-input
             v-model="newFormInline.email"
@@ -96,6 +89,36 @@ defineExpose({ getRef });
           />
         </el-form-item>
       </re-col>
+
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="入职时间" prop="entryTime">
+          <el-date-picker
+            v-model="newFormInline.entryTime"
+            type="date"
+            placeholder="选择日期"
+          />
+        </el-form-item>
+      </re-col>
+
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="离职时间" prop="retireTime">
+          <el-date-picker
+            v-model="newFormInline.retireTime"
+            type="date"
+            placeholder="选择日期"
+          />
+        </el-form-item>
+      </re-col>
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="生日" prop="birthday">
+          <el-date-picker
+            v-model="newFormInline.birthday"
+            type="date"
+            placeholder="选择日期"
+          />
+        </el-form-item>
+      </re-col>
+
       <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="性别">
           <el-select
@@ -137,20 +160,15 @@ defineExpose({ getRef });
           </el-cascader>
         </el-form-item>
       </re-col>
-      <re-col
-        :value="12"
-        :xs="24"
-        :sm="24"
-        v-if="newFormInline.title === '新增'"
-      >
+      <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="用户状态">
           <el-switch
             v-model="newFormInline.status"
             inline-prompt
             :active-value="1"
-            :inactive-value="0"
-            active-text="启用"
-            inactive-text="停用"
+            :inactive-value="2"
+            active-text="在职"
+            inactive-text="离职"
             :style="switchStyle"
           />
         </el-form-item>
@@ -158,15 +176,23 @@ defineExpose({ getRef });
 
       <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="职位标签" prop="postTag">
-          <el-input
-            v-model.number="newFormInline.postId"
+          <el-select
+            v-model="newFormInline.postId"
+            placeholder="请选择职位"
+            class="w-full"
             clearable
-            placeholder="请输入职位标签"
-          />
+          >
+            <el-option
+              v-for="(item, index) in postOptions"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
       </re-col>
 
-      <re-col :value="12" :xs="24" :sm="24">
+      <!-- <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="角色" prop="roles">
           <el-input
             v-model.number="newFormInline.roles"
@@ -174,7 +200,7 @@ defineExpose({ getRef });
             placeholder="请输入角色"
           />
         </el-form-item>
-      </re-col>
+      </re-col> -->
     </el-row>
   </el-form>
 </template>

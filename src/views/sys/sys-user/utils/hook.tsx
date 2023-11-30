@@ -131,8 +131,8 @@ export function useSysUser() {
           v-model={scope.row.status}
           active-value={1}
           inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
+          active-text="正常"
+          inactive-text="锁定"
           inline-prompt
           style={switchStyle.value}
         />

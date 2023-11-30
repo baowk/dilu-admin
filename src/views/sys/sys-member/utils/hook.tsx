@@ -42,7 +42,7 @@ import {
   onMounted
 } from "vue";
 
-export function useUser(tableRef: Ref, treeRef: Ref) {
+export function useMember(tableRef: Ref, treeRef: Ref) {
   const form = reactive({
     page: 1,
     pageSize: 10,
@@ -70,6 +70,14 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     currentPage: 1,
     background: true
   });
+
+  const postOptions = [
+    { label: "超级管理", value: -1 },
+    { label: "主管", value: 2 },
+    { label: "副管", value: 4 },
+    { label: "员工", value: 8 }
+  ];
+
   const columns: TableColumnList = [
     {
       label: "勾选列", // 如果需要表格多选，此处label必须设置
@@ -122,12 +130,11 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           loading={switchLoadMap.value[scope.index]?.loading}
           v-model={scope.row.status}
           active-value={1}
-          inactive-value={0}
+          inactive-value={2}
           active-text="正常"
           inactive-text="离职"
           inline-prompt
           style={switchStyle.value}
-          onChange={() => onChange(scope as any)}
         />
       )
     },
@@ -328,14 +335,18 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
           title,
           higherDeptOptions: formatHigherDeptOptions(higherDeptOptions.value),
           id: row?.id ?? 0,
-          nickname: row?.nickname ?? "",
-          name: row?.name ?? "",
-          entryTime: row?.entryTime ?? "",
-          phone: row?.phone ?? "",
-          email: row?.email ?? "",
-          gender: row?.gender ?? "",
-          status: row?.status ?? 1,
-          remark: row?.remark ?? ""
+          nickname: row?.nickname ?? null,
+          name: row?.name ?? null,
+          entryTime: row?.entryTime ?? null,
+          retireTime: row?.retireTime ?? null,
+          phone: row?.phone ?? null,
+          email: row?.email ?? null,
+          gender: row?.gender ?? null,
+          status: row?.status ?? null,
+          remark: row?.remark ?? null,
+          deptId: row?.deptId ?? null,
+          postId: row?.postId ?? null,
+          birthday: row?.birthday ?? null
         }
       },
       width: "48%",
@@ -550,6 +561,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     pagination,
     buttonClass,
     genderOptions,
+    postOptions,
     onSearch,
     resetForm,
     onbatchDel,

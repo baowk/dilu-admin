@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import tree from "./tree.vue";
-import { useUser } from "./utils/hook";
+import { useMember } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -42,7 +42,7 @@ const {
   onSelectionCancel,
   handleCurrentChange,
   handleSelectionChange
-} = useUser(tableRef, treeRef);
+} = useMember(tableRef, treeRef);
 </script>
 
 <template>
