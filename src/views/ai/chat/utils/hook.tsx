@@ -6,8 +6,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useChat() {
   const qform = reactive({
-    platform: null,
-    model: null,
+    platform: "ali",
+    model: "qwen-turbo",
     messages: null,
     message: null
   });
