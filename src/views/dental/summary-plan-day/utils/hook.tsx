@@ -10,7 +10,7 @@ import {
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import { type SysMember, getSysMembers } from "@/api/sys/sys-member";
 import { type SummaryPlanDayFormItemProps } from "@/api/dental/summary-plan-day";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -104,8 +104,8 @@ export function useSummaryPlanDay() {
   }
 
   function getMembers() {
-    getSysMemberPage().then(res => {
-      members.value = res.data.list;
+    getSysMembers().then(res => {
+      members.value = res.data;
     });
   }
 

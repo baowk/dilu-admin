@@ -9,7 +9,11 @@ import {
 } from "@/api/dental/bill";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
-import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import {
+  type SysMember,
+  getSysMemberPage,
+  getSysMembers
+} from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
 import { type BillFormItemProps } from "@/api/dental/bill";
 import { type PaginationProps } from "@pureadmin/table";
@@ -295,8 +299,8 @@ export function useBill() {
   ];
 
   function getMembers() {
-    getSysMemberPage().then(res => {
-      members.value = res.data.list;
+    getSysMembers().then(res => {
+      members.value = res.data;
     });
   }
 

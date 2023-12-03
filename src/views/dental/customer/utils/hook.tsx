@@ -8,7 +8,7 @@ import {
   delCustomer
 } from "@/api/dental/customer";
 
-import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import { type SysMember, getSysMembers } from "@/api/sys/sys-member";
 
 import { genderOptions } from "@/api/sys/sys-user";
 
@@ -176,8 +176,8 @@ export function useCustomer() {
   }
 
   function getMembers() {
-    getSysMemberPage().then(res => {
-      members.value = res.data.list;
+    getSysMembers().then(res => {
+      members.value = res.data;
     });
   }
 

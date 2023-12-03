@@ -7,7 +7,7 @@ import {
   updateTargetTask,
   delTargetTask
 } from "@/api/dental/target-task";
-import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import { type SysMember, getSysMembers } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
 import { type TargetTaskFormItemProps } from "@/api/dental/target-task";
 import { type PaginationProps } from "@pureadmin/table";
@@ -156,8 +156,8 @@ export function useTargetTask() {
   }
 
   function getMembers() {
-    getSysMemberPage().then(res => {
-      members.value = res.data.list;
+    getSysMembers().then(res => {
+      members.value = res.data;
     });
   }
 

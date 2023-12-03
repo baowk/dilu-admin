@@ -15,6 +15,16 @@ export const getSysMemberPage = (data?: object) => {
   );
 };
 
+export const getSysMembers = (data?: object) => {
+  return http.request<Result<Array<SysMember>>>(
+    "post",
+    "/api/v1/sys/sys-member/members",
+    {
+      data
+    }
+  );
+};
+
 /** 获取会员 */
 export const getSysMember = (data?: object) => {
   return http.request<Result<SysMember>>("post", "/api/v1/sys/sys-member/get", {

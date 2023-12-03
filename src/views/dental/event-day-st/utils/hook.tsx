@@ -8,7 +8,7 @@ import {
   delEventDaySt
 } from "@/api/dental/event-day-st";
 
-import { type SysMember, getSysMemberPage } from "@/api/sys/sys-member";
+import { type SysMember, getSysMembers } from "@/api/sys/sys-member";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type EventDayStFormItemProps } from "@/api/dental/event-day-st";
@@ -161,8 +161,8 @@ export function useEventDaySt() {
   }
 
   function getMembers() {
-    getSysMemberPage().then(res => {
-      members.value = res.data.list;
+    getSysMembers().then(res => {
+      members.value = res.data;
     });
   }
 
