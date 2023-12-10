@@ -89,12 +89,11 @@ export function useBillSt() {
           title: "日报表",
           fullscreenIcon: true,
           contentRenderer: () =>
-            h(
-              "div",
-              items.value.map((item, index) => {
-                return h("div", { key: index }, item);
-              })
-            )
+            h("textarea", {
+              rows: 10,
+              cols: 66,
+              value: items.value
+            })
         });
       }
     });
@@ -108,12 +107,11 @@ export function useBillSt() {
           title: "月报表",
           fullscreenIcon: true,
           contentRenderer: () =>
-            h(
-              "ul",
-              items.value.map((item, index) => {
-                return h("li", { key: index }, item);
-              })
-            )
+            h("textarea", {
+              rows: 20,
+              cols: 66,
+              value: items.value
+            })
         });
       }
     });
