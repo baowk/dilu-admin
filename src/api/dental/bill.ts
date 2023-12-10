@@ -1,5 +1,5 @@
 import { http } from "@/utils/http";
-import { Result, PageResult } from "@/api/common";
+import { Result, PageResult, fileExport } from "@/api/common";
 //import { Bill } from "@/api/dental/bill.d";
 
 //Api
@@ -63,6 +63,19 @@ export const stQuery = (data?: object) => {
       data
     }
   );
+};
+
+/** 统计导出 */
+export const stExport = (data?: object) => {
+  return fileExport("post", "/api/v1/dental/st/export", {
+    data
+  });
+};
+
+export const billExport = (data?: object) => {
+  return fileExport("post", "/api/v1/dental/bill/export", {
+    data
+  });
 };
 
 /** 日报表 */

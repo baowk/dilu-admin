@@ -5,15 +5,12 @@ import {
   getBillPage,
   createBill,
   updateBill,
-  delBill
+  delBill,
+  billExport
 } from "@/api/dental/bill";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
-import {
-  type SysMember,
-  getSysMemberPage,
-  getSysMembers
-} from "@/api/sys/sys-member";
+import { type SysMember, getSysMembers } from "@/api/sys/sys-member";
 import { addDialog } from "@/components/ReDialog";
 import { type BillFormItemProps } from "@/api/dental/bill";
 import { type PaginationProps } from "@pureadmin/table";
@@ -314,6 +311,11 @@ export function useBill() {
     }
   }
 
+  function exportExcel() {
+    qform.responseType = "blob";
+    billExport(qform);
+  }
+
   function handleDelete(row) {
     delBill({ ids: [row.id] }).then(res => {
       if (res.code == 200) {
@@ -458,6 +460,7 @@ export function useBill() {
     members,
     identifyText,
     impactOptions,
+    exportExcel,
     onSearch,
     resetForm,
     openDialog,

@@ -6,7 +6,6 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
 // import More from "@iconify-icons/ep/more-filled";
 import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
 
 defineOptions({
   name: "bill"
@@ -19,9 +18,9 @@ const {
   columns,
   dataList,
   onSearch,
-  resetForm,
   toStDay,
-  toStMonth
+  toStMonth,
+  exportExcel
 } = useBillSt();
 </script>
 
@@ -64,6 +63,9 @@ const {
         </el-button>
         <el-button type="primary" :loading="loading" @click="toStMonth">
           月报表
+        </el-button>
+        <el-button type="primary" :loading="loading" @click="exportExcel">
+          导出
         </el-button>
       </el-form-item>
     </el-form>

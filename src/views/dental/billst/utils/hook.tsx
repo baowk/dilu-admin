@@ -1,4 +1,4 @@
-import { stQuery, stDay, stMonth } from "@/api/dental/bill";
+import { stQuery, stDay, stMonth, stExport } from "@/api/dental/bill";
 import { addDialog } from "@/components/ReDialog";
 import { reactive, ref, onMounted, toRaw, h } from "vue";
 
@@ -138,6 +138,11 @@ export function useBillSt() {
     //onSearch();
   };
 
+  function exportExcel() {
+    qform.responseType = "blob";
+    stExport(qform);
+  }
+
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
@@ -150,6 +155,7 @@ export function useBillSt() {
     loading,
     columns,
     dataList,
+    exportExcel,
     toStDay,
     toStMonth,
     onSearch,

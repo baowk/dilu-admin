@@ -134,9 +134,9 @@ class PureHttp {
         }
         if (PureHttp.initConfig.beforeResponseCallback) {
           PureHttp.initConfig.beforeResponseCallback(response);
-          return response.data;
+          return response;
         }
-        return response.data;
+        return response;
       },
       (error: PureHttpError) => {
         const $error = error;
@@ -151,6 +151,33 @@ class PureHttp {
 
   /** 通用请求工具函数 */
   public request<T>(
+    method: RequestMethods,
+    url: string,
+    param?: AxiosRequestConfig,
+    axiosConfig?: PureHttpRequestConfig
+  ): Promise<T> {
+    const config = {
+      method,
+      url,
+      ...param,
+      ...axiosConfig
+    } as PureHttpRequestConfig;
+
+    // 单独处理自定义请求/响应回调
+    return new Promise((resolve, reject) => {
+      PureHttp.axiosInstance
+        .request(config)
+        .then((response: undefined) => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /** 通用请求工具函数 */
+  public download<T>(
     method: RequestMethods,
     url: string,
     param?: AxiosRequestConfig,

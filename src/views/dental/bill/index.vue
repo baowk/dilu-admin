@@ -24,6 +24,7 @@ const {
   pagination,
   tradeOptions,
   members,
+  exportExcel,
   onSearch,
   resetForm,
   openDialog,
@@ -97,6 +98,9 @@ const {
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           重置
+        </el-button>
+        <el-button type="primary" :loading="loading" @click="exportExcel">
+          导出
         </el-button>
       </el-form-item>
     </el-form>
