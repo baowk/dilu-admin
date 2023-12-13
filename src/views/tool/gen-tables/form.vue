@@ -79,7 +79,7 @@ defineExpose({ getRef });
 
 <template>
   <el-form
-    ref="basicInfoForm"
+    ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
     label-width="150px"
