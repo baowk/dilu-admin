@@ -97,11 +97,11 @@ export function useBill() {
     },
     {
       value: 2,
-      label: "补尾款"
+      label: "补当月款"
     },
     {
       value: 3,
-      label: "收回欠款"
+      label: "补上月款"
     },
     {
       value: 10,
