@@ -46,7 +46,8 @@ const props = withDefaults(defineProps<BillFormProps>(), {
 
 const {
   packOptions,
-  brandOptions,
+  sourceOptions,
+  diagnosisOptions,
   tradeOptions,
   impactOptions,
   identifyText,
@@ -152,13 +153,6 @@ defineExpose({ getRef });
         placeholder="请输入已付金额"
       />
     </el-form-item>
-    <!-- <el-form-item label="关联订单" prop="linkId">
-      <el-input
-        v-model.number="newFormInline.linkId"
-        clearable
-        placeholder="请输入关联订单"
-      />
-    </el-form-item> -->
 
     <el-form-item label="交易类型" prop="tradeType">
       <el-select
@@ -175,65 +169,7 @@ defineExpose({ getRef });
         />
       </el-select>
     </el-form-item>
-    <el-form-item label="品牌" prop="brandName">
-      <el-select
-        v-model="newFormInline.brand"
-        placeholder="请选择品牌"
-        class="w-full"
-        clearable
-      >
-        <el-option
-          v-for="(item, index) in brandOptions"
-          :key="index"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="颗数" prop="dentalCount">
-      <el-input
-        v-model.number="newFormInline.dentalCount"
-        clearable
-        placeholder="请输入颗数"
-      />
-    </el-form-item>
 
-    <el-form-item label="已种颗数" prop="implantedCount">
-      <el-input
-        v-model.number="newFormInline.implantedCount"
-        clearable
-        placeholder="请输入已种颗数"
-      />
-    </el-form-item>
-    <!-- <el-form-item label="种植类型" prop="implant">
-      <el-select
-        v-model="newFormInline.implant"
-        placeholder="选择种植类型"
-        class="w-full"
-        clearable
-      >
-        <el-option
-          v-for="(item, index) in impactOptions"
-          :key="index"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
-    <!-- <el-form-item label="植入日期" prop="implantDate">
-      <el-input
-        v-model="newFormInline.implantDate"
-        clearable
-        placeholder="请输入植入日期"
-      />
-    </el-form-item> -->
-    <el-form-item label="医生" prop="doctor">
-      <el-input
-        v-model="newFormInline.doctor"
-        clearable
-        placeholder="请输入医生"
-      />
-    </el-form-item>
     <el-form-item label="全半口" prop="pack">
       <el-select
         v-model="newFormInline.pack"
@@ -249,13 +185,112 @@ defineExpose({ getRef });
         />
       </el-select>
     </el-form-item>
-    <!-- <el-form-item label="预回款日期" prop="paybackDate">
+
+    <el-form-item label="奥齿泰" prop="brand1">
       <el-input
-        v-model="newFormInline.paybackDate"
+        v-model.number="newFormInline.brand1"
         clearable
-        placeholder="请输入预定回款日期"
+        placeholder="种植颗数"
       />
-    </el-form-item> -->
+      <el-input
+        v-model.number="newFormInline.brand1Impl"
+        clearable
+        placeholder="已种颗数"
+      />
+    </el-form-item>
+
+    <el-form-item label="皓圣" prop="brand2">
+      <el-input
+        v-model.number="newFormInline.brand2"
+        clearable
+        placeholder="种植颗数"
+      />
+      <el-input
+        v-model.number="newFormInline.brand2Impl"
+        clearable
+        placeholder="已种颗数"
+      />
+    </el-form-item>
+
+    <el-form-item label="雅定" prop="brand3">
+      <el-input
+        v-model.number="newFormInline.brand3"
+        clearable
+        placeholder="种植颗数"
+      />
+      <el-input
+        v-model.number="newFormInline.brand3Impl"
+        clearable
+        placeholder="已种颗数"
+      />
+    </el-form-item>
+
+    <el-form-item label="ITI" prop="brand4">
+      <el-input
+        v-model.number="newFormInline.brand4"
+        clearable
+        placeholder="种植颗数"
+      />
+      <el-input
+        v-model.number="newFormInline.brand4Impl"
+        clearable
+        placeholder="已种颗数"
+      />
+    </el-form-item>
+
+    <el-form-item label="诺贝尔" prop="brand5">
+      <el-input
+        v-model.number="newFormInline.brand5"
+        clearable
+        placeholder="种植颗数"
+      />
+      <el-input
+        v-model.number="newFormInline.brand5Impl"
+        clearable
+        placeholder="已种颗数"
+      />
+    </el-form-item>
+
+    <el-form-item label="来源" prop="source">
+      <el-select
+        v-model="newFormInline.source"
+        placeholder="请选择来源"
+        class="w-full"
+        clearable
+      >
+        <el-option
+          v-for="(item, index) in sourceOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="出诊类型" prop="diagnosisType">
+      <el-select
+        v-model="newFormInline.diagnosisType"
+        placeholder="请选择出诊类型"
+        class="w-full"
+        clearable
+      >
+        <el-option
+          v-for="(item, index) in diagnosisOptions"
+          :key="index"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="医生" prop="doctor">
+      <el-input
+        v-model="newFormInline.doctor"
+        clearable
+        placeholder="请输入医生"
+      />
+    </el-form-item>
+
     <el-form-item label="标签" prop="tags">
       <el-input
         v-model="newFormInline.tags"
@@ -263,13 +298,7 @@ defineExpose({ getRef });
         placeholder="请输入标签"
       />
     </el-form-item>
-    <!-- <el-form-item label="项目" prop="prjName">
-      <el-input
-        v-model="newFormInline.prjName"
-        clearable
-        placeholder="请输入项目"
-      />
-    </el-form-item> -->
+
     <el-form-item label="全科项目" prop="otherPrj">
       <el-input
         v-model="newFormInline.otherPrj"

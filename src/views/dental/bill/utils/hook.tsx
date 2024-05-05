@@ -19,7 +19,7 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useBill() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,
+    pageSize: 15,
     userId: null,
     name: null,
     teamId: 0,
@@ -67,26 +67,29 @@ export function useBill() {
     }
   ];
 
-  const brandOptions = [
+  const diagnosisOptions = [
     {
       value: 1,
-      label: "奥齿泰"
+      label: "初诊"
     },
     {
       value: 2,
-      label: "皓圣"
+      label: "复诊"
     },
     {
       value: 3,
-      label: "雅定"
+      label: "新诊"
+    }
+  ];
+
+  const sourceOptions = [
+    {
+      value: 1,
+      label: "场地"
     },
     {
-      value: 4,
-      label: "ITI"
-    },
-    {
-      value: 5,
-      label: "诺贝尔"
+      value: 2,
+      label: "转介绍"
     }
   ];
 
@@ -106,6 +109,10 @@ export function useBill() {
     {
       value: 10,
       label: "退款"
+    },
+    {
+      value: -1,
+      label: "未成交"
     }
   ];
 
@@ -130,11 +137,6 @@ export function useBill() {
       prop: "id",
       minWidth: 60
     },
-    // {
-    //   label: "订单号",
-    //   prop: "no",
-    //   minWidth: 120
-    // },
     {
       label: "顾客",
       prop: "customerName",
@@ -146,11 +148,6 @@ export function useBill() {
       minWidth: 80,
       formatter: ({ userId }) => getUserName(userId)
     },
-    // {
-    //   label: "金额",
-    //   prop: "amount",
-    //   minWidth: 120
-    // },
     {
       label: "折后金额",
       prop: "realAmount",
@@ -171,11 +168,6 @@ export function useBill() {
       prop: "refundAmount",
       minWidth: 80
     },
-    // {
-    //   label: "关联订单",
-    //   prop: "linkId",
-    //   minWidth: 120
-    // },
     {
       label: "交易日期",
       prop: "tradeAt",
@@ -195,40 +187,79 @@ export function useBill() {
       }
     },
     {
-      label: "已种/颗数",
-      prop: "dentalCount",
+      label: "来源",
+      prop: "source",
       minWidth: 90,
-      cellRenderer: ({ row }) => (
-        <dev>
-          {row.implantedCount}/{row.dentalCount}
-        </dev>
-      )
-    },
-    // {
-    //   label: "已种颗数",
-    //   prop: "implantedCount",
-    //   minWidth: 80
-    // },
-    {
-      label: "品牌",
-      prop: "brand",
-      minWidth: 70,
-      formatter: ({ brand }) => {
-        for (const t in brandOptions) {
-          if (brandOptions[t].value == brand) {
-            return brandOptions[t].label;
+      formatter: ({ source }) => {
+        for (const t in sourceOptions) {
+          if (sourceOptions[t].value == source) {
+            return sourceOptions[t].label;
           }
         }
       }
     },
-    // {
-    //   label: "植入日期",
-    //   prop: "implantDate",
-    //   minWidth: 120,
-    //   formatter: ({ implantDate }) =>
-    //     dayjs(implantDate).format("YYYY-MM-DD HH:mm:ss")
-    // },
-
+    {
+      label: "出诊类型",
+      prop: "diagnosisType",
+      minWidth: 90,
+      formatter: ({ diagnosisType }) => {
+        for (const t in diagnosisOptions) {
+          if (diagnosisOptions[t].value == diagnosisType) {
+            return diagnosisOptions[t].label;
+          }
+        }
+      }
+    },
+    {
+      label: "奥齿泰",
+      prop: "brand1",
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.brand1Impl}/{row.brand1}
+        </dev>
+      )
+    },
+    {
+      label: "皓圣",
+      prop: "brand2",
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.brand2Impl}/{row.brand2}
+        </dev>
+      )
+    },
+    {
+      label: "雅定",
+      prop: "brand3",
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.brand3Impl}/{row.brand3}
+        </dev>
+      )
+    },
+    {
+      label: "ITI",
+      prop: "brand4",
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.brand4Impl}/{row.brand4}
+        </dev>
+      )
+    },
+    {
+      label: "诺贝尔",
+      prop: "brand5",
+      minWidth: 80,
+      cellRenderer: ({ row }) => (
+        <dev>
+          {row.brand5Impl}/{row.brand5}
+        </dev>
+      )
+    },
     {
       label: "项目类型",
       prop: "pack",
@@ -251,13 +282,6 @@ export function useBill() {
       prop: "remark",
       minWidth: 120
     },
-    // {
-    //   label: "预定回款日期",
-    //   prop: "paybackDate",
-    //   minWidth: 120,
-    //   formatter: ({ paybackDate }) =>
-    //     dayjs(paybackDate).format("YYYY-MM-DD HH:mm:ss")
-    // },
     {
       label: "医生",
       prop: "doctor",
@@ -268,12 +292,6 @@ export function useBill() {
       prop: "tags",
       minWidth: 80
     },
-    // {
-    //   label: "项目",
-    //   prop: "prjName",
-    //   minWidth: 120
-    // },
-
     {
       label: "创建时间",
       prop: "createdAt",
@@ -296,7 +314,7 @@ export function useBill() {
   ];
 
   function getMembers() {
-    getSysMembers().then(res => {
+    getSysMembers({ status: 1 }).then(res => {
       members.value = res.data;
     });
   }
@@ -378,9 +396,18 @@ export function useBill() {
           linkId: row?.linkId ?? 0,
           tradeAt: row?.tradeAt ?? new Date(),
           tradeType: row?.tradeType ?? null,
-          dentalCount: row?.dentalCount ?? 0,
-          brand: row?.brand ?? null,
-          implantedCount: row?.implantedCount ?? 0,
+          source: row?.source ?? null,
+          diagnosisType: row?.diagnosisType ?? null,
+          brand1: row?.brand1 ?? 0,
+          brand1Impl: row?.brand1Impl ?? 0,
+          brand2: row?.brand2 ?? 0,
+          brand2Impl: row?.brand2Impl ?? 0,
+          brand3: row?.brand3 ?? 0,
+          brand3Impl: row?.brand3Impl ?? 0,
+          brand4: row?.brand4 ?? 0,
+          brand4Impl: row?.brand4Impl ?? 0,
+          brand5: row?.brand5 ?? 0,
+          brand5Impl: row?.brand5Impl ?? 0,
           implant: row?.implant ?? null,
           implantDate: row?.implantDate ?? null,
           doctor: row?.doctor ?? null,
@@ -455,7 +482,8 @@ export function useBill() {
     dataList,
     pagination,
     packOptions,
-    brandOptions,
+    diagnosisOptions,
+    sourceOptions,
     tradeOptions,
     members,
     identifyText,

@@ -20,7 +20,8 @@ const {
   onSearch,
   toStDay,
   toStMonth,
-  exportExcel
+  exportExcel,
+  exportRateExcel
 } = useBillSt();
 </script>
 
@@ -66,6 +67,9 @@ const {
         </el-button>
         <el-button type="primary" :loading="loading" @click="exportExcel">
           导出
+        </el-button>
+        <el-button type="primary" :loading="loading" @click="exportRateExcel">
+          占比导出
         </el-button>
       </el-form-item>
     </el-form>

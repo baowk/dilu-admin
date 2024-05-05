@@ -17,7 +17,7 @@ export function useTargetTask() {
   const qform = reactive({
     dayType: 30,
     page: 1,
-    pageSize: 10
+    pageSize: 15
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -156,7 +156,7 @@ export function useTargetTask() {
   }
 
   function getMembers() {
-    getSysMembers().then(res => {
+    getSysMembers({ status: 1 }).then(res => {
       members.value = res.data;
     });
   }
@@ -191,19 +191,21 @@ export function useTargetTask() {
   };
 
   function openDialog(title = "新增", row?: TargetTaskFormItemProps) {
+    const currentDate = new Date();
+    const curday = currentDate.getFullYear() * 100 + currentDate.getMonth() + 1;
     addDialog({
       title: `${title}任务`,
       props: {
         formInline: {
           id: row?.id ?? 0,
           dayType: row?.dayType ?? 30,
-          day: row?.day ?? null,
+          day: row?.day ?? curday,
           teamId: row?.teamId ?? 0,
           userId: row?.userId ?? null,
           deptPath: row?.deptPath ?? "",
-          newCustomerCnt: row?.newCustomerCnt ?? 0,
-          firstDiagnosis: row?.firstDiagnosis ?? 0,
-          deal: row?.deal ?? 0
+          newCustomerCnt: row?.newCustomerCnt ?? 72,
+          firstDiagnosis: row?.firstDiagnosis ?? 16,
+          deal: row?.deal ?? 80000
         }
       },
       width: "48%",

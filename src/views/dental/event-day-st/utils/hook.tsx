@@ -18,7 +18,7 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useEventDaySt() {
   const qform = reactive({
     page: 1,
-    pageSize: 10,
+    pageSize: 15,
     userId: null,
     deptPath: null,
     begin: null,
@@ -61,6 +61,11 @@ export function useEventDaySt() {
       minWidth: 80
     },
     {
+      label: "初诊(转介绍)",
+      prop: "firstDiagnosisReferred",
+      minWidth: 80
+    },
+    {
       label: "复诊",
       prop: "furtherDiagnosis",
       minWidth: 80
@@ -97,19 +102,19 @@ export function useEventDaySt() {
       minWidth: 80,
       formatter: ({ createBy }) => getUserName(createBy)
     },
-    {
-      label: "更新者",
-      prop: "updateBy",
-      minWidth: 80,
-      formatter: ({ updateBy }) => getUserName(updateBy)
-    },
-    {
-      label: "创建时间",
-      prop: "createdAt",
-      minWidth: 120,
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
-    },
+    // {
+    //   label: "更新者",
+    //   prop: "updateBy",
+    //   minWidth: 80,
+    //   formatter: ({ updateBy }) => getUserName(updateBy)
+    // },
+    // {
+    //   label: "创建时间",
+    //   prop: "createdAt",
+    //   minWidth: 120,
+    //   formatter: ({ createTime }) =>
+    //     dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+    // },
     {
       label: "更新时间",
       prop: "updatedAt",
@@ -161,7 +166,7 @@ export function useEventDaySt() {
   }
 
   function getMembers() {
-    getSysMembers().then(res => {
+    getSysMembers({ status: 1 }).then(res => {
       members.value = res.data;
     });
   }
@@ -197,6 +202,7 @@ export function useEventDaySt() {
           deptPath: row?.deptPath ?? "",
           newCustomerCnt: row?.newCustomerCnt ?? 0,
           firstDiagnosis: row?.firstDiagnosis ?? 0,
+          firstDiagnosisReferred: row?.firstDiagnosisReferred ?? 0,
           furtherDiagnosis: row?.furtherDiagnosis ?? 0,
           deal: row?.deal ?? 0,
           invitation: row?.invitation ?? 0,

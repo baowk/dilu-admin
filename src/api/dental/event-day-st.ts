@@ -77,6 +77,7 @@ interface EventDaySt {
   newCustomerCnt: number;
   /** 初诊 */
   firstDiagnosis: number;
+  firstDiagnosisReferred: number;
   /** 复诊 */
   furtherDiagnosis: number;
   /** 成交 */
@@ -106,6 +107,7 @@ interface EventDayStFormItemProps {
   newCustomerCnt: number;
   /** 初诊 */
   firstDiagnosis: number;
+  firstDiagnosisReferred: number;
   /** 复诊 */
   furtherDiagnosis: number;
   /** 成交 */

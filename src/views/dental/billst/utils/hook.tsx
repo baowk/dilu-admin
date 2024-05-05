@@ -1,4 +1,10 @@
-import { stQuery, stDay, stMonth, stExport } from "@/api/dental/bill";
+import {
+  stQuery,
+  stDay,
+  stMonth,
+  stExport,
+  stRateExport
+} from "@/api/dental/bill";
 import { addDialog } from "@/components/ReDialog";
 import { reactive, ref, onMounted, toRaw, h } from "vue";
 
@@ -75,6 +81,11 @@ export function useBillSt() {
       minWidth: 80
     },
     {
+      label: "新诊",
+      prop: "secondDiagnosis",
+      minWidth: 80
+    },
+    {
       label: "成交数",
       prop: "dealCnt",
       minWidth: 80
@@ -141,6 +152,11 @@ export function useBillSt() {
     stExport(qform);
   }
 
+  function exportRateExcel() {
+    qform.responseType = "blob";
+    stRateExport(qform);
+  }
+
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
@@ -154,6 +170,7 @@ export function useBillSt() {
     columns,
     dataList,
     exportExcel,
+    exportRateExcel,
     toStDay,
     toStMonth,
     onSearch,

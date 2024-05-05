@@ -18,7 +18,7 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 export function useSummaryPlanDay() {
   const form = reactive({
     page: 1,
-    pageSize: 10,
+    pageSize: 15,
     day: 0,
     teamId: 0,
     userId: 0,
@@ -104,7 +104,7 @@ export function useSummaryPlanDay() {
   }
 
   function getMembers() {
-    getSysMembers().then(res => {
+    getSysMembers({ status: 1 }).then(res => {
       members.value = res.data;
     });
   }

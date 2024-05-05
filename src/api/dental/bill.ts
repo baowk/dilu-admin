@@ -78,6 +78,13 @@ export const billExport = (data?: object) => {
   });
 };
 
+/** 占比统计导出 */
+export const stRateExport = (data?: object) => {
+  return fileExport("post", "/api/v1/dental/st/exportrate", {
+    data
+  });
+};
+
 /** 日报表 */
 export const stDay = (data?: object) => {
   return http.request<Result<Array<string>>>("post", "/api/v1/dental/st/day", {
@@ -124,12 +131,32 @@ interface Bill {
   tradeAt: Date;
   /** 交易类型1 成交 2补尾款  3补上月欠款 10退款 */
   tradeType: number;
-  /** 颗数 */
-  dentalCount: number;
-  /** 品牌 */
-  brand: number;
-  /** 已种颗数 */
-  implantedCount: number;
+
+  /** 品牌1种植颗数 */
+  brand1: number;
+  /** 品牌1已种 */
+  brand1Impl: number;
+  /** 品牌2种植颗数 */
+  brand2: number;
+  /** 品牌2已种 */
+  brand2Impl: number;
+  /** 品牌3种植颗数 */
+  brand3: number;
+  /** 品牌3已种 */
+  brand3Impl: number;
+  /** 品牌4种植颗数 */
+  brand4: number;
+  /** 品牌4已种 */
+  brand4Impl: number;
+  /** 品牌5种植颗数 */
+  brand5: number;
+  /** 品牌5已种 */
+  brand5Impl: number;
+  /**来源 */
+  source: number;
+  /**出诊类型 */
+  diagnosisType: number;
+
   /** 是否已种 */
   implant: number;
   /** 植入日期 */
@@ -190,13 +217,32 @@ interface BillFormItemProps {
   tradeAt: Date;
   /** 交易类型1 成交 2补尾款  3补上月欠款 10退款 */
   tradeType: number;
-  /** 颗数 */
-  dentalCount: number;
-  /** 品牌 */
-  brand: number;
-  brandName?: string;
-  /** 已种颗数 */
-  implantedCount: number;
+
+  /** 品牌1种植颗数 */
+  brand1: number;
+  /** 品牌1已种 */
+  brand1Impl: number;
+  /** 品牌2种植颗数 */
+  brand2: number;
+  /** 品牌2已种 */
+  brand2Impl: number;
+  /** 品牌3种植颗数 */
+  brand3: number;
+  /** 品牌3已种 */
+  brand3Impl: number;
+  /** 品牌4种植颗数 */
+  brand4: number;
+  /** 品牌4已种 */
+  brand4Impl: number;
+  /** 品牌5种植颗数 */
+  brand5: number;
+  /** 品牌5已种 */
+  brand5Impl: number;
+  /**来源 */
+  source: number;
+  /**出诊类型 */
+  diagnosisType: number;
+
   /** 是否已种 */
   implant: number;
   /** 植入日期 */
@@ -226,6 +272,7 @@ interface BillUserSt {
   target: string; //目标
   newCustomerCnt: number; //留存任务
   firstDiagnosis: number; //导诊任务
+  secondDiagnosis: number; //新诊
   deal: string; //成交
   paid: string; //实收
   debt: string; //补上月欠款
