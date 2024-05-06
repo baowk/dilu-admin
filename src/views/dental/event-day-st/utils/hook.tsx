@@ -60,11 +60,11 @@ export function useEventDaySt() {
       prop: "firstDiagnosis",
       minWidth: 80
     },
-    {
-      label: "初诊(转介绍)",
-      prop: "firstDiagnosisReferred",
-      minWidth: 80
-    },
+    // {
+    //   label: "初诊(转介绍)",
+    //   prop: "firstDiagnosisReferred",
+    //   minWidth: 80
+    // },
     {
       label: "复诊",
       prop: "furtherDiagnosis",
@@ -202,7 +202,7 @@ export function useEventDaySt() {
           deptPath: row?.deptPath ?? "",
           newCustomerCnt: row?.newCustomerCnt ?? 0,
           firstDiagnosis: row?.firstDiagnosis ?? 0,
-          firstDiagnosisReferred: row?.firstDiagnosisReferred ?? 0,
+          // firstDiagnosisReferred: row?.firstDiagnosisReferred ?? 0,
           furtherDiagnosis: row?.furtherDiagnosis ?? 0,
           deal: row?.deal ?? 0,
           invitation: row?.invitation ?? 0,
