@@ -61,7 +61,7 @@ const {
         :model="form"
         class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
       >
-        <el-form-item label="姓名：" prop="username">
+        <el-form-item label="姓名：" prop="name">
           <el-input
             v-model="form.name"
             placeholder="请输入姓名"
@@ -79,13 +79,13 @@ const {
         </el-form-item>
         <el-form-item label="状态：" prop="status">
           <el-select
-            v-model.number="form.status"
+            v-model="form.status"
             placeholder="请选择"
             clearable
             class="!w-[160px]"
           >
-            <el-option label="已开启" value="1" />
-            <el-option label="已关闭" value="0" />
+            <el-option label="在职" :value="1" />
+            <el-option label="离职" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -108,7 +108,7 @@ const {
           <el-button
             type="primary"
             :icon="useRenderIcon(AddFill)"
-            @click="openDialog()"
+            @click="openDialog('add', null)"
           >
             新增用户
           </el-button>
@@ -165,7 +165,7 @@ const {
                 type="primary"
                 :size="size"
                 :icon="useRenderIcon(EditPen)"
-                @click="openDialog('编辑', row)"
+                @click="openDialog('edit', row)"
               >
                 修改
               </el-button>

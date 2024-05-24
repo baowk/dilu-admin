@@ -1,33 +1,50 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import type { FormRules } from "element-plus";
-import { SysRoleFormProps } from "@/api/sys/sys-role";
+import { SysRoleFormProps, getSysRole } from "@/api/sys/sys-role";
 
 const props = withDefaults(defineProps<SysRoleFormProps>(), {
   formInline: () => ({
+    type: "",
     id: 0,
     name: null,
     roleKey: null,
-    status: 0,
     roleSort: 0,
     remark: null,
     menuIds: null,
-    teamId: null,
     higherDeptOptions: []
   })
 });
 
 /** 自定义表单规则校验 */
-const formRules = reactive(<FormRules>{
+const formRules = reactive({
   name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
 });
 
 const ruleFormRef = ref();
+const treeRef = ref();
 const newFormInline = ref(props.formInline);
 
 function getRef() {
   return ruleFormRef.value;
 }
+const handleCheckChange = () => {
+  newFormInline.value.menuIds = treeRef.value.getCheckedKeys();
+};
+
+const getDetail = () => {
+  if (newFormInline.value.type == "edit") {
+    getSysRole({ id: newFormInline.value.id }).then(res => {
+      if (res.code == 200) {
+        (newFormInline.value.name = res.data?.name ?? null),
+          (newFormInline.value.roleKey = res.data?.roleKey ?? null),
+          (newFormInline.value.roleSort = res.data?.roleSort ?? null),
+          (newFormInline.value.remark = res.data?.remark ?? null),
+          (newFormInline.value.menuIds = res.data?.menuIds ?? null);
+      }
+    });
+  }
+};
+getDetail();
 
 defineExpose({ getRef });
 </script>
@@ -46,13 +63,7 @@ defineExpose({ getRef });
         placeholder="请输入角色名称"
       />
     </el-form-item>
-    <!-- <el-form-item label="状态" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
-        clearable
-        placeholder="请输入状态"
-      />
-    </el-form-item> -->
+
     <el-form-item label="角色代码" prop="roleKey">
       <el-input
         v-model="newFormInline.roleKey"
@@ -77,8 +88,9 @@ defineExpose({ getRef });
 
     <el-form-item label="授权菜单" prop="menuIds">
       <el-tree
+        ref="treeRef"
         :data="newFormInline.higherDeptOptions"
-        v-model="newFormInline.menuIds"
+        @check-change="handleCheckChange"
         node-key="id"
         show-checkbox
         :default-expanded-keys="newFormInline.menuIds"
@@ -86,8 +98,7 @@ defineExpose({ getRef });
         :props="{
           label: 'title'
         }"
-      >
-      </el-tree>
+      />
     </el-form-item>
   </el-form>
 </template>

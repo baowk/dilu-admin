@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import type { FormRules } from "element-plus";
+// import type { FormRules } from "element-plus";
 import { SysMenuFormProps } from "@/api/sys/sys-menu";
 
 import { useSysMenu } from "./utils/hook";
@@ -8,7 +8,8 @@ import { useSysMenu } from "./utils/hook";
 const props = withDefaults(defineProps<SysMenuFormProps>(), {
   formInline: () => ({
     higherDeptOptions: [],
-    id: 0,
+    id: null,
+    isSecond: false,
     menuName: null,
     title: null,
     icon: null,
@@ -16,17 +17,40 @@ const props = withDefaults(defineProps<SysMenuFormProps>(), {
     platformType: null,
     menuType: 0,
     permission: null,
-    parentId: 0,
-    noCache: 0,
+    parentId: null,
+    noCache: false,
     component: null,
     sort: 0,
-    hidden: 0
+    hidden: false
   })
 });
 
 /** 自定义表单规则校验 */
-const formRules = reactive(<FormRules>{
-  name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
+const formRules = reactive({
+  parentId: [
+    { required: true, message: "请选择父级菜单", trigger: ["blur", "change"] }
+  ],
+  component: [
+    {
+      required: true,
+      message: "请输入前端组件路径",
+      trigger: ["blur", "change"]
+    }
+  ],
+  path: [
+    {
+      required: true,
+      message: "请输入路径",
+      trigger: ["blur", "change"]
+    }
+  ],
+  title: [
+    {
+      required: true,
+      message: "请输入显示名称",
+      trigger: ["blur", "change"]
+    }
+  ]
 });
 
 const ruleFormRef = ref();
@@ -46,9 +70,13 @@ defineExpose({ getRef });
     ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
-    label-width="102px"
+    label-width="120px"
   >
-    <el-form-item label="上级菜单" prop="parentId">
+    <el-form-item
+      label="父级菜单"
+      prop="parentId"
+      v-if="newFormInline.isSecond || newFormInline.parentId"
+    >
       <el-cascader
         class="w-full"
         v-model="newFormInline.parentId"
@@ -56,12 +84,12 @@ defineExpose({ getRef });
         :props="{
           value: 'id',
           label: 'title',
-
+          emitPath: false,
           checkStrictly: true
         }"
         clearable
         filterable
-        placeholder="请选择上级部门"
+        placeholder="请选择父级"
       >
         <template #default="{ node, data }">
           <span>{{ data.title }}</span>
@@ -137,8 +165,8 @@ defineExpose({ getRef });
     <el-form-item label="是否缓存" prop="noCache">
       <el-switch
         v-model="newFormInline.noCache"
-        :active-value="1"
-        :inactive-value="2"
+        :active-value="true"
+        :inactive-value="false"
         active-text="是"
         inactive-text="否"
         inline-prompt
@@ -151,7 +179,7 @@ defineExpose({ getRef });
         placeholder="请输入前端组件路径"
       />
     </el-form-item>
-    <el-form-item label="排序倒叙" prop="sort">
+    <el-form-item label="排序正叙" prop="sort">
       <el-input
         v-model.number="newFormInline.sort"
         clearable
@@ -161,8 +189,8 @@ defineExpose({ getRef });
     <el-form-item label="是否隐藏" prop="hidden">
       <el-switch
         v-model="newFormInline.hidden"
-        :active-value="1"
-        :inactive-value="2"
+        :active-value="true"
+        :inactive-value="false"
         active-text="是"
         inactive-text="否"
         inline-prompt

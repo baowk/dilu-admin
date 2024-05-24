@@ -18,7 +18,7 @@ export function useSysApi() {
   const qform = reactive({
     page: 1,
     pageSize: 10,
-    status: 0
+    status: null
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -57,12 +57,30 @@ export function useSysApi() {
     {
       label: "权限类型",
       prop: "permType",
-      minWidth: 80
+      minWidth: 80,
+      cellRenderer: ({ row }) => {
+        const { status } = row;
+        const map = {
+          1: "无需认证",
+          2: "须token",
+          3: "须鉴权"
+        };
+        return map[status];
+      }
     },
     {
       label: "状态",
       prop: "status",
-      minWidth: 80
+      minWidth: 80,
+      cellRenderer: ({ row }) => {
+        const { status } = row;
+        const map = {
+          1: "删除",
+          2: "可用",
+          3: "可用"
+        };
+        return map[status];
+      }
     },
     {
       label: "更新者",
@@ -137,8 +155,8 @@ export function useSysApi() {
           title: row?.title ?? "",
           method: row?.method ?? "",
           path: row?.path ?? "",
-          permType: row?.permType ?? 0,
-          status: row?.status ?? 0
+          permType: row?.permType ?? null,
+          status: row?.status ?? null
         }
       },
       width: "48%",

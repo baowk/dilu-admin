@@ -26,7 +26,7 @@ export function useSysUser() {
     avatar: null,
     birthday: null,
     gender: null,
-    status: 0
+    status: null
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -41,11 +41,11 @@ export function useSysUser() {
   });
 
   const columns: TableColumnList = [
-    // {
-    //   label: "主键",
-    //   prop: "id",
-    //   minWidth: 120
-    // },
+    {
+      label: "主键",
+      prop: "id",
+      minWidth: 120
+    },
     {
       label: "用户名",
       prop: "username",
@@ -59,7 +59,7 @@ export function useSysUser() {
     {
       label: "邮箱",
       prop: "email",
-      minWidth: 120
+      minWidth: 180
     },
     // {
     //   label: "密码",
@@ -89,7 +89,8 @@ export function useSysUser() {
     {
       label: "生日",
       prop: "birthday",
-      minWidth: 120
+      minWidth: 180,
+      formatter: ({ birthday }) => dayjs(birthday).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "性别",
@@ -113,7 +114,7 @@ export function useSysUser() {
     {
       label: "锁定",
       prop: "lockTime",
-      minWidth: 120
+      minWidth: 180
     },
     {
       label: "备注",
@@ -132,7 +133,7 @@ export function useSysUser() {
           active-value={1}
           inactive-value={0}
           active-text="正常"
-          inactive-text="锁定"
+          inactive-text="冻结"
           inline-prompt
           style={switchStyle.value}
         />
@@ -151,14 +152,14 @@ export function useSysUser() {
     {
       label: "创建时间",
       prop: "createdAt",
-      minWidth: 120,
+      minWidth: 180,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "最后更新时间",
       prop: "updatedAt",
-      minWidth: 120,
+      minWidth: 180,
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
@@ -221,12 +222,12 @@ export function useSysUser() {
     onSearch();
   };
 
-  function openDialog(title = "新增", row?: SysUserFormItemProps) {
+  function openDialog(type, row?: SysUserFormItemProps) {
     addDialog({
-      title: `${title}用户`,
+      title: `${type == "add" ? "新增" : "编辑"}用户`,
       props: {
         formInline: {
-          id: row?.id ?? 0,
+          id: row?.id ?? null,
           username: row?.username ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
@@ -236,11 +237,11 @@ export function useSysUser() {
           avatar: row?.avatar ?? "",
           bio: row?.bio ?? "",
           birthday: row?.birthday ?? "",
-          gender: row?.gender ?? "",
-          platformRoleId: row?.platformRoleId ?? 0,
+          gender: row?.gender.toString() ?? "",
+          platformRoleId: row?.platformRoleId ?? null,
           lockTime: row?.lockTime ?? null,
           remark: row?.remark ?? "",
-          status: row?.status ?? 0
+          status: row?.status ?? null
         }
       },
       width: "48%",
@@ -254,7 +255,7 @@ export function useSysUser() {
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
-            if (title === "新增") {
+            if (type === "add") {
               createSysUser(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import type { FormRules } from "element-plus";
-import { SysUserFormProps } from "@/api/sys/sys-user";
+import { SysUserFormProps, getroleList, getSysUser } from "@/api/sys/sys-user";
 import { useSysUser } from "./utils/hook";
 
 const props = withDefaults(defineProps<SysUserFormProps>(), {
   formInline: () => ({
-    id: 0,
+    id: null,
     username: null,
     phone: null,
     email: null,
@@ -16,19 +15,34 @@ const props = withDefaults(defineProps<SysUserFormProps>(), {
     avatar: null,
     bio: null,
     birthday: null,
-    gender: null,
-    roleId: 0,
-    post: null,
-    remark: null,
-    status: 0
+    gender: "",
+    platformRoleId: null,
+    lockTime: null,
+    remark: "",
+    status: null
   })
 });
+const validateContact = (rule: any, value: any, callback: Function) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (value && !emailRegex.test(value)) {
+    return callback(new Error("请输入有效的邮箱"));
+  }
 
+  return callback();
+};
+const validatePhone = (rule: any, value: any, callback: Function) => {
+  const emailRegex = /^1[3-9]\d{9}$/;
+  if (value && !emailRegex.test(value)) {
+    return callback(new Error("请输入有效的手机号"));
+  }
+  return callback();
+};
 /** 自定义表单规则校验 */
-const formRules = reactive(<FormRules>{
-  //name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
+const formRules = reactive({
+  email: [{ validator: validateContact, trigger: "blur" }],
+  phone: [{ validator: validatePhone, trigger: "blur" }]
 });
-
+const roleList = ref(<any>[]);
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
@@ -36,6 +50,22 @@ function getRef() {
   return ruleFormRef.value;
 }
 
+const getUserdetail = () => {
+  if (newFormInline.value.id) {
+    getSysUser({ id: newFormInline.value.id }).then(res => {
+      console.log("detaildetail", res);
+    });
+  }
+};
+getUserdetail();
+const getRole = () => {
+  getroleList().then(res => {
+    if (res.code == 200) {
+      roleList.value = res.data;
+    }
+  });
+};
+getRole();
 const { genderOptions } = useSysUser();
 
 defineExpose({ getRef });
@@ -71,6 +101,7 @@ defineExpose({ getRef });
     </el-form-item>
     <el-form-item label="密码" prop="password">
       <el-input
+        type="password"
         v-model="newFormInline.password"
         clearable
         placeholder="请输入密码"
@@ -105,11 +136,15 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="生日" prop="birthday">
-      <el-input
+      <el-date-picker
+        style="width: 100%"
         v-model="newFormInline.birthday"
-        clearable
-        placeholder="请输入生日 格式 yyyy-MM-dd"
-      />
+        type="date"
+        value-format="YYYY-MM-DD"
+        format="YYYY-MM-DD"
+        placeholder="选择日期"
+      >
+      </el-date-picker>
     </el-form-item>
     <el-form-item label="性别" prop="gender">
       <el-select
@@ -127,11 +162,18 @@ defineExpose({ getRef });
       </el-select>
     </el-form-item>
     <el-form-item label="角色" prop="platformRoleId">
-      <el-input
-        v-model.number="newFormInline.platformRoleId"
-        clearable
-        placeholder="请输入角色ID"
-      />
+      <el-select
+        v-model="newFormInline.platformRoleId"
+        placeholder="请选择角色"
+        class="w-full"
+      >
+        <el-option
+          v-for="item in roleList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item label="备注" prop="remark">
       <el-input
@@ -141,11 +183,14 @@ defineExpose({ getRef });
       />
     </el-form-item>
     <el-form-item label="状态" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
-        clearable
-        placeholder="请输入状态 1冻结 2正常 3默认"
-      />
+      <el-select
+        class="w-full"
+        v-model="newFormInline.status"
+        placeholder="请选择"
+      >
+        <el-option label="正常" :value="1" />
+        <el-option label="冻结" :value="-1" />
+      </el-select>
     </el-form-item>
   </el-form>
 </template>

@@ -27,6 +27,7 @@ const {
   onSearch,
   resetForm,
   openDialog,
+  openApiDialog,
   handleDelete,
   handleSizeChange,
   handleCurrentChange,
@@ -106,7 +107,7 @@ const {
           <el-button
             type="primary"
             :icon="useRenderIcon(AddFill)"
-            @click="openDialog()"
+            @click="openDialog('add', false, null)"
           >
             新增菜单
           </el-button>
@@ -115,7 +116,6 @@ const {
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           ref="tableRef"
-          align-whole="center"
           showOverflowTooltip
           table-layout="auto"
           row-key="id"
@@ -141,7 +141,7 @@ const {
                 type="primary"
                 :size="size"
                 :icon="useRenderIcon(EditPen)"
-                @click="openDialog('编辑', row)"
+                @click="openDialog('edit', false, row)"
               >
                 修改
               </el-button>
@@ -164,6 +164,30 @@ const {
                 </template>
               </el-popconfirm>
             </Auth>
+            <Auth value="sys:sysMenu:addChild">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(EditPen)"
+                @click="openDialog('add', true, row)"
+              >
+                新增子级菜单
+              </el-button>
+            </Auth>
+
+            <el-button
+              v-if="row.menuType != 1"
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(EditPen)"
+              @click="openApiDialog(row)"
+            >
+              绑定API
+            </el-button>
           </template>
         </pure-table>
       </template>

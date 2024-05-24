@@ -113,6 +113,10 @@ export function useBill() {
     {
       value: -1,
       label: "未成交"
+    },
+    {
+      value: 9,
+      label: "补种牙齿"
     }
   ];
 

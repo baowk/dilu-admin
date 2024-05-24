@@ -40,13 +40,24 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="状态：" prop="status">
+      <el-form-item label="用户名" prop="username">
         <el-input
-          v-model="form.name"
-          placeholder="请输入状态 1冻结 2正常 3默认"
+          v-model="form.username"
           clearable
-          class="!w-[200px]"
+          placeholder="请输入用户名"
         />
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="form.email" clearable placeholder="请输入邮箱" />
+      </el-form-item>
+      <el-form-item label="手机号" prop="phone">
+        <el-input v-model="form.phone" clearable placeholder="请输入手机号" />
+      </el-form-item>
+      <el-form-item label="状态：" prop="status">
+        <el-select v-model="form.status" placeholder="请选择">
+          <el-option label="正常" :value="1" />
+          <el-option label="冻结" :value="-1" />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -68,7 +79,7 @@ const {
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
+          @click="openDialog('add')"
         >
           新增用户
         </el-button>
@@ -100,7 +111,7 @@ const {
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
+              @click="openDialog('edit', row)"
             >
               修改
             </el-button>

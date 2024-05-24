@@ -40,7 +40,7 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="状态：" prop="status">
+      <el-form-item label="状态：" prop="status">
         <el-input
           v-model="form.name"
           placeholder="请输入状态"
@@ -68,7 +68,7 @@ const {
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
+          @click="openDialog('add')"
         >
           新增角色
         </el-button>
@@ -100,7 +100,7 @@ const {
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
+              @click="openDialog('edit', row)"
             >
               修改
             </el-button>

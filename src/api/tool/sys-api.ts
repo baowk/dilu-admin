@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { SysApi } from "@/api/sys/sys-api.d";
 
-//Api 
+//Api
 
 /** 获取接口管理列表 */
 export const getSysApiPage = (data?: object) => {
@@ -31,14 +31,14 @@ export const createSysApi = (data?: object) => {
 
 /** 更新接口 */
 export const updateSysApi = (data?: object) => {
-  return http.request<Result<SysApi>>("post", "/api/v1/sys/sys-api/update",{
+  return http.request<Result<SysApi>>("post", "/api/v1/sys/sys-api/update", {
     data
   });
 };
 
 /** 删除接口 */
 export const delSysApi = (data?: object) => {
-  return http.request<Result<SysApi>>("post", "/api/v1/sys/sys-api/del",{
+  return http.request<Result<SysApi>>("post", "/api/v1/sys/sys-api/del", {
     data
   });
 };
@@ -47,7 +47,6 @@ export const delSysApi = (data?: object) => {
 
 /** 接口 */
 interface SysApi {
-  
   /** 主键编码 */
   id: number;
   /** 标题 */
@@ -66,9 +65,7 @@ interface SysApi {
   updatedAt: Date;
 }
 
-
 interface SysApiFormItemProps {
-  
   /** 主键编码 */
   id: number;
   /** 标题 */

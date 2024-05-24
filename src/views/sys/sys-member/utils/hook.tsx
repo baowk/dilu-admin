@@ -15,13 +15,12 @@ import { getRoleList } from "@/api/sys/sys-role";
 
 import { getDeptAll } from "@/api/sys/sys-dept";
 import { genderOptions } from "@/api/sys/sys-user";
-
+import { cloneDeep } from "@pureadmin/utils";
 import {
-  type SysMemberFormProps,
   getSysMemberPage,
   createSysMember,
-  updateSysMember
-  //delSysMember
+  updateSysMember,
+  delSysMember
 } from "@/api/sys/sys-member";
 
 import {
@@ -245,8 +244,14 @@ export function useMember(tableRef: Ref, treeRef: Ref) {
   }
 
   function handleDelete(row) {
-    message(`您删除了用户编号为${row.id}的这条数据`, { type: "success" });
-    onSearch();
+    delSysMember({
+      ids: [row.id]
+    }).then(res => {
+      if (res.code === 200) {
+        message(`您删除了用户编号为${row.id}的这条数据`, { type: "success" });
+        onSearch();
+      }
+    });
   }
 
   function handleSizeChange(val: number) {
@@ -304,6 +309,7 @@ export function useMember(tableRef: Ref, treeRef: Ref) {
 
   const resetForm = formEl => {
     if (!formEl) return;
+
     formEl.resetFields();
     form.deptId = 0;
     treeRef.value.onTreeReset();
@@ -311,7 +317,8 @@ export function useMember(tableRef: Ref, treeRef: Ref) {
   };
 
   function onTreeSelect({ id, selected }) {
-    form.deptId = selected ? id : "";
+    form.deptId = selected ? id : null;
+    console.log(1);
     onSearch();
   }
 
@@ -327,41 +334,51 @@ export function useMember(tableRef: Ref, treeRef: Ref) {
     return newTreeList;
   }
 
-  function openDialog(title = "新增", row?: SysMemberFormProps) {
+  function openDialog(type, row) {
     addDialog({
-      title: `${title}用户`,
+      title: `${type == "add" ? "新增" : "编辑"}用户`,
       props: {
         formInline: {
-          title,
+          type,
+          title: type == "add" ? "新增" : "编辑",
           higherDeptOptions: formatHigherDeptOptions(higherDeptOptions.value),
           id: row?.id ?? 0,
-          nickname: row?.nickname ?? null,
-          name: row?.name ?? null,
-          entryTime: row?.entryTime ?? null,
-          retireTime: row?.retireTime ?? null,
-          phone: row?.phone ?? null,
-          email: row?.email ?? null,
-          gender: row?.gender ?? null,
-          status: row?.status ?? null,
-          remark: row?.remark ?? null,
-          deptId: row?.deptId ?? null,
-          postId: row?.postId ?? null,
-          birthday: row?.birthday ?? null
+          nickname: null,
+          name: null,
+          entryTime: null,
+          retireTime: null,
+          phone: null,
+          email: null,
+          gender: null,
+          status: 1,
+          remark: null,
+          deptId: null,
+          postId: null,
+          birthday: null,
+          roles: ""
         }
       },
-      width: "48%",
+      width: "60%",
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as SysMemberFormProps;
+        const curData = cloneDeep(options.props.formInline);
+        curData.roles = curData.roles.toString();
         FormRef.validate(valid => {
           if (valid) {
             console.log("curData", curData);
             // 表单规则校验通过
-            if (title === "新增") {
+            if (type === "add") {
+              if (!curData.userId) {
+                message("请勾选一个用户", {
+                  type: "error"
+                });
+                return false;
+              }
+              delete curData.higherDeptOptions;
               // 实际开发先调用新增接口，再进行下面操作
               createSysMember(curData).then(res => {
                 if (res.code == 200) {
@@ -377,6 +394,8 @@ export function useMember(tableRef: Ref, treeRef: Ref) {
               });
             } else {
               // 实际开发先调用编辑接口，再进行下面操作
+              console.log("currensearch", curData);
+              delete curData.higherDeptOptions;
               updateSysMember(curData).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {

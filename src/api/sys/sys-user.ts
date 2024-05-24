@@ -55,7 +55,11 @@ export const getMyUserInfo = (data?: object) => {
   });
 };
 
-//Model
+export const getroleList = (data?: object) => {
+  return http.request<Result<string>>("post", "/api/v1/sys/sys-role/list", {
+    data
+  });
+};
 
 /** 用户 */
 interface SysUser {

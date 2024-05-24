@@ -5,8 +5,7 @@ import {
   getSysRolePage,
   createSysRole,
   updateSysRole,
-  delSysRole,
-  getSysRole
+  delSysRole
 } from "@/api/sys/sys-role";
 //import { ElMessageBox } from "element-plus";
 //import { usePublicHooks } from "@/utils/hooks";
@@ -37,7 +36,7 @@ export function useSysRole() {
   const dataList = ref([]);
   const loading = ref(true);
   const dataMenu = ref([]);
-  const detail = ref();
+
   //const switchLoadMap = ref({});
   //const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
@@ -193,104 +192,77 @@ export function useSysRole() {
     onSearch();
   };
 
-  function openDialog(title = "新增", row?: SysRoleFormItemProps) {
-    detail.value = {};
-    if (row && row.id) {
-      getSysRole({ id: row.id }).then(res => {
-        if (res.code == 200) {
-          addDialog({
-            title: `${title}角色`,
-            props: {
-              formInline: {
-                higherDeptOptions: formatHigherDeptOptions(
-                  cloneDeep(dataMenu.value)
-                ),
-                id: row?.id ?? null,
-                name: res.data?.name ?? null,
-                status: res.data?.status ?? null,
-                roleKey: res.data?.roleKey ?? null,
-                roleSort: res.data?.roleSort ?? null,
-                remark: res.data?.remark ?? null,
-                menuIds: res.data?.menuIds ?? null
-              }
-            },
-            width: "48%",
-            draggable: true,
-            fullscreenIcon: true,
-            closeOnClickModal: false,
-            contentRenderer: () => h(editForm, { ref: formRef }),
-            beforeSure: (done, { options }) => {
-              const FormRef = formRef.value.getRef();
-              const curData = options.props.formInline as SysRoleFormItemProps;
-              FormRef.validate(valid => {
-                if (valid) {
-                  // 表单规则校验通过
-                  updateSysRole(curData).then(res => {
-                    if (res.code == 200) {
-                      message(res.msg, {
-                        type: "success"
-                      });
-                      onSearch(); // 刷新表格数据
-                    } else {
-                      message(res.msg, {
-                        type: "error"
-                      });
-                    }
-                  });
-                }
-                done(); // 关闭弹框
-              });
-            }
-          });
+  function openDialog(type, row?: SysRoleFormItemProps) {
+    addDialog({
+      title: `${type == "add" ? "新增" : "编辑"}角色`,
+      props: {
+        formInline: {
+          type,
+          higherDeptOptions: formatHigherDeptOptions(cloneDeep(dataMenu.value)),
+          id: row?.id ?? null,
+          name: null,
+          roleKey: null,
+          roleSort: null,
+          remark: null,
+          menuIds: null
         }
-      });
-    } else {
-      addDialog({
-        title: `${title}角色`,
-        props: {
-          formInline: {
-            higherDeptOptions: formatHigherDeptOptions(
-              cloneDeep(dataMenu.value)
-            ),
-            id: null,
-            name: null,
-            status: null,
-            roleKey: null,
-            roleSort: null,
-            remark: null,
-            menuIds: null
-          }
-        },
-        width: "48%",
-        draggable: true,
-        fullscreenIcon: true,
-        closeOnClickModal: false,
-        contentRenderer: () => h(editForm, { ref: formRef }),
-        beforeSure: (done, { options }) => {
-          const FormRef = formRef.value.getRef();
-          const curData = options.props.formInline as SysRoleFormItemProps;
-          FormRef.validate(valid => {
-            if (valid) {
-              // 表单规则校验通过
-              createSysRole(curData).then(res => {
+      },
+      width: "48%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(editForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as SysRoleFormItemProps;
+        FormRef.validate(valid => {
+          if (valid) {
+            if (type == "add") {
+              createSysRole({
+                name: curData.name,
+                roleKey: curData.roleKey,
+                roleSort: curData.roleSort,
+                remark: curData.remark,
+                menuIds: curData.menuIds
+              }).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
                     type: "success"
                   });
                   onSearch(); // 刷新表格数据
+                  done(); // 关闭弹框
                 } else {
                   message(res.msg, {
                     type: "error"
                   });
                 }
               });
-
-              done(); // 关闭弹框
+            } else {
+              updateSysRole({
+                id: curData.id,
+                name: curData.name,
+                roleKey: curData.roleKey,
+                roleSort: curData.roleSort,
+                remark: curData.remark,
+                menuIds: curData.menuIds
+              }).then(res => {
+                if (res.code == 200) {
+                  message(res.msg, {
+                    type: "success"
+                  });
+                  onSearch(); // 刷新表格数据
+                  done(); // 关闭弹框
+                } else {
+                  message(res.msg, {
+                    type: "error"
+                  });
+                }
+              });
             }
-          });
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   }
 
   /** 数据权限 可自行开发 */

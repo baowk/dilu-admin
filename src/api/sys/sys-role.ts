@@ -85,18 +85,17 @@ interface SysRoleFormItemProps {
   id: number;
   /** 角色名称 */
   name: string;
-  /** 状态 */
-  status: number;
+
   /** 角色代码 */
   roleKey: string;
   /** 排序 */
   roleSort: number;
-  /**团队id */
-  teamId: number;
+
   /** 备注 */
   remark: string;
   menuIds: Array<number>;
   higherDeptOptions: Record<string, unknown>[];
+  type: string;
 }
 interface SysRoleFormProps {
   formInline: SysRoleFormItemProps;

@@ -1,14 +1,15 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
+import apiForm from "../apiForm.vue";
 import { message } from "@/utils/message";
 import {
   getSysMenuPage,
   createSysMenu,
   updateSysMenu,
-  delSysMenu
+  delSysMenu,
+  setApi
 } from "@/api/sys/sys-menu";
 import { handleTree } from "@/utils/tree";
-//import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
 import { type SysMenuFormItemProps } from "@/api/sys/sys-menu";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -121,7 +122,7 @@ export function useSysMenu() {
       align: "left"
     },
     {
-      label: "排序倒叙",
+      label: "排序正叙",
       prop: "sort",
       minWidth: 80
     },
@@ -157,7 +158,7 @@ export function useSysMenu() {
     {
       label: "操作",
       fixed: "right",
-      width: 140,
+      width: 360,
       slot: "operation"
     }
   ];
@@ -223,26 +224,75 @@ export function useSysMenu() {
     formEl.resetFields();
     onSearch();
   };
-
-  function openDialog(title = "新增", row?: SysMenuFormItemProps) {
+  function getId(arr) {
+    return arr.map(item => item.id);
+  }
+  function openApiDialog(row) {
     addDialog({
-      title: `${title}菜单`,
+      title: `绑定API`,
       props: {
         formInline: {
+          page: 1,
+          pageSize: 10,
+          path: "",
+          menuId: Number(row.id)
+        }
+      },
+      width: "48%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      // contentRenderer: () => h(apiForm, { ref: apiformRef }),
+      contentRenderer: () => h(apiForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        if (formRef.value.getId() && formRef.value.getId().length == 0) {
+          message("请选择数据", {
+            type: "error"
+          });
+          return false;
+        }
+        setApi({
+          menuId: row.id,
+          apiIds: getId(formRef.value.getId())
+        }).then(res => {
+          if (res.code == 200) {
+            message(res.msg, {
+              type: "success"
+            });
+            onSearch(); // 刷新表格数据
+            done();
+          }
+        });
+        console.log("apiformRef", getId(formRef.value.getId()), row.id);
+      }
+    });
+  }
+
+  function openDialog(type = "add", isSecond, row?: SysMenuFormItemProps) {
+    addDialog({
+      title: `${type == "add" ? "新增" : "编辑"}菜单`,
+      props: {
+        formInline: {
+          isSecond,
           higherDeptOptions: formatHigherDeptOptions(cloneDeep(dataList.value)),
-          id: row?.id ?? 0,
-          menuName: row?.menuName ?? null,
-          title: row?.title ?? null,
-          icon: row?.icon ?? "",
-          path: row?.path ?? "",
-          platformType: row?.platformType ?? 1,
-          menuType: row?.menuType ?? 1,
-          permission: row?.permission ?? "",
-          parentId: row?.parentId ?? 0,
-          noCache: row?.noCache ?? 0,
-          component: row?.component ?? "",
-          sort: row?.sort ?? 0,
-          hidden: row?.hidden ?? 0
+          id: row?.id ?? null,
+          menuName: type == "add" ? null : row?.menuName ?? null,
+          title: type == "add" ? null : row?.title ?? null,
+          icon: type == "add" ? "" : row?.icon ?? "",
+          path: type == "add" ? "" : row?.path ?? "",
+          platformType: type == "add" ? null : row?.platformType ?? 1,
+          menuType: type == "add" ? null : row?.menuType ?? 1,
+          permission: type == "add" ? "" : row?.permission ?? "",
+          parentId:
+            type == "add"
+              ? row?.menuType != 1
+                ? row?.id ?? null
+                : row?.parentId ?? null
+              : row?.parentId ?? null,
+          noCache: type == "add" ? false : row?.noCache ?? false,
+          component: type == "add" ? "" : row?.component ?? "",
+          sort: type == "add" ? null : row?.sort ?? 0,
+          hidden: type == "add" ? false : row?.hidden ?? false
         }
       },
       width: "48%",
@@ -256,8 +306,12 @@ export function useSysMenu() {
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
-            if (title === "新增") {
-              createSysMenu(curData).then(res => {
+            if (type === "add") {
+              const param = cloneDeep(curData);
+              delete param.higherDeptOptions;
+              delete param.id;
+              delete param.isSecond;
+              createSysMenu(param).then(res => {
                 if (res.code == 200) {
                   message(res.msg, {
                     type: "success"
@@ -307,6 +361,7 @@ export function useSysMenu() {
     onSearch,
     resetForm,
     openDialog,
+    openApiDialog,
     handleDelete,
     handleSizeChange,
     handleCurrentChange,

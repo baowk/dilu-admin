@@ -36,6 +36,7 @@ defineExpose({ getRef });
   >
     <el-form-item label="主键" prop="id">
       <el-input
+        :disabled="true"
         v-model.number="newFormInline.id"
         clearable
         placeholder="请输入主键"

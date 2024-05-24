@@ -1,5 +1,5 @@
 import { http } from "@/utils/http";
-import { Result } from "@/api/common";
+import { Result, PageResult } from "@/api/common";
 //import { SysMenu } from "@/api/sys/sys-menu.d";
 
 //Api
@@ -54,7 +54,26 @@ export const delSysMenu = (data?: object) => {
   });
 };
 
-//Model
+/** 绑定api列表 */
+export const getApiList = (data?: object) => {
+  return http.request<Result<PageResult<any>>>(
+    "post",
+    "/api/v1/sys/sys-menu/apis",
+    {
+      data
+    }
+  );
+};
+/** 绑定api */
+export const setApi = (data?: object) => {
+  return http.request<Result<SysMenu>>(
+    "post",
+    "/api/v1/sys/sys-menu/set_apis",
+    {
+      data
+    }
+  );
+};
 
 /** 菜单 */
 interface SysMenu {
@@ -98,6 +117,7 @@ interface SysMenu {
 
 interface SysMenuFormItemProps {
   higherDeptOptions: Record<string, unknown>[];
+  isSecond: boolean;
   /** 主键 */
   id: number;
   /** 菜单名 */
@@ -117,16 +137,32 @@ interface SysMenuFormItemProps {
   /** 菜单父id */
   parentId: number;
   /** 是否缓存 */
-  noCache: number;
+  noCache: boolean;
   /** 前端组件路径 */
   component: string;
   /** 排序倒叙 */
   sort: number;
   /** 是否隐藏 */
-  hidden: number;
+  hidden: boolean;
+}
+interface SysAPIFormItemProps {
+  page: number;
+  pageSize: number;
+  path: string;
+  menuId: number;
 }
 interface SysMenuFormProps {
   formInline: SysMenuFormItemProps;
 }
 
-export type { SysMenuFormItemProps, SysMenuFormProps, SysMenu };
+interface SysApiProps {
+  formInline: SysAPIFormItemProps;
+}
+
+export type {
+  SysMenuFormItemProps,
+  SysMenuFormProps,
+  SysMenu,
+  SysApiProps,
+  SysAPIFormItemProps
+};

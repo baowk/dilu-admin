@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<SysApiFormProps>(), {
     method: null,
     path: null,
     permType: 0,
-    status: 0
+    status: null
   })
 });
 
@@ -34,15 +34,8 @@ defineExpose({ getRef });
     ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
-    label-width="82px"
+    label-width="120px"
   >
-    <el-form-item label="主键编码" prop="id">
-      <el-input
-        v-model.number="newFormInline.id"
-        clearable
-        placeholder="请输入主键编码"
-      />
-    </el-form-item>
     <el-form-item label="标题" prop="title">
       <el-input
         v-model="newFormInline.title"
@@ -64,22 +57,27 @@ defineExpose({ getRef });
         placeholder="请输入请求地址"
       />
     </el-form-item>
-    <el-form-item
-      label="权限类型（1：无需认证 2:须token 3：须鉴权）"
-      prop="permType"
-    >
-      <el-input
-        v-model.number="newFormInline.permType"
-        clearable
-        placeholder="请输入权限类型（1：无需认证 2:须token 3：须鉴权）"
-      />
+    <el-form-item label="权限类型" prop="permType">
+      <el-select
+        class="w-full"
+        v-model="newFormInline.permType"
+        placeholder="请选择"
+      >
+        <el-option label="无需认证" :value="1" />
+        <el-option label="须token" :value="2" />
+        <el-option label=" 须鉴权" :value="3" />
+      </el-select>
     </el-form-item>
-    <el-form-item label="状态 3 DEF 2 OK 1 del" prop="status">
-      <el-input
-        v-model.number="newFormInline.status"
-        clearable
-        placeholder="请输入状态 3 DEF 2 OK 1 del"
-      />
+    <el-form-item label="状态 " prop="status">
+      <el-select
+        class="w-full"
+        v-model="newFormInline.status"
+        placeholder="请选择"
+      >
+        <el-option label="del" :value="1" />
+        <el-option label="OK" :value="2" />
+        <el-option label=" DEF" :value="3" />
+      </el-select>
     </el-form-item>
   </el-form>
 </template>

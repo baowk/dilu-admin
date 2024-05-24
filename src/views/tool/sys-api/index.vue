@@ -40,13 +40,18 @@ const {
       :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-    <el-form-item label="状态 3 DEF 2 OK 1 del：" prop="status">
-        <el-input
+      <el-form-item label="状态 " prop="status">
+        <!-- <el-input
           v-model="qform.status"
           placeholder="请输入状态 3 DEF 2 OK 1 del"
           clearable
           class="!w-[200px]"
-        />
+        /> -->
+        <el-select v-model="qform.status" placeholder="请选择">
+          <el-option label="del" :value="1" />
+          <el-option label="OK" :value="2" />
+          <el-option label=" DEF" :value="3" />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -112,7 +117,7 @@ const {
               <el-popconfirm
                 :title="`是否确认删除接口名称为${row.name}的这条数据`"
                 @confirm="handleDelete(row)"
-                >
+              >
                 <template #reference>
                   <el-button
                     class="reset-margin"

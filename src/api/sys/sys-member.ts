@@ -70,6 +70,20 @@ export const changeMyInfo = (data?: object) => {
     }
   );
 };
+/** 用户是否在团队中 */
+export const userInTeam = (data?: object) => {
+  return http.request<Result<userInTeam>>(
+    "post",
+    "/api/v1/sys/sys-member/exist",
+    {
+      data
+    }
+  );
+};
+
+interface userInTeam {
+  exist: boolean;
+}
 //Model
 
 /** 会员 */
@@ -143,6 +157,7 @@ interface SysMemberFormItemProps {
   /**生日 */
   birthday: Date;
   gender: string;
+  higherDeptOptions: any;
 }
 interface SysMemberFormProps {
   formInline: SysMemberFormItemProps;
