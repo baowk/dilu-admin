@@ -90,6 +90,10 @@ export function useBill() {
     {
       value: 2,
       label: "转介绍"
+    },
+    {
+      value: 3,
+      label: "加班"
     }
   ];
 

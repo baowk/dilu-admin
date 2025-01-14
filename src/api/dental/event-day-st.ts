@@ -80,6 +80,7 @@ interface EventDaySt {
   //firstDiagnosisReferred: number;
   /** 复诊 */
   furtherDiagnosis: number;
+  recheck: number;
   /** 成交 */
   deal: number;
   /** 明日邀约 */
@@ -110,6 +111,7 @@ interface EventDayStFormItemProps {
   //firstDiagnosisReferred: number;
   /** 复诊 */
   furtherDiagnosis: number;
+  recheck: number;
   /** 成交 */
   deal: number;
   /** 明日邀约 */

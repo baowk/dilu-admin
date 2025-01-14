@@ -71,6 +71,11 @@ export function useEventDaySt() {
       minWidth: 80
     },
     {
+      label: "复查",
+      prop: "recheck",
+      minWidth: 80
+    },
+    {
       label: "成交",
       prop: "deal",
       minWidth: 80
@@ -202,7 +207,7 @@ export function useEventDaySt() {
           deptPath: row?.deptPath ?? "",
           newCustomerCnt: row?.newCustomerCnt ?? 0,
           firstDiagnosis: row?.firstDiagnosis ?? 0,
-          // firstDiagnosisReferred: row?.firstDiagnosisReferred ?? 0,
+          recheck: row?.recheck ?? 0,
           furtherDiagnosis: row?.furtherDiagnosis ?? 0,
           deal: row?.deal ?? 0,
           invitation: row?.invitation ?? 0,

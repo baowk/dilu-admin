@@ -80,18 +80,19 @@ defineExpose({ getRef });
         placeholder="请输入初诊"
       />
     </el-form-item>
-    <!-- <el-form-item label="初诊转介绍" prop="firstDiagnosisReferred">
-      <el-input
-        v-model.number="newFormInline.firstDiagnosisReferred"
-        clearable
-        placeholder="请输入初诊"
-      />
-    </el-form-item> -->
+   
     <el-form-item label="复诊" prop="furtherDiagnosis">
       <el-input
         v-model.number="newFormInline.furtherDiagnosis"
         clearable
         placeholder="请输入复诊"
+      />
+    </el-form-item>
+     <el-form-item label="复查" prop="recheck">
+      <el-input
+        v-model.number="newFormInline.recheck"
+        clearable
+        placeholder="复查"
       />
     </el-form-item>
     <el-form-item label="成交" prop="deal">
