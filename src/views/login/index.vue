@@ -48,39 +48,37 @@ const ruleForm = reactive({
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
-  loading.value = true;
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      useUserStoreHook()
-        .loginByUsername({
-          username: ruleForm.username,
-          password: ruleForm.password
-        })
-        .then(res => {
-          if (res.code == 200) {
-            //获取团队
-            getMyTeams().then(data => {
-              if (data.code == 200) {
-                setTeams(data.data);
-                // 获取后端路由
-                initRouter().then(() => {
-                  router.push(getTopMenu(true).path);
-                  message("登录成功", { type: "success" });
-                });
-              }
-            });
-          } else {
-            message(res.msg, { customClass: "el", type: "error" });
-            loading.value = false;
-            return fields;
-          }
-        });
-    } else {
-      loading.value = false;
-      return fields;
+  try {
+    loading.value = true;
+    const valid = await formEl.validate();
+    if (!valid) {
+      return;
     }
-  });
+
+    const res = await useUserStoreHook().loginByUsername({
+      username: ruleForm.username,
+      password: ruleForm.password
+    });
+
+    if (res.code != 200) {
+      message(res.msg, { customClass: "el", type: "error" });
+      return;
+    }
+
+    const data = await getMyTeams();
+    if (data.code != 200) {
+      return;
+    }
+
+    setTeams(data.data);
+    // 获取后端路由
+    await initRouter();
+    router.push(getTopMenu(true).path);
+    message("登录成功", { type: "success" });
+  } finally {
+    loading.value = false;
+  }
 };
 
 /** 使用公共函数，避免`removeEventListener`失效 */
