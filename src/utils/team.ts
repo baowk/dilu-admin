@@ -52,7 +52,7 @@ export function selectTeamId(teamId: number) {
 }
 
 export function setTeams(data: Array<Team>, select?: number) {
-  if (data.length > 0) {
+  if (data && data.length > 0) {
     let curSelect = 0;
     if (select) {
       data.forEach(item => {
